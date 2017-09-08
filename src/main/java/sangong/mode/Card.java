@@ -12,10 +12,10 @@ import java.util.List;
 public class Card {
 
     public static List<Integer> getAllCard() {
-        return Arrays.asList(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14,
+        return new ArrayList<>(Arrays.asList(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14,
                 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114,
                 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214,
-                302, 303, 304, 305, 306, 307, 308, 309, 310, 311, 312, 313, 314);
+                302, 303, 304, 305, 306, 307, 308, 309, 310, 311, 312, 313, 314));
     }
 
     public static boolean isSanGong(List<Integer> cardList) {

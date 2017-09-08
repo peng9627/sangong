@@ -1,12 +1,13 @@
 package sangong.mode;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SeatRecord {
     private int userId;                         //用户名
     private String nickname;
     private String head;
-    private List<Integer> cards;                //牌
+    private List<Integer> cards = new ArrayList<>();                //牌
     private int winOrLose;                      //输赢分数
 
     public int getUserId() {

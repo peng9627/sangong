@@ -1,8 +1,14 @@
 package sangong.mode;
 
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
+import org.slf4j.LoggerFactory;
+import sangong.constant.Constant;
 import sangong.entrance.SanGongTcpService;
 import sangong.redis.RedisService;
+import sangong.utils.HttpUtil;
 
 import java.util.*;
 
@@ -22,6 +28,9 @@ public class Room {
     private int gameCount;
     private int bankerWay;//庄家方式
     private List<Record> recordList = new ArrayList<>();//战绩
+    private int roomOwner;
+    private Date startDate;
+    private Date statusDate;
 
     public int getBaseScore() {
         return baseScore;
@@ -103,6 +112,30 @@ public class Room {
         this.recordList = recordList;
     }
 
+    public int getRoomOwner() {
+        return roomOwner;
+    }
+
+    public void setRoomOwner(int roomOwner) {
+        this.roomOwner = roomOwner;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getStatusDate() {
+        return statusDate;
+    }
+
+    public void setStatusDate(Date statusDate) {
+        this.statusDate = statusDate;
+    }
+
     public void addSeat(User user) {
         Seat seat = new Seat();
         seat.setRobot(false);
@@ -118,6 +151,7 @@ public class Room {
     }
 
     public void dealCard() {
+        startDate = new Date();
         int min = Card.getAllCard().size();
         List<Integer> surplusCards = Card.getAllCard();
         for (Seat seat : seats) {
@@ -134,17 +168,18 @@ public class Room {
         }
     }
 
-    public void compareGrab() {
+    public void compareGrab(int userId) {
         if (1 == bankerWay) {
-            int userId = 0;
-            int score = Integer.MIN_VALUE;
-
-            for (Seat seat : seats) {
-                if (1 == seat.getGrab() && seat.getScore() > score) {
-                    userId = seat.getUserId();
-                    score = seat.getScore();
-                }
-            }
+//            int userId = 0;
+//            int score = Integer.MIN_VALUE;
+//
+//            for (Seat seat : seats) {
+//                if (1 == seat.getGrab() && seat.getScore() > score) {
+//                    userId = seat.getUserId();
+//                    score = seat.getScore();
+//                }
+//            }
+//            grab = userId;
             grab = userId;
         } else {
             if (0 == grab) {
@@ -161,11 +196,18 @@ public class Room {
                 }
             }
         }
+        for (Seat seat : seats) {
+            seat.setGrab(0);
+        }
     }
 
     private void clear() {
         historyList.clear();
         gameStatus = GameStatus.READYING;
+        if (1 == bankerWay) {
+            grab = 0;
+        }
+        startDate = new Date();
         seats.forEach(Seat::clear);
     }
 
@@ -183,6 +225,7 @@ public class Room {
         List<SeatRecord> seatRecords = new ArrayList<>();
 
         SanGong.SanGongResultResponse.Builder resultResponse = SanGong.SanGongResultResponse.newBuilder();
+        resultResponse.setReadyTimeCounter(redisService.exists("room_match" + roomNo) ? 8 : 0);
         //TODO 扣款
         if (grab != 0) {
             Seat grabSeat = null;
@@ -204,12 +247,15 @@ public class Room {
                         SanGong.SanGongResult.Builder userResult = SanGong.SanGongResult.newBuilder();
                         userResult.setID(seat.getUserId());
                         userResult.addAllCards(seat.getCards());
-                        userResult.setScore(-seat.getPlayScore());
                         seat.setScore(seat.getScore() - seat.getPlayScore());
+                        userResult.setCurrentScore(-seat.getPlayScore());
+                        userResult.setTotalScore(seat.getScore());
                         resultResponse.addResult(userResult);
 
                         SeatRecord seatRecord = new SeatRecord();
                         seatRecord.setUserId(seat.getUserId());
+                        seatRecord.setNickname(seat.getNickname());
+                        seatRecord.setHead(seat.getHead());
                         seatRecord.setCards(seat.getCards());
                         seatRecord.setWinOrLose(-seat.getPlayScore());
                         seatRecords.add(seatRecord);
@@ -219,12 +265,15 @@ public class Room {
                         SanGong.SanGongResult.Builder userResult = SanGong.SanGongResult.newBuilder();
                         userResult.setID(seat.getUserId());
                         userResult.addAllCards(seat.getCards());
-                        userResult.setScore(seat.getPlayScore());
                         seat.setScore(seat.getScore() + seat.getPlayScore());
+                        userResult.setCurrentScore(seat.getPlayScore());
+                        userResult.setTotalScore(seat.getScore());
                         resultResponse.addResult(userResult);
 
                         SeatRecord seatRecord = new SeatRecord();
                         seatRecord.setUserId(seat.getUserId());
+                        seatRecord.setNickname(seat.getNickname());
+                        seatRecord.setHead(seat.getHead());
                         seatRecord.setCards(seat.getCards());
                         seatRecord.setWinOrLose(seat.getPlayScore());
                         seatRecords.add(seatRecord);
@@ -235,12 +284,15 @@ public class Room {
             SanGong.SanGongResult.Builder userResult = SanGong.SanGongResult.newBuilder();
             userResult.setID(grabSeat.getUserId());
             userResult.addAllCards(grabSeat.getCards());
-            userResult.setScore(bankScore);
             grabSeat.setScore(grabSeat.getScore() + bankScore);
+            userResult.setCurrentScore(bankScore);
+            userResult.setTotalScore(grabSeat.getScore());
             resultResponse.addResult(userResult);
 
             SeatRecord seatRecord = new SeatRecord();
             seatRecord.setUserId(grabSeat.getUserId());
+            seatRecord.setNickname(grabSeat.getNickname());
+            seatRecord.setHead(grabSeat.getHead());
             seatRecord.setCards(grabSeat.getCards());
             seatRecord.setWinOrLose(bankScore);
             seatRecords.add(seatRecord);
@@ -264,12 +316,15 @@ public class Room {
             SanGong.SanGongResult.Builder winResult = SanGong.SanGongResult.newBuilder();
             winResult.setID(winSeat.getUserId());
             winResult.addAllCards(winSeat.getCards());
-            winResult.setScore(win);
             winSeat.setScore(winSeat.getScore() + win);
+            winResult.setCurrentScore(win);
+            winResult.setTotalScore(winSeat.getScore());
             resultResponse.addResult(winResult);
 
             SeatRecord winRecord = new SeatRecord();
             winRecord.setUserId(winSeat.getUserId());
+            winRecord.setNickname(winSeat.getNickname());
+            winRecord.setHead(winSeat.getHead());
             winRecord.setCards(winSeat.getCards());
             winRecord.setWinOrLose(win);
             seatRecords.add(winRecord);
@@ -306,13 +361,17 @@ public class Room {
                     userResult.setID(seat.getUserId());
                     userResult.addAllCards(seat.getCards());
                     if (lose.containsKey(seat.getUserId())) {
-                        userResult.setScore(-lose.get(seat.getUserId()));
                         seat.setScore(seat.getScore() - lose.get(seat.getUserId()));
+                        userResult.setCurrentScore(-lose.get(seat.getUserId()));
+                        userResult.setTotalScore(seat.getScore());
+
                     }
                     resultResponse.addResult(userResult);
 
                     SeatRecord seatRecord = new SeatRecord();
                     seatRecord.setUserId(winSeat.getUserId());
+                    seatRecord.setNickname(winSeat.getNickname());
+                    seatRecord.setHead(winSeat.getHead());
                     seatRecord.setCards(winSeat.getCards());
                     seatRecord.setWinOrLose(-lose.get(seat.getUserId()));
                     seatRecords.add(seatRecord);
@@ -322,7 +381,7 @@ public class Room {
         }
 
         record.setSeatRecordList(seatRecords);
-        record.setHistoryList(historyList);
+        record.getHistoryList().addAll(historyList);
         recordList.add(record);
 
         response.setOperationType(GameBase.OperationType.RESULT).setData(resultResponse.build().toByteString());
@@ -339,7 +398,10 @@ public class Room {
     public void roomOver(GameBase.BaseConnection.Builder response, RedisService redisService) {
         SanGong.SanGongOverResponse.Builder over = SanGong.SanGongOverResponse.newBuilder();
 
+        StringBuilder people = new StringBuilder();
+
         for (Seat seat : seats) {
+            people.append(",").append(seat.getUserId());
             SanGong.SanGongSeatOver.Builder seatGameOver = SanGong.SanGongSeatOver.newBuilder()
                     .setID(seat.getUserId()).setSanGongCount(seat.getSanGongCount());
             over.addGameOver(seatGameOver);
@@ -356,6 +418,38 @@ public class Room {
                 over.setBackKey(uuid);
                 response.setOperationType(GameBase.OperationType.OVER).setData(over.build().toByteString());
                 SanGongTcpService.userClients.get(seat.getUserId()).send(response.build(), seat.getUserId());
+            }
+        }
+
+        if (0 != recordList.size()) {
+            List<TotalScore> totalScores = new ArrayList<>();
+            for (Seat seat : seats) {
+                TotalScore totalScore = new TotalScore();
+                totalScore.setHead(seat.getHead());
+                totalScore.setNickname(seat.getNickname());
+                totalScore.setUserId(seat.getUserId());
+                totalScore.setScore(seat.getScore());
+                totalScores.add(totalScore);
+            }
+            SerializerFeature[] features = new SerializerFeature[]{SerializerFeature.WriteNullListAsEmpty,
+                    SerializerFeature.WriteMapNullValue, SerializerFeature.DisableCircularReferenceDetect,
+                    SerializerFeature.WriteNullStringAsEmpty, SerializerFeature.WriteNullNumberAsZero,
+                    SerializerFeature.WriteNullBooleanAsFalse};
+            int feature = SerializerFeature.config(JSON.DEFAULT_GENERATE_FEATURE, SerializerFeature.WriteEnumUsingName, false);
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("gameType", 1);
+            jsonObject.put("roomOwner", roomOwner);
+            jsonObject.put("people", people.toString().substring(1));
+            jsonObject.put("gameTotal", gameTimes);
+            jsonObject.put("gameCount", gameCount);
+            jsonObject.put("peopleCount", seats.size());
+            jsonObject.put("roomNo", Integer.parseInt(roomNo));
+            jsonObject.put("gameData", JSON.toJSONString(recordList, feature, features).getBytes());
+            jsonObject.put("scoreData", JSON.toJSONString(totalScores, feature, features).getBytes());
+
+            ApiResponse apiResponse = JSON.parseObject(HttpUtil.urlConnectionByRsa(Constant.apiUrl + Constant.gamerecordCreateUrl, jsonObject.toJSONString()), ApiResponse.class);
+            if (0 != apiResponse.getCode()) {
+                LoggerFactory.getLogger(this.getClass()).error(Constant.apiUrl + Constant.gamerecordCreateUrl + "?" + jsonObject.toJSONString());
             }
         }
 
