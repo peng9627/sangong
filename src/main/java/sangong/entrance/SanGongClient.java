@@ -6,6 +6,7 @@ import com.alibaba.fastjson.TypeReference;
 import com.google.protobuf.InvalidProtocolBufferException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import sangong.constant.Constant;
 import sangong.mode.*;
 import sangong.redis.RedisService;
 import sangong.utils.HttpUtil;
@@ -39,20 +40,16 @@ public class SanGongClient {
                 while (!redisService.lock("lock_room" + roomNo)) {
                 }
                 Room room = JSON.parseObject(redisService.getCache("room" + roomNo), Room.class);
-
+                if (null == room) {
+                    return;
+                }
                 for (Seat seat : room.getSeats()) {
                     if (seat.getUserId() == userId) {
                         seat.setRobot(true);
                         break;
                     }
                 }
-                SanGong.SangongGameInfo.Builder gameInfo = SanGong.SangongGameInfo.newBuilder();
-                gameInfo.setGameCount(room.getGameCount());
-                gameInfo.setGameTimes(room.getGameTimes());
-                gameInfo.setBanker(room.getGrab());
-                addSeat(room, gameInfo);
-                response.setOperationType(GameBase.OperationType.GAME_INFO).setData(gameInfo.build().toByteString());
-                messageReceive.send(response.build(), userId);
+                room.sendSeatInfo(response);
 
                 redisService.addCache("room" + roomNo, JSON.toJSONString(room));
                 redisService.unlock("lock_room" + roomNo);
@@ -123,12 +120,15 @@ public class SanGongClient {
                         redisService.addCache("reconnect" + userId, "sangong," + roomNo);
                         //房间是否已存在当前用户，存在则为重连
                         final boolean[] find = {false};
-                        room.getSeats().stream().filter(seat -> seat.getUserId() == userId).forEach(seat -> find[0] = true);
+                        room.getSeats().stream().filter(seat -> seat.getUserId() == userId).forEach(seat -> {
+                            find[0] = true;
+                            seat.setRobot(false);
+                        });
                         if (!find[0]) {
                             if (6 > room.getSeats().size() && 0 == room.getGameStatus().compareTo(GameStatus.WAITING)) {
                                 JSONObject jsonObject = new JSONObject();
                                 jsonObject.put("userId", userId);
-                                ApiResponse<User> userResponse = JSON.parseObject(HttpUtil.urlConnectionByRsa("http://127.0.0.1:9999/api/user/info", jsonObject.toJSONString()), new TypeReference<ApiResponse<User>>() {
+                                ApiResponse<User> userResponse = JSON.parseObject(HttpUtil.urlConnectionByRsa(Constant.apiUrl + Constant.userInfoUrl, jsonObject.toJSONString()), new TypeReference<ApiResponse<User>>() {
                                 });
                                 if (0 == userResponse.getCode()) {
                                     room.addSeat(userResponse.getData());
@@ -141,32 +141,8 @@ public class SanGongClient {
                                 break;
                             }
                         }
-                        SanGong.SangongIntoResponse sangongIntoResponse = SanGong.SangongIntoResponse.newBuilder()
-                                .setBaseScore(room.getBaseScore()).setBankerWay(room.getBankerWay()).setGameTimes(room.getGameTimes()).build();
-                        intoResponseBuilder.setData(sangongIntoResponse.toByteString());
-
-                        response.setOperationType(GameBase.OperationType.ROOM_INFO).setData(intoResponseBuilder.build().toByteString());
-                        messageReceive.send(response.build(), userId);
-
-                        GameBase.RoomSeatsInfo.Builder roomSeatsInfo = GameBase.RoomSeatsInfo.newBuilder();
-                        for (Seat seat1 : room.getSeats()) {
-                            GameBase.SeatResponse.Builder seatResponse = GameBase.SeatResponse.newBuilder();
-                            seatResponse.setSeatNo(seat1.getSeatNo());
-                            seatResponse.setID(seat1.getUserId());
-                            seatResponse.setScore(seat1.getScore());
-                            seatResponse.setReady(seat1.isReady());
-                            seatResponse.setAreaString(seat1.getAreaString());
-                            seatResponse.setNickname(seat1.getNickname());
-                            seatResponse.setHead(seat1.getHead());
-                            seatResponse.setSex(seat1.isSex());
-                            roomSeatsInfo.addSeats(seatResponse.build());
-                        }
-                        response.setOperationType(GameBase.OperationType.SEAT_INFO).setData(roomSeatsInfo.build().toByteString());
-                        for (Seat seat : room.getSeats()) {
-                            if (SanGongTcpService.userClients.containsKey(seat.getUserId())) {
-                                messageReceive.send(response.build(), seat.getUserId());
-                            }
-                        }
+                        room.sendRoomInfo(intoResponseBuilder, response);
+                        room.sendSeatInfo(response);
 
                         if (0 != room.getGameStatus().compareTo(GameStatus.WAITING)) {
                             SanGong.SangongGameInfo.Builder gameInfo = SanGong.SangongGameInfo.newBuilder();
@@ -557,7 +533,7 @@ public class SanGongClient {
                                 }
                             }
                             if (!dissolveReply.getAgree()) {
-                                GameBase.DissolveConfirm dissolveConfirm = GameBase.DissolveConfirm.newBuilder().setDissolved(false).setUserId(userId).build();
+                                GameBase.DissolveConfirm dissolveConfirm = GameBase.DissolveConfirm.newBuilder().setDissolved(false).build();
                                 response.setOperationType(GameBase.OperationType.DISSOLVE_CONFIRM).setData(dissolveConfirm.toByteString());
                                 for (Seat seat : room.getSeats()) {
                                     if (SanGongTcpService.userClients.containsKey(seat.getUserId())) {

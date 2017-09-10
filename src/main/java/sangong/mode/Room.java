@@ -226,7 +226,6 @@ public class Room {
 
         SanGong.SanGongResultResponse.Builder resultResponse = SanGong.SanGongResultResponse.newBuilder();
         resultResponse.setReadyTimeCounter(redisService.exists("room_match" + roomNo) ? 8 : 0);
-        //TODO 扣款
         if (grab != 0) {
             Seat grabSeat = null;
             for (Seat seat : seats) {
@@ -457,5 +456,44 @@ public class Room {
         redisService.delete("room" + roomNo);
         redisService.delete("room_type" + roomNo);
         roomNo = null;
+    }
+
+    public void sendRoomInfo(GameBase.RoomCardIntoResponse.Builder intoResponseBuilder, GameBase.BaseConnection.Builder response) {
+        SanGong.SangongIntoResponse.Builder sangongIntoResponse = SanGong.SangongIntoResponse.newBuilder();
+        sangongIntoResponse.setBaseScore(baseScore);
+        sangongIntoResponse.setBankerWay(bankerWay);
+        sangongIntoResponse.setGameTimes(gameTimes);
+        intoResponseBuilder.setData(sangongIntoResponse.build().toByteString());
+
+        response.setOperationType(GameBase.OperationType.ROOM_INFO).setData(intoResponseBuilder.build().toByteString());
+        for (Seat seat : seats) {
+            if (SanGongTcpService.userClients.containsKey(seat.getUserId())) {
+                SanGongTcpService.userClients.get(seat.getUserId()).send(response.build(), seat.getUserId());
+            }
+        }
+
+    }
+
+    public void sendSeatInfo(GameBase.BaseConnection.Builder response) {
+        GameBase.RoomSeatsInfo.Builder roomSeatsInfo = GameBase.RoomSeatsInfo.newBuilder();
+        for (Seat seat1 : seats) {
+            GameBase.SeatResponse.Builder seatResponse = GameBase.SeatResponse.newBuilder();
+            seatResponse.setSeatNo(seat1.getSeatNo());
+            seatResponse.setID(seat1.getUserId());
+            seatResponse.setScore(seat1.getScore());
+            seatResponse.setReady(seat1.isReady());
+            seatResponse.setAreaString(seat1.getAreaString());
+            seatResponse.setNickname(seat1.getNickname());
+            seatResponse.setHead(seat1.getHead());
+            seatResponse.setSex(seat1.isSex());
+            seatResponse.setOffline(seat1.isRobot());
+            roomSeatsInfo.addSeats(seatResponse.build());
+        }
+        response.setOperationType(GameBase.OperationType.SEAT_INFO).setData(roomSeatsInfo.build().toByteString());
+        for (Seat seat : seats) {
+            if (SanGongTcpService.userClients.containsKey(seat.getUserId())) {
+                SanGongTcpService.userClients.get(seat.getUserId()).send(response.build(), seat.getUserId());
+            }
+        }
     }
 }
