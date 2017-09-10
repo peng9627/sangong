@@ -23,6 +23,9 @@ public class Seat {
     private int grab;                           //抢庄0、未操作，1、抢，2、不抢
     private int sanGongCount;                   //三公次数
     private int playScore;                      //下注分
+    private String ip;                          //ip
+    private int gamecount;                      //游戏局数
+
 
     public int getSeatNo() {
         return seatNo;
@@ -142,6 +145,22 @@ public class Seat {
 
     public void setPlayScore(int playScore) {
         this.playScore = playScore;
+    }
+
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
+    public int getGamecount() {
+        return gamecount;
+    }
+
+    public void setGamecount(int gamecount) {
+        this.gamecount = gamecount;
     }
 
     public void clear() {

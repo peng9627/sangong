@@ -37,10 +37,10 @@ public class Card {
     public static int getCardsValue(List<Integer> cardList) {
         int value = 0;
         for (Integer integer : cardList) {
-            if (integer < 10) {
-                value += integer;
+            if (integer % 100 < 10) {
+                value += integer % 100;
             }
-            if (integer == 14) {
+            if (integer % 100 == 14) {
                 value += 1;
             }
         }
@@ -53,18 +53,9 @@ public class Card {
         int size = getGongCardSize(cardList);
         int otherSize = getGongCardSize(cards);
 
-        if (size != otherSize) {
+        if (size != otherSize && (size == 3 || otherSize == 3)) {
             return size > otherSize;
         }
-
-        //比较点子
-        int cardListValue = getCardsValue(cardList);
-        int cardsValue = getCardsValue(cards);
-
-        if (cardListValue != cardsValue) {
-            return cardListValue > cardsValue;
-        }
-
         List<Integer> cardListArray = new ArrayList<>();
         for (Integer integer : cardList) {
             if (integer % 100 == 14) {
@@ -77,7 +68,11 @@ public class Card {
         cardListArray.sort(new Comparator<Integer>() {
             @Override
             public int compare(Integer o1, Integer o2) {
-                return o1.compareTo(o2);
+                if (o1 % 100 == o2 % 100) {
+                    return o1 / 100 > o2 / 100 ? 1 : -1;
+                } else {
+                    return o1 % 100 > o2 % 100 ? 1 : -1;
+                }
             }
         });
 
@@ -93,31 +88,46 @@ public class Card {
         cardsArray.sort(new Comparator<Integer>() {
             @Override
             public int compare(Integer o1, Integer o2) {
-                return o1.compareTo(o2);
+                if (o1 % 100 == o2 % 100) {
+                    return o1 / 100 > o2 / 100 ? 1 : -1;
+                } else {
+                    return o1 % 100 > o2 % 100 ? 1 : -1;
+                }
             }
         });
 
-        //如果是三公
-        if (size == 3) {
-            if (cardListArray.get(2) % 10 == cardsArray.get(2) % 10) {
+        if (size == 3 && otherSize == 3) {
+            if (cardListArray.get(2) % 100 == cardsArray.get(2) % 100) {
                 return cardListArray.get(2) > cardsArray.get(2);
             } else {
-                return cardListArray.get(2) % 10 > cardsArray.get(2) % 10;
+                return cardListArray.get(2) % 100 > cardsArray.get(2) % 100;
+            }
+        }
+
+        //比较点子
+        int cardListValue = getCardsValue(cardList);
+        int cardsValue = getCardsValue(cards);
+
+        if (cardListValue != cardsValue) {
+            return cardListValue > cardsValue;
+        }
+
+        if (size != otherSize) {
+            return size > otherSize;
+        }
+
+        //第二张是公牌
+        if (cardListArray.get(1) % 100 > 10) {
+            if (cardListArray.get(0) % 100 != cardsArray.get(0) % 100) {
+                return cardListArray.get(0) % 100 > cardsArray.get(0) % 100;
+            } else {
+                return cardListArray.get(0) > cardsArray.get(0);
             }
         } else {
-            //第二张是公牌
-            if (cardListArray.get(1) > 10) {
-                if (cardListArray.get(0) % 10 != cardsArray.get(0) % 10) {
-                    return cardListArray.get(0) % 10 > cardsArray.get(0) % 10;
-                } else {
-                    return cardListArray.get(0) > cardsArray.get(0);
-                }
+            if (cardListArray.get(1) % 100 != cardsArray.get(1) % 100) {
+                return cardListArray.get(1) % 100 > cardsArray.get(1) % 100;
             } else {
-                if (cardListArray.get(1) % 10 != cardsArray.get(1) % 10) {
-                    return cardListArray.get(1) % 10 > cardsArray.get(1) % 10;
-                } else {
-                    return cardListArray.get(1) > cardsArray.get(1);
-                }
+                return cardListArray.get(1) > cardsArray.get(1);
             }
         }
 

@@ -147,6 +147,8 @@ public class Room {
         seat.setHead(user.getHead());
         seat.setNickname(user.getNickname());
         seat.setSex(user.getSex().equals("MAN"));
+        seat.setIp(user.getLastLoginIp());
+        seat.setGamecount(user.getGameCount());
         seats.add(seat);
     }
 
@@ -402,7 +404,7 @@ public class Room {
         for (Seat seat : seats) {
             people.append(",").append(seat.getUserId());
             SanGong.SanGongSeatOver.Builder seatGameOver = SanGong.SanGongSeatOver.newBuilder()
-                    .setID(seat.getUserId()).setSanGongCount(seat.getSanGongCount());
+                    .setID(seat.getUserId()).setSanGongCount(seat.getSanGongCount()).setWinOrLose(seat.getScore());
             over.addGameOver(seatGameOver);
         }
 
@@ -413,7 +415,7 @@ public class Room {
                 while (redisService.exists(uuid)) {
                     uuid = UUID.randomUUID().toString().replace("-", "");
                 }
-                redisService.addCache("backkey" + uuid, seat.getUserId() + "", 10);
+                redisService.addCache("backkey" + uuid, seat.getUserId() + "", 1800);
                 over.setBackKey(uuid);
                 response.setOperationType(GameBase.OperationType.OVER).setData(over.build().toByteString());
                 SanGongTcpService.userClients.get(seat.getUserId()).send(response.build(), seat.getUserId());
@@ -436,7 +438,7 @@ public class Room {
                     SerializerFeature.WriteNullBooleanAsFalse};
             int feature = SerializerFeature.config(JSON.DEFAULT_GENERATE_FEATURE, SerializerFeature.WriteEnumUsingName, false);
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("gameType", 1);
+            jsonObject.put("gameType", 3);
             jsonObject.put("roomOwner", roomOwner);
             jsonObject.put("people", people.toString().substring(1));
             jsonObject.put("gameTotal", gameTimes);
@@ -458,7 +460,7 @@ public class Room {
         roomNo = null;
     }
 
-    public void sendRoomInfo(GameBase.RoomCardIntoResponse.Builder intoResponseBuilder, GameBase.BaseConnection.Builder response) {
+    public void sendRoomInfo(int userId, GameBase.RoomCardIntoResponse.Builder intoResponseBuilder, GameBase.BaseConnection.Builder response) {
         SanGong.SangongIntoResponse.Builder sangongIntoResponse = SanGong.SangongIntoResponse.newBuilder();
         sangongIntoResponse.setBaseScore(baseScore);
         sangongIntoResponse.setBankerWay(bankerWay);
@@ -466,10 +468,8 @@ public class Room {
         intoResponseBuilder.setData(sangongIntoResponse.build().toByteString());
 
         response.setOperationType(GameBase.OperationType.ROOM_INFO).setData(intoResponseBuilder.build().toByteString());
-        for (Seat seat : seats) {
-            if (SanGongTcpService.userClients.containsKey(seat.getUserId())) {
-                SanGongTcpService.userClients.get(seat.getUserId()).send(response.build(), seat.getUserId());
-            }
+        if (SanGongTcpService.userClients.containsKey(userId)) {
+            SanGongTcpService.userClients.get(userId).send(response.build(), userId);
         }
 
     }
@@ -482,7 +482,8 @@ public class Room {
             seatResponse.setID(seat1.getUserId());
             seatResponse.setScore(seat1.getScore());
             seatResponse.setReady(seat1.isReady());
-            seatResponse.setAreaString(seat1.getAreaString());
+            seatResponse.setIp(seat1.getIp());
+            seatResponse.setGameCount(seat1.getGamecount());
             seatResponse.setNickname(seat1.getNickname());
             seatResponse.setHead(seat1.getHead());
             seatResponse.setSex(seat1.isSex());

@@ -23,7 +23,7 @@ import java.util.concurrent.Executors;
  */
 public class SanGongTcpService implements Runnable {
 
-    public static Map<Integer, MessageReceive> userClients = new HashMap<>();
+    public final static Map<Integer, MessageReceive> userClients = new HashMap<>();
     private ServerSocket serverSocket;
     private boolean started = false;
     private Logger logger = LoggerFactory.getLogger(this.getClass());

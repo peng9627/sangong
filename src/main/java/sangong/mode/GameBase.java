@@ -1643,14 +1643,14 @@ public final class GameBase {
      * <code>INPUT = 2;</code>
      */
     INPUT(2),
-      /**
-       * <pre>
-       * 语音
-       * </pre>
-       * <p>
-       * <code>VOICE = 3;</code>
-       */
-      VOICE(3),
+    /**
+     * <pre>
+     * 语音
+     * </pre>
+     * <p>
+     * <code>VOICE = 3;</code>
+     */
+    VOICE(3),
     UNRECOGNIZED(-1),
     ;
 
@@ -1678,14 +1678,14 @@ public final class GameBase {
      * <code>INPUT = 2;</code>
      */
     public static final int INPUT_VALUE = 2;
-      /**
-       * <pre>
-       * 语音
-       * </pre>
-       * <p>
-       * <code>VOICE = 3;</code>
-       */
-      public static final int VOICE_VALUE = 3;
+    /**
+     * <pre>
+     * 语音
+     * </pre>
+     * <p>
+     * <code>VOICE = 3;</code>
+     */
+    public static final int VOICE_VALUE = 3;
 
 
     public final int getNumber() {
@@ -1706,10 +1706,10 @@ public final class GameBase {
 
     public static MessageType forNumber(int value) {
       switch (value) {
-        case 0: return TEXT;
-          case 1:
-              return EMOTICON;
-          case 2: return INPUT;
+        case 0:
+          return TEXT;
+        case 1: return EMOTICON;
+        case 2: return INPUT;
         case 3: return VOICE;
         default: return null;
       }
@@ -5010,18 +5010,19 @@ public final class GameBase {
      *地区
      * </pre>
      *
-     * <code>string areaString = 6;</code>
+     * <code>string ip = 6;</code>
      */
-    java.lang.String getAreaString();
+    java.lang.String getIp();
+
     /**
      * <pre>
      *地区
      * </pre>
      *
-     * <code>string areaString = 6;</code>
+     * <code>string ip = 6;</code>
      */
     com.google.protobuf.ByteString
-        getAreaStringBytes();
+        getIpBytes();
 
     /**
      * <pre>
@@ -5058,6 +5059,15 @@ public final class GameBase {
      * <code>bool offline = 9;</code>
      */
     boolean getOffline();
+
+    /**
+     * <pre>
+     *总局数
+     * </pre>
+     *
+     * <code>uint32 gameCount = 10;</code>
+     */
+    int getGameCount();
   }
   /**
    * <pre>
@@ -5080,10 +5090,11 @@ public final class GameBase {
       nickname_ = "";
       score_ = 0;
       ready_ = false;
-      areaString_ = "";
+      ip_ = "";
       head_ = "";
       sex_ = false;
       offline_ = false;
+      gameCount_ = 0;
     }
 
     @java.lang.Override
@@ -5140,7 +5151,7 @@ public final class GameBase {
             case 50: {
               java.lang.String s = input.readStringRequireUtf8();
 
-              areaString_ = s;
+              ip_ = s;
               break;
             }
             case 58: {
@@ -5157,6 +5168,11 @@ public final class GameBase {
             case 72: {
 
               offline_ = input.readBool();
+              break;
+            }
+            case 80: {
+
+              gameCount_ = input.readUInt32();
               break;
             }
           }
@@ -5276,42 +5292,44 @@ public final class GameBase {
       return ready_;
     }
 
-    public static final int AREASTRING_FIELD_NUMBER = 6;
-    private volatile java.lang.Object areaString_;
+    public static final int IP_FIELD_NUMBER = 6;
+    private volatile java.lang.Object ip_;
+
     /**
      * <pre>
      *地区
      * </pre>
      *
-     * <code>string areaString = 6;</code>
+     * <code>string ip = 6;</code>
      */
-    public java.lang.String getAreaString() {
-      java.lang.Object ref = areaString_;
+    public java.lang.String getIp() {
+      java.lang.Object ref = ip_;
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
-        areaString_ = s;
+        ip_ = s;
         return s;
       }
     }
+
     /**
      * <pre>
      *地区
      * </pre>
      *
-     * <code>string areaString = 6;</code>
+     * <code>string ip = 6;</code>
      */
     public com.google.protobuf.ByteString
-        getAreaStringBytes() {
-      java.lang.Object ref = areaString_;
+        getIpBytes() {
+      java.lang.Object ref = ip_;
       if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
-        areaString_ = b;
+        ip_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
@@ -5386,6 +5404,20 @@ public final class GameBase {
       return offline_;
     }
 
+    public static final int GAMECOUNT_FIELD_NUMBER = 10;
+    private int gameCount_;
+
+    /**
+     * <pre>
+     * 总局数
+     * </pre>
+     * <p>
+     * <code>uint32 gameCount = 10;</code>
+     */
+    public int getGameCount() {
+      return gameCount_;
+    }
+
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -5413,8 +5445,8 @@ public final class GameBase {
       if (ready_ != false) {
         output.writeBool(5, ready_);
       }
-      if (!getAreaStringBytes().isEmpty()) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 6, areaString_);
+      if (!getIpBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 6, ip_);
       }
       if (!getHeadBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 7, head_);
@@ -5424,6 +5456,9 @@ public final class GameBase {
       }
       if (offline_ != false) {
         output.writeBool(9, offline_);
+      }
+      if (gameCount_ != 0) {
+        output.writeUInt32(10, gameCount_);
       }
     }
 
@@ -5449,10 +5484,10 @@ public final class GameBase {
       }
       if (ready_ != false) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBoolSize(5, ready_);
+                .computeBoolSize(5, ready_);
       }
-      if (!getAreaStringBytes().isEmpty()) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(6, areaString_);
+      if (!getIpBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(6, ip_);
       }
       if (!getHeadBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(7, head_);
@@ -5463,7 +5498,11 @@ public final class GameBase {
       }
       if (offline_ != false) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBoolSize(9, offline_);
+                .computeBoolSize(9, offline_);
+      }
+      if (gameCount_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+                .computeUInt32Size(10, gameCount_);
       }
       memoizedSize = size;
       return size;
@@ -5490,15 +5529,17 @@ public final class GameBase {
       result = result && (getScore()
           == other.getScore());
       result = result && (getReady()
-          == other.getReady());
-      result = result && getAreaString()
-          .equals(other.getAreaString());
+              == other.getReady());
+      result = result && getIp()
+          .equals(other.getIp());
       result = result && getHead()
           .equals(other.getHead());
       result = result && (getSex()
           == other.getSex());
       result = result && (getOffline()
-          == other.getOffline());
+              == other.getOffline());
+      result = result && (getGameCount()
+          == other.getGameCount());
       return result;
     }
 
@@ -5519,9 +5560,9 @@ public final class GameBase {
       hash = (53 * hash) + getScore();
       hash = (37 * hash) + READY_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
-          getReady());
-      hash = (37 * hash) + AREASTRING_FIELD_NUMBER;
-      hash = (53 * hash) + getAreaString().hashCode();
+              getReady());
+      hash = (37 * hash) + IP_FIELD_NUMBER;
+      hash = (53 * hash) + getIp().hashCode();
       hash = (37 * hash) + HEAD_FIELD_NUMBER;
       hash = (53 * hash) + getHead().hashCode();
       hash = (37 * hash) + SEX_FIELD_NUMBER;
@@ -5529,7 +5570,9 @@ public final class GameBase {
           getSex());
       hash = (37 * hash) + OFFLINE_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
-          getOffline());
+              getOffline());
+      hash = (37 * hash) + GAMECOUNT_FIELD_NUMBER;
+      hash = (53 * hash) + getGameCount();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -5673,13 +5716,15 @@ public final class GameBase {
 
         ready_ = false;
 
-        areaString_ = "";
+        ip_ = "";
 
         head_ = "";
 
         sex_ = false;
 
         offline_ = false;
+
+        gameCount_ = 0;
 
         return this;
       }
@@ -5708,10 +5753,11 @@ public final class GameBase {
         result.nickname_ = nickname_;
         result.score_ = score_;
         result.ready_ = ready_;
-        result.areaString_ = areaString_;
+        result.ip_ = ip_;
         result.head_ = head_;
         result.sex_ = sex_;
         result.offline_ = offline_;
+        result.gameCount_ = gameCount_;
         onBuilt();
         return result;
       }
@@ -5769,8 +5815,8 @@ public final class GameBase {
         if (other.getReady() != false) {
           setReady(other.getReady());
         }
-        if (!other.getAreaString().isEmpty()) {
-          areaString_ = other.areaString_;
+        if (!other.getIp().isEmpty()) {
+          ip_ = other.ip_;
           onChanged();
         }
         if (!other.getHead().isEmpty()) {
@@ -5782,6 +5828,9 @@ public final class GameBase {
         }
         if (other.getOffline() != false) {
           setOffline(other.getOffline());
+        }
+        if (other.getGameCount() != 0) {
+          setGameCount(other.getGameCount());
         }
         onChanged();
         return this;
@@ -6044,97 +6093,102 @@ public final class GameBase {
        * <code>bool ready = 5;</code>
        */
       public Builder clearReady() {
-        
+
         ready_ = false;
         onChanged();
         return this;
       }
 
-      private java.lang.Object areaString_ = "";
+      private java.lang.Object ip_ = "";
+
       /**
        * <pre>
        *地区
        * </pre>
        *
-       * <code>string areaString = 6;</code>
+       * <code>string ip = 6;</code>
        */
-      public java.lang.String getAreaString() {
-        java.lang.Object ref = areaString_;
+      public java.lang.String getIp() {
+        java.lang.Object ref = ip_;
         if (!(ref instanceof java.lang.String)) {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
           java.lang.String s = bs.toStringUtf8();
-          areaString_ = s;
+          ip_ = s;
           return s;
         } else {
           return (java.lang.String) ref;
         }
       }
+
       /**
        * <pre>
        *地区
        * </pre>
        *
-       * <code>string areaString = 6;</code>
+       * <code>string ip = 6;</code>
        */
       public com.google.protobuf.ByteString
-          getAreaStringBytes() {
-        java.lang.Object ref = areaString_;
+          getIpBytes() {
+        java.lang.Object ref = ip_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
-          areaString_ = b;
+          ip_ = b;
           return b;
         } else {
           return (com.google.protobuf.ByteString) ref;
         }
       }
+
       /**
        * <pre>
        *地区
        * </pre>
        *
-       * <code>string areaString = 6;</code>
+       * <code>string ip = 6;</code>
        */
-      public Builder setAreaString(
+      public Builder setIp(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
   
-        areaString_ = value;
+        ip_ = value;
         onChanged();
         return this;
       }
+
       /**
        * <pre>
        *地区
        * </pre>
        *
-       * <code>string areaString = 6;</code>
+       * <code>string ip = 6;</code>
        */
-      public Builder clearAreaString() {
+      public Builder clearIp() {
         
-        areaString_ = getDefaultInstance().getAreaString();
+        ip_ = getDefaultInstance().getIp();
         onChanged();
         return this;
       }
+
       /**
        * <pre>
        *地区
        * </pre>
        *
-       * <code>string areaString = 6;</code>
+       * <code>string ip = 6;</code>
        */
-      public Builder setAreaStringBytes(
+      public Builder setIpBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
-    throw new NullPointerException();
+          throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
         
-        areaString_ = value;
+        ip_ = value;
         onChanged();
         return this;
       }
@@ -6298,8 +6352,49 @@ public final class GameBase {
        * <code>bool offline = 9;</code>
        */
       public Builder clearOffline() {
-        
+
         offline_ = false;
+        onChanged();
+        return this;
+      }
+
+      private int gameCount_;
+
+      /**
+       * <pre>
+       * 总局数
+       * </pre>
+       * <p>
+       * <code>uint32 gameCount = 10;</code>
+       */
+      public int getGameCount() {
+        return gameCount_;
+      }
+
+      /**
+       * <pre>
+       * 总局数
+       * </pre>
+       * <p>
+       * <code>uint32 gameCount = 10;</code>
+       */
+      public Builder setGameCount(int value) {
+
+        gameCount_ = value;
+        onChanged();
+        return this;
+      }
+
+      /**
+       * <pre>
+       * 总局数
+       * </pre>
+       * <p>
+       * <code>uint32 gameCount = 10;</code>
+       */
+      public Builder clearGameCount() {
+
+        gameCount_ = 0;
         onChanged();
         return this;
       }
@@ -17774,14 +17869,13 @@ public final class GameBase {
   public  static final class Message extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:Message)
-      MessageOrBuilder {
+          MessageOrBuilder {
     // Use Message.newBuilder() to construct.
     private Message(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-
-      private Message() {
-          messageType_ = 0;
+    private Message() {
+      messageType_ = 0;
       content_ = com.google.protobuf.ByteString.EMPTY;
       userId_ = 0;
     }
@@ -17815,9 +17909,9 @@ public final class GameBase {
               int rawValue = input.readEnum();
 
               messageType_ = rawValue;
-                break;
+              break;
             }
-              case 18: {
+            case 18: {
 
               content_ = input.readBytes();
               break;
@@ -17874,7 +17968,7 @@ public final class GameBase {
       return result == null ? sangong.mode.GameBase.MessageType.UNRECOGNIZED : result;
     }
 
-      public static final int CONTENT_FIELD_NUMBER = 2;
+    public static final int CONTENT_FIELD_NUMBER = 2;
     private com.google.protobuf.ByteString content_;
     /**
      * <pre>
@@ -17911,11 +18005,11 @@ public final class GameBase {
     }
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
+            throws java.io.IOException {
       if (messageType_ != sangong.mode.GameBase.MessageType.TEXT.getNumber()) {
-          output.writeEnum(1, messageType_);
+        output.writeEnum(1, messageType_);
       }
-        if (!content_.isEmpty()) {
+      if (!content_.isEmpty()) {
         output.writeBytes(2, content_);
       }
       if (userId_ != 0) {
@@ -17930,10 +18024,10 @@ public final class GameBase {
       size = 0;
       if (messageType_ != sangong.mode.GameBase.MessageType.TEXT.getNumber()) {
         size += com.google.protobuf.CodedOutputStream
-                .computeEnumSize(1, messageType_);
+          .computeEnumSize(1, messageType_);
       }
-        if (!content_.isEmpty()) {
-            size += com.google.protobuf.CodedOutputStream
+      if (!content_.isEmpty()) {
+        size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(2, content_);
       }
       if (userId_ != 0) {
@@ -18103,14 +18197,15 @@ public final class GameBase {
         super(parent);
         maybeForceBuilderInitialization();
       }
+
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3
                 .alwaysUseFieldBuilders) {
         }
       }
       public Builder clear() {
-          super.clear();
-          messageType_ = 0;
+        super.clear();
+        messageType_ = 0;
 
         content_ = com.google.protobuf.ByteString.EMPTY;
 
@@ -18185,7 +18280,7 @@ public final class GameBase {
         if (other.messageType_ != 0) {
           setMessageTypeValue(other.getMessageTypeValue());
         }
-          if (other.getContent() != com.google.protobuf.ByteString.EMPTY) {
+        if (other.getContent() != com.google.protobuf.ByteString.EMPTY) {
           setContent(other.getContent());
         }
         if (other.getUserId() != 0) {
@@ -18267,6 +18362,7 @@ public final class GameBase {
         onChanged();
         return this;
       }
+
       /**
        * <pre>
        *公共消息类型
@@ -18277,11 +18373,11 @@ public final class GameBase {
       public Builder clearMessageType() {
         
         messageType_ = 0;
-          onChanged();
-          return this;
+        onChanged();
+        return this;
       }
 
-        private com.google.protobuf.ByteString content_ = com.google.protobuf.ByteString.EMPTY;
+      private com.google.protobuf.ByteString content_ = com.google.protobuf.ByteString.EMPTY;
       /**
        * <pre>
        *公共消息内容，用户输入时此处为字符串，否则是下标
@@ -23394,10 +23490,10 @@ public final class GameBase {
       // @@protoc_insertion_point(interface_extends:DissolveConfirm)
       com.google.protobuf.MessageOrBuilder {
 
-      /**
-       * <pre>
-       *是否成功解散
-       * </pre>
+    /**
+     * <pre>
+     *是否成功解散
+     * </pre>
      *
      * <code>bool dissolved = 1;</code>
      */
@@ -23472,16 +23568,15 @@ public final class GameBase {
         internalGetFieldAccessorTable() {
       return sangong.mode.GameBase.internal_static_DissolveConfirm_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              sangong.mode.GameBase.DissolveConfirm.class, sangong.mode.GameBase.DissolveConfirm.Builder.class);
+                  sangong.mode.GameBase.DissolveConfirm.class, sangong.mode.GameBase.DissolveConfirm.Builder.class);
     }
 
     public static final int DISSOLVED_FIELD_NUMBER = 1;
     private boolean dissolved_;
-
-      /**
-       * <pre>
-       *是否成功解散
-       * </pre>
+    /**
+     * <pre>
+     *是否成功解散
+     * </pre>
      *
      * <code>bool dissolved = 1;</code>
      */
@@ -23501,7 +23596,7 @@ public final class GameBase {
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-        if (dissolved_ != false) {
+      if (dissolved_ != false) {
         output.writeBool(1, dissolved_);
       }
     }
@@ -23512,7 +23607,7 @@ public final class GameBase {
 
       size = 0;
       if (dissolved_ != false) {
-          size += com.google.protobuf.CodedOutputStream
+        size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(1, dissolved_);
       }
       memoizedSize = size;
@@ -24588,86 +24683,86 @@ public final class GameBase {
       "(\r\022\016\n\006roomNo\030\002 \001(\t\"\252\001\n\024RoomCardIntoRespo" +
       "nse\022\031\n\005error\030\001 \001(\0162\n.ErrorCode\022\033\n\010gameTy" +
       "pe\030\002 \001(\0162\t.GameType\022\016\n\006roomNo\030\003 \001(\t\022\021\n\tr" +
-      "oomOwner\030\004 \001(\r\022\017\n\007started\030\005 \001(\010\022\014\n\004data\030" +
+              "oomOwner\030\004 \001(\r\022\017\n\007started\030\005 \001(\010\022\014\n\004data\030" +
       "\006 \001(\014\022\030\n\020readyTimeCounter\030\007 \001(\005\"-\n\rRoomS" +
-      "eatsInfo\022\034\n\005seats\030\001 \003(\0132\r.SeatResponse\"\232" +
-      "\001\n\014SeatResponse\022\016\n\006seatNo\030\001 \001(\r\022\n\n\002ID\030\002 ",
-      "\001(\r\022\020\n\010nickname\030\003 \001(\t\022\r\n\005score\030\004 \001(\005\022\r\n\005" +
-      "ready\030\005 \001(\010\022\022\n\nareaString\030\006 \001(\t\022\014\n\004head\030" +
-      "\007 \001(\t\022\013\n\003sex\030\010 \001(\010\022\017\n\007offline\030\t \001(\010\"L\n\020O" +
-      "perationHistory\022\n\n\002ID\030\001 \001(\r\022\036\n\013operation" +
-      "Id\030\002 \001(\0162\t.ActionId\022\014\n\004card\030\003 \003(\005\"F\n\nBas" +
-      "eAction\022\036\n\013operationId\030\001 \001(\0162\t.ActionId\022" +
-      "\n\n\002ID\030\002 \001(\r\022\014\n\004data\030\003 \001(\014\"B\n\013AskResponse" +
-      "\022\036\n\013operationId\030\001 \003(\0162\t.ActionId\022\023\n\013time" +
-      "Counter\030\002 \001(\005\"0\n\rRoundResponse\022\n\n\002ID\030\001 \001" +
-      "(\r\022\023\n\013timeCounter\030\002 \001(\005\"\033\n\rReadyResponse",
-      "\022\n\n\002ID\030\001 \001(\r\".\n\rErrorResponse\022\035\n\terrorCo" +
-      "de\030\001 \001(\0162\n.ErrorCode\"2\n\016RecordResponse\022 " +
-      "\n\013gameRecords\030\001 \003(\0132\013.GameRecord\"C\n\nGame" +
-      "Record\022\033\n\010gameType\030\001 \001(\0162\t.GameType\022\030\n\007r" +
-      "ecords\030\002 \003(\0132\007.Record\"p\n\006Record\022\020\n\010recor" +
-      "dId\030\001 \001(\t\022\016\n\006roomNo\030\002 \001(\t\022\021\n\tgameCount\030\003" +
-      " \001(\r\022\037\n\nuserRecord\030\004 \003(\0132\013.UserRecord\022\020\n" +
-      "\010dateTime\030\005 \001(\004\"(\n\024RecordDetailsRequest\022" +
-      "\020\n\010recordId\030\001 \001(\t\"a\n\025RecordDetailsRespon" +
-      "se\022\035\n\terrorCode\030\001 \001(\0162\n.ErrorCode\022)\n\017Rou",
-      "ndItemRecord\030\002 \003(\0132\020.RoundItemRecord\"2\n\017" +
-      "RoundItemRecord\022\037\n\nuserRecord\030\001 \003(\0132\013.Us" +
-      "erRecord\"G\n\nUserRecord\022\n\n\002ID\030\001 \001(\r\022\020\n\010ni" +
-      "ckname\030\002 \001(\t\022\014\n\004head\030\003 \001(\t\022\r\n\005score\030\004 \001(" +
-      "\005\"0\n\rReplayRequest\022\020\n\010recordId\030\001 \001(\t\022\r\n\005" +
-      "round\030\002 \001(\r\"?\n\016ReplayResponse\022\035\n\terrorCo" +
-      "de\030\001 \001(\0162\n.ErrorCode\022\016\n\006replay\030\002 \001(\014\"M\n\007" +
-      "Message\022!\n\013messageType\030\001 \001(\0162\014.MessageTy" +
-              "pe\022\017\n\007content\030\002 \001(\014\022\016\n\006userId\030\003 \001(\r\"L\n\022A" +
-      "ppointInteraction\022\020\n\010toUserId\030\001 \001(\r\022\024\n\014c",
-      "ontentIndex\030\002 \001(\r\022\016\n\006userId\030\003 \001(\r\"\037\n\rLog" +
-      "gerRequest\022\016\n\006logger\030\001 \001(\t\"]\n\tMatchInfo\022" +
-      "\021\n\tarenaType\030\001 \001(\r\022\014\n\004name\030\002 \001(\t\022\r\n\005coun" +
-      "t\030\003 \001(\r\022\020\n\010entryFee\030\004 \001(\r\022\016\n\006reward\030\005 \001(" +
-      "\r\"D\n\tMatchData\022\016\n\006status\030\001 \001(\r\022\021\n\tstartD" +
-      "ate\030\002 \001(\004\022\024\n\014currentCount\030\003 \001(\r\"8\n\013Match" +
-      "Result\022)\n\017matchUserResult\030\001 \003(\0132\020.MatchU" +
-      "serResult\"2\n\017MatchUserResult\022\016\n\006userId\030\001" +
-      " \001(\r\022\017\n\007ranking\030\002 \001(\r\"\037\n\rDissolveApply\022\016" +
-      "\n\006userId\030\001 \001(\r\".\n\rDissolveReply\022\016\n\006userI",
-            "d\030\001 \001(\r\022\r\n\005agree\030\002 \001(\010\"$\n\017DissolveConfir" +
-                    "m\022\021\n\tdissolved\030\001 \001(\010\"\031\n\006Notice\022\017\n\007messag" +
-                    "e\030\001 \001(\t*\300\005\n\rOperationType\022\t\n\005ERROR\020\000\022\t\n\005" +
-                    "LOGIN\020\n\022\017\n\013CREATE_ROOM\020\013\022\t\n\005QUERY\020\014\022\n\n\006R" +
-                    "EBACK\020\r\022\014\n\010ADD_ROOM\020\016\022\n\n\006RECORD\020\017\022\022\n\016REC" +
-                    "ORD_DETAILS\020\020\022\021\n\rSHARE_SUCCESS\020\021\022\r\n\tUSER" +
-                    "_INFO\020\022\022\010\n\004MALL\020\023\022\024\n\020EXCHANGE_HISTORY\020\024\022" +
-                    "\020\n\014REGISTRATION\020\025\022\025\n\021COMPETITION_START\020\026" +
-                    "\022\024\n\020INTO_COMPETITION\020\027\022\014\n\010CURRENCY\020\030\022\024\n\020" +
-                    "COMPETITION_LIST\020\031\022\010\n\004TASK\020\032\022\n\n\006NOTICE\020\033",
-            "\022\016\n\nMATCH_INFO\020\036\022\016\n\nMATCH_DATA\020\037\022\020\n\014MATC" +
-                    "H_RESULT\020 \022\016\n\nCONNECTION\0202\022\t\n\005START\0203\022\r\n" +
-                    "\tROOM_INFO\0204\022\r\n\tSEAT_INFO\0205\022\r\n\tGAME_INFO" +
-                    "\0206\022\t\n\005READY\0207\022\r\n\tCOMPLETED\0208\022\n\n\006ACTION\0209" +
-                    "\022\t\n\005ROUND\020:\022\007\n\003ASK\020;\022\010\n\004EXIT\020<\022\n\n\006RESULT" +
-                    "\020=\022\013\n\007MESSAGE\020>\022\n\n\006REPLAY\020?\022\010\n\004OVER\020@\022\020\n" +
-                    "\014RECONNECTION\020A\022\014\n\010DISSOLVE\020B\022\022\n\016DISSOLV" +
-                    "E_REPLY\020C\022\024\n\020DISSOLVE_CONFIRM\020D\022\022\n\016CONFI" +
-                    "RM_BANKER\020E\022\r\n\tDEAL_CARD\020F\022\017\n\013INTERACTIO" +
-                    "N\020G\022\021\n\rUPDATE_STATUS\020H\022\n\n\006LOGGER\020P*\274\001\n\010A",
-            "ctionId\022\r\n\tROOM_LIST\020\000\022\r\n\tBUY_HORSE\020\013\022\014\n" +
-                    "\010GET_CARD\020\014\022\r\n\tPLAY_CARD\020\r\022\010\n\004PENG\020\016\022\013\n\007" +
-                    "AN_GANG\020\017\022\r\n\tDIAN_GANG\020\020\022\013\n\007BA_GANG\020\021\022\006\n" +
-                    "\002HU\020\022\022\010\n\004PASS\020\023\022\007\n\003CHI\020\024\022\016\n\nPLAY_SCORE\020\025" +
-                    "\022\r\n\tOPEN_CARD\020\026\022\010\n\004GRAB\020\027*\212\002\n\tErrorCode\022" +
-                    "\013\n\007SUCCESS\020\000\022\020\n\014ERROR_UNKNOW\020\001\022\030\n\024ERROR_" +
-                    "UNKNOW_ACCOUNT\020\n\022\034\n\030ERROR_PASSWORD_INCOR" +
-                    "RECT\020\013\022\027\n\023ERROR_KEY_INCORRECT\020\014\022\022\n\016ROOM_" +
-                    "NOT_EXIST\020\025\022\016\n\nCOUNT_FULL\020\026\022\030\n\024SHOUND_NO" +
-                    "T_OPERATION\020\027\022\023\n\017GOLD_TOO_LITTLE\020\030\022\017\n\013HA",
-            "SNOT_CARD\020\031\022\020\n\014ERROR_SHARED\020\032\022\027\n\023AREADY_" +
-                    "REGISTRATION\020\033*R\n\010GameType\022\024\n\020MAHJONG_XI" +
-                    "NGNING\020\000\022\022\n\016MAHJONG_RUIJIN\020\001\022\017\n\013RUN_QUIC" +
-                    "KLY\020\002\022\013\n\007SANGONG\020\003*;\n\013MessageType\022\010\n\004TEX" +
-                    "T\020\000\022\014\n\010EMOTICON\020\001\022\t\n\005INPUT\020\002\022\t\n\005VOICE\020\003B" +
-      "\016\n\014sangong.modeb\006proto3"
+      "eatsInfo\022\034\n\005seats\030\001 \003(\0132\r.SeatResponse\"\245" +
+              "\001\n\014SeatResponse\022\016\n\006seatNo\030\001 \001(\r\022\n\n\002ID\030\002 ",
+            "\001(\r\022\020\n\010nickname\030\003 \001(\t\022\r\n\005score\030\004 \001(\005\022\r\n\005" +
+                    "ready\030\005 \001(\010\022\n\n\002ip\030\006 \001(\t\022\014\n\004head\030\007 \001(\t\022\013\n" +
+                    "\003sex\030\010 \001(\010\022\017\n\007offline\030\t \001(\010\022\021\n\tgameCount" +
+                    "\030\n \001(\r\"L\n\020OperationHistory\022\n\n\002ID\030\001 \001(\r\022\036" +
+                    "\n\013operationId\030\002 \001(\0162\t.ActionId\022\014\n\004card\030\003" +
+                    " \003(\005\"F\n\nBaseAction\022\036\n\013operationId\030\001 \001(\0162" +
+                    "\t.ActionId\022\n\n\002ID\030\002 \001(\r\022\014\n\004data\030\003 \001(\014\"B\n\013" +
+                    "AskResponse\022\036\n\013operationId\030\001 \003(\0162\t.Actio" +
+                    "nId\022\023\n\013timeCounter\030\002 \001(\005\"0\n\rRoundRespons" +
+                    "e\022\n\n\002ID\030\001 \001(\r\022\023\n\013timeCounter\030\002 \001(\005\"\033\n\rRe",
+            "adyResponse\022\n\n\002ID\030\001 \001(\r\".\n\rErrorResponse" +
+                    "\022\035\n\terrorCode\030\001 \001(\0162\n.ErrorCode\"2\n\016Recor" +
+                    "dResponse\022 \n\013gameRecords\030\001 \003(\0132\013.GameRec" +
+                    "ord\"C\n\nGameRecord\022\033\n\010gameType\030\001 \001(\0162\t.Ga" +
+                    "meType\022\030\n\007records\030\002 \003(\0132\007.Record\"p\n\006Reco" +
+                    "rd\022\020\n\010recordId\030\001 \001(\t\022\016\n\006roomNo\030\002 \001(\t\022\021\n\t" +
+                    "gameCount\030\003 \001(\r\022\037\n\nuserRecord\030\004 \003(\0132\013.Us" +
+                    "erRecord\022\020\n\010dateTime\030\005 \001(\004\"(\n\024RecordDeta" +
+                    "ilsRequest\022\020\n\010recordId\030\001 \001(\t\"a\n\025RecordDe" +
+                    "tailsResponse\022\035\n\terrorCode\030\001 \001(\0162\n.Error",
+            "Code\022)\n\017RoundItemRecord\030\002 \003(\0132\020.RoundIte" +
+                    "mRecord\"2\n\017RoundItemRecord\022\037\n\nuserRecord" +
+                    "\030\001 \003(\0132\013.UserRecord\"G\n\nUserRecord\022\n\n\002ID\030" +
+                    "\001 \001(\r\022\020\n\010nickname\030\002 \001(\t\022\014\n\004head\030\003 \001(\t\022\r\n" +
+                    "\005score\030\004 \001(\005\"0\n\rReplayRequest\022\020\n\010recordI" +
+                    "d\030\001 \001(\t\022\r\n\005round\030\002 \001(\r\"?\n\016ReplayResponse" +
+                    "\022\035\n\terrorCode\030\001 \001(\0162\n.ErrorCode\022\016\n\006repla" +
+                    "y\030\002 \001(\014\"M\n\007Message\022!\n\013messageType\030\001 \001(\0162" +
+                    "\014.MessageType\022\017\n\007content\030\002 \001(\014\022\016\n\006userId" +
+                    "\030\003 \001(\r\"L\n\022AppointInteraction\022\020\n\010toUserId",
+            "\030\001 \001(\r\022\024\n\014contentIndex\030\002 \001(\r\022\016\n\006userId\030\003" +
+                    " \001(\r\"\037\n\rLoggerRequest\022\016\n\006logger\030\001 \001(\t\"]\n" +
+                    "\tMatchInfo\022\021\n\tarenaType\030\001 \001(\r\022\014\n\004name\030\002 " +
+                    "\001(\t\022\r\n\005count\030\003 \001(\r\022\020\n\010entryFee\030\004 \001(\r\022\016\n\006" +
+                    "reward\030\005 \001(\r\"D\n\tMatchData\022\016\n\006status\030\001 \001(" +
+                    "\r\022\021\n\tstartDate\030\002 \001(\004\022\024\n\014currentCount\030\003 \001" +
+                    "(\r\"8\n\013MatchResult\022)\n\017matchUserResult\030\001 \003" +
+                    "(\0132\020.MatchUserResult\"2\n\017MatchUserResult\022" +
+                    "\016\n\006userId\030\001 \001(\r\022\017\n\007ranking\030\002 \001(\r\"\037\n\rDiss" +
+                    "olveApply\022\016\n\006userId\030\001 \001(\r\".\n\rDissolveRep",
+            "ly\022\016\n\006userId\030\001 \001(\r\022\r\n\005agree\030\002 \001(\010\"$\n\017Dis" +
+                    "solveConfirm\022\021\n\tdissolved\030\001 \001(\010\"\031\n\006Notic" +
+                    "e\022\017\n\007message\030\001 \001(\t*\300\005\n\rOperationType\022\t\n\005" +
+                    "ERROR\020\000\022\t\n\005LOGIN\020\n\022\017\n\013CREATE_ROOM\020\013\022\t\n\005Q" +
+                    "UERY\020\014\022\n\n\006REBACK\020\r\022\014\n\010ADD_ROOM\020\016\022\n\n\006RECO" +
+                    "RD\020\017\022\022\n\016RECORD_DETAILS\020\020\022\021\n\rSHARE_SUCCES" +
+                    "S\020\021\022\r\n\tUSER_INFO\020\022\022\010\n\004MALL\020\023\022\024\n\020EXCHANGE" +
+                    "_HISTORY\020\024\022\020\n\014REGISTRATION\020\025\022\025\n\021COMPETIT" +
+                    "ION_START\020\026\022\024\n\020INTO_COMPETITION\020\027\022\014\n\010CUR" +
+                    "RENCY\020\030\022\024\n\020COMPETITION_LIST\020\031\022\010\n\004TASK\020\032\022",
+            "\n\n\006NOTICE\020\033\022\016\n\nMATCH_INFO\020\036\022\016\n\nMATCH_DAT" +
+                    "A\020\037\022\020\n\014MATCH_RESULT\020 \022\016\n\nCONNECTION\0202\022\t\n" +
+                    "\005START\0203\022\r\n\tROOM_INFO\0204\022\r\n\tSEAT_INFO\0205\022\r" +
+                    "\n\tGAME_INFO\0206\022\t\n\005READY\0207\022\r\n\tCOMPLETED\0208\022" +
+                    "\n\n\006ACTION\0209\022\t\n\005ROUND\020:\022\007\n\003ASK\020;\022\010\n\004EXIT\020" +
+                    "<\022\n\n\006RESULT\020=\022\013\n\007MESSAGE\020>\022\n\n\006REPLAY\020?\022\010" +
+                    "\n\004OVER\020@\022\020\n\014RECONNECTION\020A\022\014\n\010DISSOLVE\020B" +
+                    "\022\022\n\016DISSOLVE_REPLY\020C\022\024\n\020DISSOLVE_CONFIRM" +
+                    "\020D\022\022\n\016CONFIRM_BANKER\020E\022\r\n\tDEAL_CARD\020F\022\017\n" +
+                    "\013INTERACTION\020G\022\021\n\rUPDATE_STATUS\020H\022\n\n\006LOG",
+            "GER\020P*\274\001\n\010ActionId\022\r\n\tROOM_LIST\020\000\022\r\n\tBUY" +
+                    "_HORSE\020\013\022\014\n\010GET_CARD\020\014\022\r\n\tPLAY_CARD\020\r\022\010\n" +
+                    "\004PENG\020\016\022\013\n\007AN_GANG\020\017\022\r\n\tDIAN_GANG\020\020\022\013\n\007B" +
+                    "A_GANG\020\021\022\006\n\002HU\020\022\022\010\n\004PASS\020\023\022\007\n\003CHI\020\024\022\016\n\nP" +
+                    "LAY_SCORE\020\025\022\r\n\tOPEN_CARD\020\026\022\010\n\004GRAB\020\027*\212\002\n" +
+                    "\tErrorCode\022\013\n\007SUCCESS\020\000\022\020\n\014ERROR_UNKNOW\020" +
+                    "\001\022\030\n\024ERROR_UNKNOW_ACCOUNT\020\n\022\034\n\030ERROR_PAS" +
+                    "SWORD_INCORRECT\020\013\022\027\n\023ERROR_KEY_INCORRECT" +
+                    "\020\014\022\022\n\016ROOM_NOT_EXIST\020\025\022\016\n\nCOUNT_FULL\020\026\022\030" +
+                    "\n\024SHOUND_NOT_OPERATION\020\027\022\023\n\017GOLD_TOO_LIT",
+            "TLE\020\030\022\017\n\013HASNOT_CARD\020\031\022\020\n\014ERROR_SHARED\020\032" +
+                    "\022\027\n\023AREADY_REGISTRATION\020\033*R\n\010GameType\022\024\n" +
+                    "\020MAHJONG_XINGNING\020\000\022\022\n\016MAHJONG_RUIJIN\020\001\022" +
+                    "\017\n\013RUN_QUICKLY\020\002\022\013\n\007SANGONG\020\003*;\n\013Message" +
+      "Type\022\010\n\004TEXT\020\000\022\014\n\010EMOTICON\020\001\022\t\n\005INPUT\020\002\022" +
+      "\t\n\005VOICE\020\003B\016\n\014sangong.modeb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -24708,9 +24803,9 @@ public final class GameBase {
     internal_static_SeatResponse_descriptor =
       getDescriptor().getMessageTypes().get(4);
     internal_static_SeatResponse_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+            com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_SeatResponse_descriptor,
-        new java.lang.String[] { "SeatNo", "ID", "Nickname", "Score", "Ready", "AreaString", "Head", "Sex", "Offline", });
+        new java.lang.String[] { "SeatNo", "ID", "Nickname", "Score", "Ready", "Ip", "Head", "Sex", "Offline", "GameCount", });
     internal_static_OperationHistory_descriptor =
       getDescriptor().getMessageTypes().get(5);
     internal_static_OperationHistory_fieldAccessorTable = new
@@ -24856,10 +24951,10 @@ public final class GameBase {
         internal_static_DissolveReply_descriptor,
         new java.lang.String[] { "UserId", "Agree", });
     internal_static_DissolveConfirm_descriptor =
-      getDescriptor().getMessageTypes().get(29);
+            getDescriptor().getMessageTypes().get(29);
     internal_static_DissolveConfirm_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-            internal_static_DissolveConfirm_descriptor,
+        internal_static_DissolveConfirm_descriptor,
         new java.lang.String[] { "Dissolved", });
     internal_static_Notice_descriptor =
       getDescriptor().getMessageTypes().get(30);
