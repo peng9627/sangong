@@ -195,6 +195,7 @@ public class Room {
                     } else {
                         grab = seats.get(i + 1).getUserId();
                     }
+                    break;
                 }
             }
         }
@@ -332,7 +333,7 @@ public class Room {
 
             Map<Integer, Integer> lose = new HashMap<>();
             while (win > 0) {
-                for (Seat seat : seats) {
+                for (Seat seat : arraySeat) {
                     if (seat.getUserId() != winSeat.getUserId()) {
                         int score;
                         if (win > seat.getPlayScore()) {
@@ -366,16 +367,17 @@ public class Room {
                         userResult.setCurrentScore(-lose.get(seat.getUserId()));
                         userResult.setTotalScore(seat.getScore());
 
-                    }
-                    resultResponse.addResult(userResult);
+                        resultResponse.addResult(userResult);
 
-                    SeatRecord seatRecord = new SeatRecord();
-                    seatRecord.setUserId(winSeat.getUserId());
-                    seatRecord.setNickname(winSeat.getNickname());
-                    seatRecord.setHead(winSeat.getHead());
-                    seatRecord.setCards(winSeat.getCards());
-                    seatRecord.setWinOrLose(-lose.get(seat.getUserId()));
-                    seatRecords.add(seatRecord);
+                        SeatRecord seatRecord = new SeatRecord();
+                        seatRecord.setUserId(winSeat.getUserId());
+                        seatRecord.setNickname(winSeat.getNickname());
+                        seatRecord.setHead(winSeat.getHead());
+                        seatRecord.setCards(winSeat.getCards());
+                        seatRecord.setWinOrLose(-lose.get(seat.getUserId()));
+                        seatRecords.add(seatRecord);
+
+                    }
                 }
             }
 
@@ -393,6 +395,14 @@ public class Room {
         //结束房间
         if (gameCount == gameTimes) {
             roomOver(response, redisService);
+        } else {
+            SanGong.SangongGameStatusResponse.Builder statusResponse = SanGong.SangongGameStatusResponse.newBuilder();
+            statusResponse.setTimeCounter(redisService.exists("room_match" + roomNo) ? 8 : 0);
+            statusResponse.setGameStatus(SanGong.SangongGameStatus.SANGONG_READYING).build();
+            response.setOperationType(GameBase.OperationType.UPDATE_STATUS).setData(statusResponse.build().toByteString());
+            seats.stream().filter(seat -> SanGongTcpService.userClients.containsKey(seat.getUserId())).forEach(seat -> {
+                SanGongTcpService.userClients.get(seat.getUserId()).send(response.build(), seat.getUserId());
+            });
         }
     }
 

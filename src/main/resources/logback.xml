@@ -8,9 +8,9 @@
     </appender>
 
     <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>logs/info.log</file>
+        <file>logs/sangong/info.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <FileNamePattern>logs/info-%d{yyyy-MM-dd_HH}.log</FileNamePattern>
+            <FileNamePattern>logs/sangong/info-%d{yyyy-MM-dd_HH}.log</FileNamePattern>
         </rollingPolicy>
         <encoder>
             <pattern>%date [%thread] %-5level %msg - %logger{80}%n%ex</pattern>
@@ -26,7 +26,7 @@
             <onMismatch>DENY</onMismatch>
         </filter>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <FileNamePattern>logs/error.%d{yyyy-MM-dd_HH}.log</FileNamePattern>
+            <FileNamePattern>logs/sangong/error.%d{yyyy-MM-dd_HH}.log</FileNamePattern>
             <MaxHistory>30</MaxHistory>
         </rollingPolicy>
         <encoder>
@@ -43,7 +43,7 @@
             <onMismatch>DENY</onMismatch>
         </filter>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <FileNamePattern>logs/applogs.%d{yyyy-MM-dd}.log</FileNamePattern>
+            <FileNamePattern>logs/sangong/applogs.%d{yyyy-MM-dd}.log</FileNamePattern>
             <MaxHistory>30</MaxHistory>
         </rollingPolicy>
         <encoder>
