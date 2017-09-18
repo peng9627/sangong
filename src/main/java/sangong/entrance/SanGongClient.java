@@ -69,7 +69,6 @@ public class SanGongClient {
             seatResponse.setID(seat1.getUserId());
             seatResponse.setScore(seat1.getScore());
             seatResponse.setIsRobot(seat1.isRobot());
-            seatResponse.setGrab(seat1.getGrab());
             seatResponse.setOpen(seat1.isOpen());
             seatResponse.setPlayScore(seat1.getPlayScore());
             if (null != seat1.getCards() && 0 != seat1.getCards().size()) {
@@ -234,7 +233,7 @@ public class SanGongClient {
                                     break;
                                 }
                             }
-                            if (allReady && (0 != room.getGameStatus().compareTo(GameStatus.WAITING) || room.getSeats().size() == 6)) {
+                            if (allReady && room.getSeats().size() == room.getCount()) {
 
                                 SanGong.SangongGameStatusResponse.Builder statusResponse = SanGong.SangongGameStatusResponse.newBuilder();
                                 if (0 == room.getGameStatus().compareTo(GameStatus.WAITING)) {
@@ -249,38 +248,38 @@ public class SanGongClient {
                                 for (Seat seat : room.getSeats()) {
                                     seat.setReady(false);
                                 }
-                                if (1 == room.getBankerWay()) {
-                                    room.setGameCount(room.getGameCount() + 1);
-                                    room.setGameStatus(GameStatus.GRABING);
-                                    statusResponse = SanGong.SangongGameStatusResponse.newBuilder();
-                                    statusResponse.setTimeCounter(redisService.exists("room_match" + roomNo) ? 8 : 0);
-                                    room.setStatusDate(new Date());
-                                    statusResponse.setGameStatus(SanGong.SangongGameStatus.SANGONG_GRABING).build();
-                                    response.setOperationType(GameBase.OperationType.UPDATE_STATUS).setData(statusResponse.build().toByteString());
-                                    room.getSeats().stream().filter(seat -> SanGongTcpService.userClients.containsKey(seat.getUserId())).forEach(seat -> {
-                                        messageReceive.send(response.build(), seat.getUserId());
-                                    });
-                                } else {
-                                    room.compareGrab(0);
-                                    room.setGameCount(room.getGameCount() + 1);
-                                    room.setGameStatus(GameStatus.PLAYING);
+//                                if (1 == room.getBankerWay()) {
+//                                    room.setGameCount(room.getGameCount() + 1);
+//                                    room.setGameStatus(GameStatus.GRABING);
+//                                    statusResponse = SanGong.SangongGameStatusResponse.newBuilder();
+//                                    statusResponse.setTimeCounter(redisService.exists("room_match" + roomNo) ? 8 : 0);
+//                                    room.setStatusDate(new Date());
+//                                    statusResponse.setGameStatus(SanGong.SangongGameStatus.SANGONG_GRABING).build();
+//                                    response.setOperationType(GameBase.OperationType.UPDATE_STATUS).setData(statusResponse.build().toByteString());
+//                                    room.getSeats().stream().filter(seat -> SanGongTcpService.userClients.containsKey(seat.getUserId())).forEach(seat -> {
+//                                        messageReceive.send(response.build(), seat.getUserId());
+//                                    });
+//                                } else {
+//                                    room.compareGrab(0);
+                                room.setGameCount(room.getGameCount() + 1);
+                                room.setGameStatus(GameStatus.PLAYING);
 
-                                    SanGong.ConfirmBankerResponse confirmBankerResponse = SanGong.ConfirmBankerResponse.newBuilder()
-                                            .setBanker(room.getGrab()).build();
-                                    response.setOperationType(GameBase.OperationType.CONFIRM_BANKER).setData(confirmBankerResponse.toByteString());
-                                    room.getSeats().stream().filter(seat1 -> SanGongTcpService.userClients.containsKey(seat1.getUserId())).forEach(seat1 -> {
-                                        SanGongTcpService.userClients.get(seat1.getUserId()).send(response.build(), seat1.getUserId());
-                                    });
+//                                    SanGong.ConfirmBankerResponse confirmBankerResponse = SanGong.ConfirmBankerResponse.newBuilder()
+//                                            .setBanker(room.getGrab()).build();
+//                                    response.setOperationType(GameBase.OperationType.CONFIRM_BANKER).setData(confirmBankerResponse.toByteString());
+//                                    room.getSeats().stream().filter(seat1 -> SanGongTcpService.userClients.containsKey(seat1.getUserId())).forEach(seat1 -> {
+//                                        SanGongTcpService.userClients.get(seat1.getUserId()).send(response.build(), seat1.getUserId());
+//                                    });
 
-                                    statusResponse = SanGong.SangongGameStatusResponse.newBuilder();
-                                    statusResponse.setTimeCounter(redisService.exists("room_match" + roomNo) ? 8 : 0);
-                                    room.setStatusDate(new Date());
-                                    statusResponse.setGameStatus(SanGong.SangongGameStatus.SANGONG_PLAYING).build();
-                                    response.setOperationType(GameBase.OperationType.UPDATE_STATUS).setData(statusResponse.build().toByteString());
-                                    room.getSeats().stream().filter(seat -> SanGongTcpService.userClients.containsKey(seat.getUserId())).forEach(seat -> {
-                                        messageReceive.send(response.build(), seat.getUserId());
-                                    });
-                                }
+                                statusResponse = SanGong.SangongGameStatusResponse.newBuilder();
+                                statusResponse.setTimeCounter(redisService.exists("room_match" + roomNo) ? 8 : 0);
+                                room.setStatusDate(new Date());
+                                statusResponse.setGameStatus(SanGong.SangongGameStatus.SANGONG_PLAYING).build();
+                                response.setOperationType(GameBase.OperationType.UPDATE_STATUS).setData(statusResponse.build().toByteString());
+                                room.getSeats().stream().filter(seat -> SanGongTcpService.userClients.containsKey(seat.getUserId())).forEach(seat -> {
+                                    messageReceive.send(response.build(), seat.getUserId());
+                                });
+//                                }
                             }
                             redisService.addCache("room" + roomNo, JSON.toJSONString(room));
                         }
@@ -289,81 +288,81 @@ public class SanGongClient {
                         logger.warn("房间不存在");
                     }
                     break;
-                case START:
-                    if (redisService.exists("room" + roomNo)) {
-                        while (!redisService.lock("lock_room" + roomNo)) {
-                        }
-                        Room room = JSON.parseObject(redisService.getCache("room" + roomNo), Room.class);
-                        if (0 == room.getGameStatus().compareTo(GameStatus.READYING) || 0 == room.getGameStatus().compareTo(GameStatus.WAITING)) {
-                            room.getSeats().stream().filter(seat -> seat.getUserId() == userId && !seat.isReady()).forEach(seat -> {
-                                seat.setReady(true);
-                                response.setOperationType(GameBase.OperationType.READY).setData(GameBase.ReadyResponse.newBuilder().setID(seat.getUserId()).build().toByteString());
-                                room.getSeats().stream().filter(seat1 -> SanGongTcpService.userClients.containsKey(seat1.getUserId())).forEach(seat1 ->
-                                        SanGongTcpService.userClients.get(seat1.getUserId()).send(response.build(), seat1.getUserId()));
-                            });
-                            boolean allReady = true;
-                            for (Seat seat : room.getSeats()) {
-                                if (!seat.isReady()) {
-                                    allReady = false;
-                                    break;
-                                }
-                            }
-                            if (allReady && 1 < room.getSeats().size()) {
-                                if (0 == room.getGameStatus().compareTo(GameStatus.WAITING)) {
-                                    SanGong.SangongGameStatusResponse.Builder statusResponse = SanGong.SangongGameStatusResponse.newBuilder();
-                                    statusResponse.setTimeCounter(redisService.exists("room_match" + roomNo) ? 8 : 0);
-                                    statusResponse.setGameStatus(SanGong.SangongGameStatus.SANGONG_READYING).build();
-                                    response.setOperationType(GameBase.OperationType.UPDATE_STATUS).setData(statusResponse.build().toByteString());
-                                    room.getSeats().stream().filter(seat -> SanGongTcpService.userClients.containsKey(seat.getUserId())).forEach(seat -> {
-                                        messageReceive.send(response.build(), seat.getUserId());
-                                    });
-                                }
-                                for (Seat seat : room.getSeats()) {
-                                    seat.setReady(false);
-                                }
-                                if (1 == room.getBankerWay()) {
-                                    room.setGameCount(room.getGameCount() + 1);
-                                    room.setGameStatus(GameStatus.GRABING);
-                                    SanGong.SangongGameStatusResponse.Builder statusResponse = SanGong.SangongGameStatusResponse.newBuilder();
-                                    statusResponse.setTimeCounter(redisService.exists("room_match" + roomNo) ? 8 : 0);
-                                    room.setStatusDate(new Date());
-                                    statusResponse.setGameStatus(SanGong.SangongGameStatus.SANGONG_GRABING).build();
-                                    response.setOperationType(GameBase.OperationType.UPDATE_STATUS).setData(statusResponse.build().toByteString());
-                                    room.getSeats().stream().filter(seat -> SanGongTcpService.userClients.containsKey(seat.getUserId())).forEach(seat -> {
-                                        messageReceive.send(response.build(), seat.getUserId());
-                                    });
-                                } else {
-                                    room.compareGrab(0);
-                                    room.setGameCount(room.getGameCount() + 1);
-                                    room.setGameStatus(GameStatus.PLAYING);
-
-                                    SanGong.ConfirmBankerResponse confirmBankerResponse = SanGong.ConfirmBankerResponse.newBuilder()
-                                            .setBanker(room.getGrab()).build();
-                                    response.setOperationType(GameBase.OperationType.CONFIRM_BANKER).setData(confirmBankerResponse.toByteString());
-                                    room.getSeats().stream().filter(seat1 -> SanGongTcpService.userClients.containsKey(seat1.getUserId())).forEach(seat1 -> {
-                                        SanGongTcpService.userClients.get(seat1.getUserId()).send(response.build(), seat1.getUserId());
-                                    });
-
-                                    SanGong.SangongGameStatusResponse.Builder statusResponse = SanGong.SangongGameStatusResponse.newBuilder();
-                                    statusResponse.setTimeCounter(redisService.exists("room_match" + roomNo) ? 8 : 0);
-                                    room.setStatusDate(new Date());
-                                    statusResponse.setGameStatus(SanGong.SangongGameStatus.SANGONG_PLAYING).build();
-                                    response.setOperationType(GameBase.OperationType.UPDATE_STATUS).setData(statusResponse.build().toByteString());
-                                    room.getSeats().stream().filter(seat -> SanGongTcpService.userClients.containsKey(seat.getUserId())).forEach(seat -> {
-                                        messageReceive.send(response.build(), seat.getUserId());
-                                    });
-                                }
-                            } else {
-                                messageReceive.send(response.setOperationType(GameBase.OperationType.ERROR).setData(GameBase.ErrorResponse.newBuilder()
-                                        .setErrorCode(GameBase.ErrorCode.SHOUND_NOT_OPERATION).build().toByteString()).build(), userId);
-                            }
-                            redisService.addCache("room" + roomNo, JSON.toJSONString(room));
-                        }
-                        redisService.unlock("lock_room" + roomNo);
-                    } else {
-                        logger.warn("房间不存在");
-                    }
-                    break;
+//                case START:
+//                    if (redisService.exists("room" + roomNo)) {
+//                        while (!redisService.lock("lock_room" + roomNo)) {
+//                        }
+//                        Room room = JSON.parseObject(redisService.getCache("room" + roomNo), Room.class);
+//                        if (0 == room.getGameStatus().compareTo(GameStatus.READYING) || 0 == room.getGameStatus().compareTo(GameStatus.WAITING)) {
+//                            room.getSeats().stream().filter(seat -> seat.getUserId() == userId && !seat.isReady()).forEach(seat -> {
+//                                seat.setReady(true);
+//                                response.setOperationType(GameBase.OperationType.READY).setData(GameBase.ReadyResponse.newBuilder().setID(seat.getUserId()).build().toByteString());
+//                                room.getSeats().stream().filter(seat1 -> SanGongTcpService.userClients.containsKey(seat1.getUserId())).forEach(seat1 ->
+//                                        SanGongTcpService.userClients.get(seat1.getUserId()).send(response.build(), seat1.getUserId()));
+//                            });
+//                            boolean allReady = true;
+//                            for (Seat seat : room.getSeats()) {
+//                                if (!seat.isReady()) {
+//                                    allReady = false;
+//                                    break;
+//                                }
+//                            }
+//                            if (allReady && 1 < room.getSeats().size()) {
+//                                if (0 == room.getGameStatus().compareTo(GameStatus.WAITING)) {
+//                                    SanGong.SangongGameStatusResponse.Builder statusResponse = SanGong.SangongGameStatusResponse.newBuilder();
+//                                    statusResponse.setTimeCounter(redisService.exists("room_match" + roomNo) ? 8 : 0);
+//                                    statusResponse.setGameStatus(SanGong.SangongGameStatus.SANGONG_READYING).build();
+//                                    response.setOperationType(GameBase.OperationType.UPDATE_STATUS).setData(statusResponse.build().toByteString());
+//                                    room.getSeats().stream().filter(seat -> SanGongTcpService.userClients.containsKey(seat.getUserId())).forEach(seat -> {
+//                                        messageReceive.send(response.build(), seat.getUserId());
+//                                    });
+//                                }
+//                                for (Seat seat : room.getSeats()) {
+//                                    seat.setReady(false);
+//                                }
+////                                if (1 == room.getBankerWay()) {
+////                                    room.setGameCount(room.getGameCount() + 1);
+////                                    room.setGameStatus(GameStatus.GRABING);
+////                                    SanGong.SangongGameStatusResponse.Builder statusResponse = SanGong.SangongGameStatusResponse.newBuilder();
+////                                    statusResponse.setTimeCounter(redisService.exists("room_match" + roomNo) ? 8 : 0);
+////                                    room.setStatusDate(new Date());
+////                                    statusResponse.setGameStatus(SanGong.SangongGameStatus.SANGONG_GRABING).build();
+////                                    response.setOperationType(GameBase.OperationType.UPDATE_STATUS).setData(statusResponse.build().toByteString());
+////                                    room.getSeats().stream().filter(seat -> SanGongTcpService.userClients.containsKey(seat.getUserId())).forEach(seat -> {
+////                                        messageReceive.send(response.build(), seat.getUserId());
+////                                    });
+////                                } else {
+////                                    room.compareGrab(0);
+//                                room.setGameCount(room.getGameCount() + 1);
+//                                room.setGameStatus(GameStatus.PLAYING);
+//
+////                                    SanGong.ConfirmBankerResponse confirmBankerResponse = SanGong.ConfirmBankerResponse.newBuilder()
+////                                            .setBanker(room.getGrab()).build();
+////                                    response.setOperationType(GameBase.OperationType.CONFIRM_BANKER).setData(confirmBankerResponse.toByteString());
+////                                    room.getSeats().stream().filter(seat1 -> SanGongTcpService.userClients.containsKey(seat1.getUserId())).forEach(seat1 -> {
+////                                        SanGongTcpService.userClients.get(seat1.getUserId()).send(response.build(), seat1.getUserId());
+////                                    });
+//
+//                                SanGong.SangongGameStatusResponse.Builder statusResponse = SanGong.SangongGameStatusResponse.newBuilder();
+//                                statusResponse.setTimeCounter(redisService.exists("room_match" + roomNo) ? 8 : 0);
+//                                room.setStatusDate(new Date());
+//                                statusResponse.setGameStatus(SanGong.SangongGameStatus.SANGONG_PLAYING).build();
+//                                response.setOperationType(GameBase.OperationType.UPDATE_STATUS).setData(statusResponse.build().toByteString());
+//                                room.getSeats().stream().filter(seat -> SanGongTcpService.userClients.containsKey(seat.getUserId())).forEach(seat -> {
+//                                    messageReceive.send(response.build(), seat.getUserId());
+//                                });
+////                                }
+//                            } else {
+//                                messageReceive.send(response.setOperationType(GameBase.OperationType.ERROR).setData(GameBase.ErrorResponse.newBuilder()
+//                                        .setErrorCode(GameBase.ErrorCode.SHOUND_NOT_OPERATION).build().toByteString()).build(), userId);
+//                            }
+//                            redisService.addCache("room" + roomNo, JSON.toJSONString(room));
+//                        }
+//                        redisService.unlock("lock_room" + roomNo);
+//                    } else {
+//                        logger.warn("房间不存在");
+//                    }
+//                    break;
                 case COMPLETED:
                     if (redisService.exists("room" + roomNo)) {
                         while (!redisService.lock("lock_room" + roomNo)) {
@@ -397,59 +396,59 @@ public class SanGongClient {
                         }
                         Room room = JSON.parseObject(redisService.getCache("room" + roomNo), Room.class);
                         switch (actionRequest.getOperationId()) {
-                            case GRAB:
-                                if (0 == room.getGameStatus().compareTo(GameStatus.GRABING)) {
-                                    if (room.getGrab() == 0) {
-                                        SanGong.GrabRequest grabRequest = SanGong.GrabRequest.parseFrom(actionRequest.getData());
-                                        room.getSeats().stream().filter(seat -> seat.getUserId() == userId && 0 == seat.getGrab()).forEach(seat -> {
-                                            seat.setGrab(grabRequest.getGrab() ? 1 : 2);
-
-                                            actionResponse.setOperationId(GameBase.ActionId.GRAB).setData(SanGong.GrabResponse.newBuilder()
-                                                    .setID(seat.getUserId()).setGrab(grabRequest.getGrab()).build().toByteString());
-                                            response.setOperationType(GameBase.OperationType.ACTION).setData(actionResponse.build().toByteString());
-                                            room.getSeats().stream().filter(seat1 -> SanGongTcpService.userClients.containsKey(seat1.getUserId())).forEach(seat1 ->
-                                                    SanGongTcpService.userClients.get(seat1.getUserId()).send(response.build(), seat1.getUserId()));
-
+//                            case GRAB:
+//                                if (0 == room.getGameStatus().compareTo(GameStatus.GRABING)) {
+//                                    if (room.getGrab() == 0) {
+//                                        SanGong.GrabRequest grabRequest = SanGong.GrabRequest.parseFrom(actionRequest.getData());
+//                                        room.getSeats().stream().filter(seat -> seat.getUserId() == userId && 0 == seat.getGrab()).forEach(seat -> {
+//                                            seat.setGrab(grabRequest.getGrab() ? 1 : 2);
 //
-                                            if (grabRequest.getGrab()) {
-                                                room.compareGrab(userId);
-                                            } else {
-                                                //检查是否所有人都抢庄，抢庄了就发牌
-                                                boolean allGrab = true;
-                                                for (Seat seat1 : room.getSeats()) {
-                                                    if (0 == seat1.getGrab()) {
-                                                        allGrab = false;
-                                                        break;
-                                                    }
-                                                }
-                                                if (allGrab) {
-                                                    room.compareGrab(0);
-                                                } else {
-                                                    return;
-                                                }
-                                            }
-                                            room.setGameStatus(GameStatus.PLAYING);
-
-                                            SanGong.ConfirmBankerResponse confirmBankerResponse = SanGong.ConfirmBankerResponse.newBuilder()
-                                                    .setBanker(room.getGrab()).build();
-                                            response.setOperationType(GameBase.OperationType.CONFIRM_BANKER).setData(confirmBankerResponse.toByteString());
-                                            room.getSeats().stream().filter(seat1 -> SanGongTcpService.userClients.containsKey(seat1.getUserId())).forEach(seat1 -> {
-                                                SanGongTcpService.userClients.get(seat1.getUserId()).send(response.build(), seat1.getUserId());
-                                            });
-
-                                            SanGong.SangongGameStatusResponse.Builder statusResponse = SanGong.SangongGameStatusResponse.newBuilder();
-                                            statusResponse.setTimeCounter(redisService.exists("room_match" + roomNo) ? 8 : 0);
-                                            room.setStatusDate(new Date());
-                                            statusResponse.setGameStatus(SanGong.SangongGameStatus.SANGONG_PLAYING).build();
-                                            response.setOperationType(GameBase.OperationType.UPDATE_STATUS).setData(statusResponse.build().toByteString());
-                                            room.getSeats().stream().filter(seat1 -> SanGongTcpService.userClients.containsKey(seat1.getUserId())).forEach(seat1 -> {
-                                                messageReceive.send(response.build(), seat1.getUserId());
-                                            });
-//                                        }
-                                        });
-                                    }
-                                }
-                                break;
+//                                            actionResponse.setOperationId(GameBase.ActionId.GRAB).setData(SanGong.GrabResponse.newBuilder()
+//                                                    .setID(seat.getUserId()).setGrab(grabRequest.getGrab()).build().toByteString());
+//                                            response.setOperationType(GameBase.OperationType.ACTION).setData(actionResponse.build().toByteString());
+//                                            room.getSeats().stream().filter(seat1 -> SanGongTcpService.userClients.containsKey(seat1.getUserId())).forEach(seat1 ->
+//                                                    SanGongTcpService.userClients.get(seat1.getUserId()).send(response.build(), seat1.getUserId()));
+//
+////
+//                                            if (grabRequest.getGrab()) {
+//                                                room.compareGrab(userId);
+//                                            } else {
+//                                                //检查是否所有人都抢庄，抢庄了就发牌
+//                                                boolean allGrab = true;
+//                                                for (Seat seat1 : room.getSeats()) {
+//                                                    if (0 == seat1.getGrab()) {
+//                                                        allGrab = false;
+//                                                        break;
+//                                                    }
+//                                                }
+//                                                if (allGrab) {
+//                                                    room.compareGrab(0);
+//                                                } else {
+//                                                    return;
+//                                                }
+//                                            }
+//                                            room.setGameStatus(GameStatus.PLAYING);
+//
+//                                            SanGong.ConfirmBankerResponse confirmBankerResponse = SanGong.ConfirmBankerResponse.newBuilder()
+//                                                    .setBanker(room.getGrab()).build();
+//                                            response.setOperationType(GameBase.OperationType.CONFIRM_BANKER).setData(confirmBankerResponse.toByteString());
+//                                            room.getSeats().stream().filter(seat1 -> SanGongTcpService.userClients.containsKey(seat1.getUserId())).forEach(seat1 -> {
+//                                                SanGongTcpService.userClients.get(seat1.getUserId()).send(response.build(), seat1.getUserId());
+//                                            });
+//
+//                                            SanGong.SangongGameStatusResponse.Builder statusResponse = SanGong.SangongGameStatusResponse.newBuilder();
+//                                            statusResponse.setTimeCounter(redisService.exists("room_match" + roomNo) ? 8 : 0);
+//                                            room.setStatusDate(new Date());
+//                                            statusResponse.setGameStatus(SanGong.SangongGameStatus.SANGONG_PLAYING).build();
+//                                            response.setOperationType(GameBase.OperationType.UPDATE_STATUS).setData(statusResponse.build().toByteString());
+//                                            room.getSeats().stream().filter(seat1 -> SanGongTcpService.userClients.containsKey(seat1.getUserId())).forEach(seat1 -> {
+//                                                messageReceive.send(response.build(), seat1.getUserId());
+//                                            });
+////                                        }
+//                                        });
+//                                    }
+//                                }
+//                                break;
                             case PLAY_SCORE:
                                 if (0 == room.getGameStatus().compareTo(GameStatus.PLAYING)) {
                                     SanGong.PlayScoreRequest playScoreRequest = SanGong.PlayScoreRequest.parseFrom(actionRequest.getData());

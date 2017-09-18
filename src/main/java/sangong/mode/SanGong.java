@@ -151,28 +151,20 @@ public final class SanGong {
     SANGONG_READYING(1),
     /**
      * <pre>
-     *抢庄状态
-     * </pre>
-     *
-     * <code>SANGONG_GRABING = 2;</code>
-     */
-    SANGONG_GRABING(2),
-    /**
-     * <pre>
      *下注状态
      * </pre>
      *
-     * <code>SANGONG_PLAYING = 3;</code>
+     * <code>SANGONG_PLAYING = 2;</code>
      */
-    SANGONG_PLAYING(3),
+    SANGONG_PLAYING(2),
     /**
      * <pre>
      *亮牌状态
      * </pre>
      *
-     * <code>SANGONG_OPENING = 4;</code>
+     * <code>SANGONG_OPENING = 3;</code>
      */
-    SANGONG_OPENING(4),
+    SANGONG_OPENING(3),
     UNRECOGNIZED(-1),
     ;
 
@@ -194,28 +186,20 @@ public final class SanGong {
     public static final int SANGONG_READYING_VALUE = 1;
     /**
      * <pre>
-     *抢庄状态
-     * </pre>
-     *
-     * <code>SANGONG_GRABING = 2;</code>
-     */
-    public static final int SANGONG_GRABING_VALUE = 2;
-    /**
-     * <pre>
      *下注状态
      * </pre>
      *
-     * <code>SANGONG_PLAYING = 3;</code>
+     * <code>SANGONG_PLAYING = 2;</code>
      */
-    public static final int SANGONG_PLAYING_VALUE = 3;
+    public static final int SANGONG_PLAYING_VALUE = 2;
     /**
      * <pre>
      *亮牌状态
      * </pre>
      *
-     * <code>SANGONG_OPENING = 4;</code>
+     * <code>SANGONG_OPENING = 3;</code>
      */
-    public static final int SANGONG_OPENING_VALUE = 4;
+    public static final int SANGONG_OPENING_VALUE = 3;
 
 
     public final int getNumber() {
@@ -238,9 +222,10 @@ public final class SanGong {
       switch (value) {
         case 0: return SANGONG_WAITTING;
         case 1: return SANGONG_READYING;
-        case 2: return SANGONG_GRABING;
-        case 3: return SANGONG_PLAYING;
-        case 4: return SANGONG_OPENING;
+          case 2:
+              return SANGONG_PLAYING;
+          case 3:
+              return SANGONG_OPENING;
         default: return null;
       }
     }
@@ -317,12 +302,30 @@ public final class SanGong {
 
     /**
      * <pre>
-     *庄家方式 1.自由抢庄，2.轮流作庄
+     *庄家方式 1.自由场，2.通杀庄
      * </pre>
      *
      * <code>uint32 bankerWay = 3;</code>
      */
     int getBankerWay();
+
+      /**
+       * <pre>
+       * 人数
+       * </pre>
+       * <p>
+       * <code>uint32 count = 4;</code>
+       */
+      int getCount();
+
+      /**
+       * <pre>
+       * 支付方式 1.房主支付，2.AA
+       * </pre>
+       * <p>
+       * <code>uint32 payType = 5;</code>
+       */
+      int getPayType();
   }
   /**
    * <pre>
@@ -341,8 +344,10 @@ public final class SanGong {
     }
     private SangongIntoResponse() {
       baseScore_ = 0;
-      gameTimes_ = 0;
-      bankerWay_ = 0;
+        gameTimes_ = 0;
+        bankerWay_ = 0;
+      count_ = 0;
+      payType_ = 0;
     }
 
     @java.lang.Override
@@ -380,11 +385,21 @@ public final class SanGong {
               gameTimes_ = input.readUInt32();
               break;
             }
-            case 24: {
+              case 24: {
 
-              bankerWay_ = input.readUInt32();
-              break;
-            }
+                  bankerWay_ = input.readUInt32();
+                  break;
+              }
+              case 32: {
+
+                  count_ = input.readUInt32();
+                  break;
+              }
+              case 40: {
+
+                  payType_ = input.readUInt32();
+                  break;
+              }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -435,17 +450,45 @@ public final class SanGong {
     }
 
     public static final int BANKERWAY_FIELD_NUMBER = 3;
-    private int bankerWay_;
+      private int bankerWay_;
     /**
      * <pre>
-     *庄家方式 1.自由抢庄，2.轮流作庄
+     *庄家方式 1.自由场，2.通杀庄
      * </pre>
      *
      * <code>uint32 bankerWay = 3;</code>
      */
     public int getBankerWay() {
-      return bankerWay_;
+        return bankerWay_;
     }
+
+      public static final int COUNT_FIELD_NUMBER = 4;
+      private int count_;
+
+      /**
+       * <pre>
+       * 人数
+       * </pre>
+       * <p>
+       * <code>uint32 count = 4;</code>
+       */
+      public int getCount() {
+          return count_;
+      }
+
+      public static final int PAYTYPE_FIELD_NUMBER = 5;
+      private int payType_;
+
+      /**
+       * <pre>
+       * 支付方式 1.房主支付，2.AA
+       * </pre>
+       * <p>
+       * <code>uint32 payType = 5;</code>
+       */
+      public int getPayType() {
+          return payType_;
+      }
 
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -465,8 +508,14 @@ public final class SanGong {
       if (gameTimes_ != 0) {
         output.writeUInt32(2, gameTimes_);
       }
-      if (bankerWay_ != 0) {
-        output.writeUInt32(3, bankerWay_);
+        if (bankerWay_ != 0) {
+            output.writeUInt32(3, bankerWay_);
+        }
+        if (count_ != 0) {
+            output.writeUInt32(4, count_);
+        }
+      if (payType_ != 0) {
+        output.writeUInt32(5, payType_);
       }
     }
 
@@ -483,10 +532,18 @@ public final class SanGong {
         size += com.google.protobuf.CodedOutputStream
           .computeUInt32Size(2, gameTimes_);
       }
-      if (bankerWay_ != 0) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(3, bankerWay_);
-      }
+        if (bankerWay_ != 0) {
+            size += com.google.protobuf.CodedOutputStream
+                    .computeUInt32Size(3, bankerWay_);
+        }
+        if (count_ != 0) {
+            size += com.google.protobuf.CodedOutputStream
+                    .computeUInt32Size(4, count_);
+        }
+        if (payType_ != 0) {
+            size += com.google.protobuf.CodedOutputStream
+                    .computeUInt32Size(5, payType_);
+        }
       memoizedSize = size;
       return size;
     }
@@ -506,9 +563,13 @@ public final class SanGong {
       result = result && (getBaseScore()
           == other.getBaseScore());
       result = result && (getGameTimes()
-          == other.getGameTimes());
-      result = result && (getBankerWay()
-          == other.getBankerWay());
+              == other.getGameTimes());
+        result = result && (getBankerWay()
+                == other.getBankerWay());
+        result = result && (getCount()
+                == other.getCount());
+      result = result && (getPayType()
+          == other.getPayType());
       return result;
     }
 
@@ -523,8 +584,12 @@ public final class SanGong {
       hash = (53 * hash) + getBaseScore();
       hash = (37 * hash) + GAMETIMES_FIELD_NUMBER;
       hash = (53 * hash) + getGameTimes();
-      hash = (37 * hash) + BANKERWAY_FIELD_NUMBER;
-      hash = (53 * hash) + getBankerWay();
+        hash = (37 * hash) + BANKERWAY_FIELD_NUMBER;
+        hash = (53 * hash) + getBankerWay();
+        hash = (37 * hash) + COUNT_FIELD_NUMBER;
+        hash = (53 * hash) + getCount();
+      hash = (37 * hash) + PAYTYPE_FIELD_NUMBER;
+      hash = (53 * hash) + getPayType();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -657,12 +722,16 @@ public final class SanGong {
         }
       }
       public Builder clear() {
-        super.clear();
-        baseScore_ = 0;
+          super.clear();
+          baseScore_ = 0;
 
         gameTimes_ = 0;
 
         bankerWay_ = 0;
+
+        count_ = 0;
+
+        payType_ = 0;
 
         return this;
       }
@@ -686,9 +755,11 @@ public final class SanGong {
 
       public sangong.mode.SanGong.SangongIntoResponse buildPartial() {
         sangong.mode.SanGong.SangongIntoResponse result = new sangong.mode.SanGong.SangongIntoResponse(this);
-        result.baseScore_ = baseScore_;
-        result.gameTimes_ = gameTimes_;
+          result.baseScore_ = baseScore_;
+          result.gameTimes_ = gameTimes_;
         result.bankerWay_ = bankerWay_;
+        result.count_ = count_;
+        result.payType_ = payType_;
         onBuilt();
         return result;
       }
@@ -736,8 +807,14 @@ public final class SanGong {
         if (other.getGameTimes() != 0) {
           setGameTimes(other.getGameTimes());
         }
-        if (other.getBankerWay() != 0) {
-          setBankerWay(other.getBankerWay());
+          if (other.getBankerWay() != 0) {
+              setBankerWay(other.getBankerWay());
+          }
+          if (other.getCount() != 0) {
+              setCount(other.getCount());
+          }
+        if (other.getPayType() != 0) {
+          setPayType(other.getPayType());
         }
         onChanged();
         return this;
@@ -837,14 +914,14 @@ public final class SanGong {
       public Builder clearGameTimes() {
         
         gameTimes_ = 0;
-        onChanged();
+          onChanged();
         return this;
       }
 
       private int bankerWay_ ;
       /**
        * <pre>
-       *庄家方式 1.自由抢庄，2.轮流作庄
+       *庄家方式 1.自由场，2.通杀庄
        * </pre>
        *
        * <code>uint32 bankerWay = 3;</code>
@@ -854,30 +931,112 @@ public final class SanGong {
       }
       /**
        * <pre>
-       *庄家方式 1.自由抢庄，2.轮流作庄
+       *庄家方式 1.自由场，2.通杀庄
        * </pre>
        *
        * <code>uint32 bankerWay = 3;</code>
        */
       public Builder setBankerWay(int value) {
-        
-        bankerWay_ = value;
+
+          bankerWay_ = value;
         onChanged();
         return this;
       }
       /**
        * <pre>
-       *庄家方式 1.自由抢庄，2.轮流作庄
+       *庄家方式 1.自由场，2.通杀庄
        * </pre>
        *
        * <code>uint32 bankerWay = 3;</code>
        */
       public Builder clearBankerWay() {
-        
-        bankerWay_ = 0;
-        onChanged();
-        return this;
+
+          bankerWay_ = 0;
+          onChanged();
+          return this;
       }
+
+        private int count_;
+
+        /**
+         * <pre>
+         * 人数
+         * </pre>
+         * <p>
+         * <code>uint32 count = 4;</code>
+         */
+        public int getCount() {
+            return count_;
+        }
+
+        /**
+         * <pre>
+         * 人数
+         * </pre>
+         * <p>
+         * <code>uint32 count = 4;</code>
+         */
+        public Builder setCount(int value) {
+
+            count_ = value;
+            onChanged();
+            return this;
+        }
+
+        /**
+         * <pre>
+         * 人数
+         * </pre>
+         * <p>
+         * <code>uint32 count = 4;</code>
+         */
+        public Builder clearCount() {
+
+            count_ = 0;
+            onChanged();
+            return this;
+        }
+
+        private int payType_;
+
+        /**
+         * <pre>
+         * 支付方式 1.房主支付，2.AA
+         * </pre>
+         * <p>
+         * <code>uint32 payType = 5;</code>
+         */
+        public int getPayType() {
+            return payType_;
+        }
+
+        /**
+         * <pre>
+         * 支付方式 1.房主支付，2.AA
+         * </pre>
+         * <p>
+         * <code>uint32 payType = 5;</code>
+         */
+        public Builder setPayType(int value) {
+
+            payType_ = value;
+            onChanged();
+            return this;
+        }
+
+        /**
+         * <pre>
+         * 支付方式 1.房主支付，2.AA
+         * </pre>
+         * <p>
+         * <code>uint32 payType = 5;</code>
+         */
+        public Builder clearPayType() {
+
+            payType_ = 0;
+            onChanged();
+            return this;
+        }
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
@@ -2708,19 +2867,10 @@ public final class SanGong {
 
     /**
      * <pre>
-     *是否抢过庄0、未操作，1、抢，2、不抢
-     * </pre>
-     *
-     * <code>uint32 grab = 6;</code>
-     */
-    int getGrab();
-
-    /**
-     * <pre>
      *是否亮过牌
      * </pre>
      *
-     * <code>bool open = 7;</code>
+     * <code>bool open = 6;</code>
      */
     boolean getOpen();
 
@@ -2729,7 +2879,7 @@ public final class SanGong {
      *下注分
      * </pre>
      *
-     * <code>uint32 playScore = 8;</code>
+     * <code>uint32 playScore = 7;</code>
      */
     int getPlayScore();
   }
@@ -2754,7 +2904,6 @@ public final class SanGong {
       cardsSize_ = 0;
       score_ = 0;
       isRobot_ = false;
-      grab_ = 0;
       open_ = false;
       playScore_ = 0;
     }
@@ -2827,15 +2976,10 @@ public final class SanGong {
             }
             case 48: {
 
-              grab_ = input.readUInt32();
-              break;
-            }
-            case 56: {
-
               open_ = input.readBool();
               break;
             }
-            case 64: {
+            case 56: {
 
               playScore_ = input.readUInt32();
               break;
@@ -2954,40 +3098,27 @@ public final class SanGong {
       return isRobot_;
     }
 
-    public static final int GRAB_FIELD_NUMBER = 6;
-    private int grab_;
-    /**
-     * <pre>
-     *是否抢过庄0、未操作，1、抢，2、不抢
-     * </pre>
-     *
-     * <code>uint32 grab = 6;</code>
-     */
-    public int getGrab() {
-      return grab_;
-    }
-
-    public static final int OPEN_FIELD_NUMBER = 7;
+    public static final int OPEN_FIELD_NUMBER = 6;
     private boolean open_;
     /**
      * <pre>
      *是否亮过牌
      * </pre>
      *
-     * <code>bool open = 7;</code>
+     * <code>bool open = 6;</code>
      */
     public boolean getOpen() {
       return open_;
     }
 
-    public static final int PLAYSCORE_FIELD_NUMBER = 8;
+    public static final int PLAYSCORE_FIELD_NUMBER = 7;
     private int playScore_;
     /**
      * <pre>
      *下注分
      * </pre>
      *
-     * <code>uint32 playScore = 8;</code>
+     * <code>uint32 playScore = 7;</code>
      */
     public int getPlayScore() {
       return playScore_;
@@ -3013,10 +3144,10 @@ public final class SanGong {
         output.writeUInt32NoTag(18);
         output.writeUInt32NoTag(cardsMemoizedSerializedSize);
       }
-      for (int i = 0; i < cards_.size(); i++) {
+        for (int i = 0; i < cards_.size(); i++) {
         output.writeInt32NoTag(cards_.get(i));
-      }
-      if (cardsSize_ != 0) {
+        }
+        if (cardsSize_ != 0) {
         output.writeUInt32(3, cardsSize_);
       }
       if (score_ != 0) {
@@ -3025,14 +3156,11 @@ public final class SanGong {
       if (isRobot_ != false) {
         output.writeBool(5, isRobot_);
       }
-      if (grab_ != 0) {
-        output.writeUInt32(6, grab_);
-      }
       if (open_ != false) {
-        output.writeBool(7, open_);
+        output.writeBool(6, open_);
       }
       if (playScore_ != 0) {
-        output.writeUInt32(8, playScore_);
+        output.writeUInt32(7, playScore_);
       }
     }
 
@@ -3063,25 +3191,21 @@ public final class SanGong {
         size += com.google.protobuf.CodedOutputStream
           .computeUInt32Size(3, cardsSize_);
       }
-      if (score_ != 0) {
+        if (score_ != 0) {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(4, score_);
-      }
-      if (isRobot_ != false) {
+        }
+        if (isRobot_ != false) {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(5, isRobot_);
       }
-      if (grab_ != 0) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(6, grab_);
-      }
       if (open_ != false) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBoolSize(7, open_);
+          .computeBoolSize(6, open_);
       }
       if (playScore_ != 0) {
         size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(8, playScore_);
+          .computeUInt32Size(7, playScore_);
       }
       memoizedSize = size;
       return size;
@@ -3109,8 +3233,6 @@ public final class SanGong {
           == other.getScore());
       result = result && (getIsRobot()
           == other.getIsRobot());
-      result = result && (getGrab()
-          == other.getGrab());
       result = result && (getOpen()
           == other.getOpen());
       result = result && (getPlayScore()
@@ -3138,8 +3260,6 @@ public final class SanGong {
       hash = (37 * hash) + ISROBOT_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
           getIsRobot());
-      hash = (37 * hash) + GRAB_FIELD_NUMBER;
-      hash = (53 * hash) + getGrab();
       hash = (37 * hash) + OPEN_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
           getOpen());
@@ -3288,8 +3408,6 @@ public final class SanGong {
 
         isRobot_ = false;
 
-        grab_ = 0;
-
         open_ = false;
 
         playScore_ = 0;
@@ -3327,7 +3445,6 @@ public final class SanGong {
         result.cardsSize_ = cardsSize_;
         result.score_ = score_;
         result.isRobot_ = isRobot_;
-        result.grab_ = grab_;
         result.open_ = open_;
         result.playScore_ = playScore_;
         result.bitField0_ = to_bitField0_;
@@ -3393,9 +3510,6 @@ public final class SanGong {
         }
         if (other.getIsRobot() != false) {
           setIsRobot(other.getIsRobot());
-        }
-        if (other.getGrab() != 0) {
-          setGrab(other.getGrab());
         }
         if (other.getOpen() != false) {
           setOpen(other.getOpen());
@@ -3660,9 +3774,10 @@ public final class SanGong {
         
         isRobot_ = value;
         onChanged();
-        return this;
+          return this;
       }
-      /**
+
+        /**
        * <pre>
        *是否托管
        * </pre>
@@ -3670,46 +3785,8 @@ public final class SanGong {
        * <code>bool isRobot = 5;</code>
        */
       public Builder clearIsRobot() {
-        
-        isRobot_ = false;
-        onChanged();
-        return this;
-      }
 
-      private int grab_ ;
-      /**
-       * <pre>
-       *是否抢过庄0、未操作，1、抢，2、不抢
-       * </pre>
-       *
-       * <code>uint32 grab = 6;</code>
-       */
-      public int getGrab() {
-        return grab_;
-      }
-      /**
-       * <pre>
-       *是否抢过庄0、未操作，1、抢，2、不抢
-       * </pre>
-       *
-       * <code>uint32 grab = 6;</code>
-       */
-      public Builder setGrab(int value) {
-        
-        grab_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <pre>
-       *是否抢过庄0、未操作，1、抢，2、不抢
-       * </pre>
-       *
-       * <code>uint32 grab = 6;</code>
-       */
-      public Builder clearGrab() {
-        
-        grab_ = 0;
+          isRobot_ = false;
         onChanged();
         return this;
       }
@@ -3720,35 +3797,36 @@ public final class SanGong {
        *是否亮过牌
        * </pre>
        *
-       * <code>bool open = 7;</code>
+       * <code>bool open = 6;</code>
        */
       public boolean getOpen() {
-        return open_;
+          return open_;
       }
       /**
        * <pre>
        *是否亮过牌
        * </pre>
        *
-       * <code>bool open = 7;</code>
+       * <code>bool open = 6;</code>
        */
       public Builder setOpen(boolean value) {
         
         open_ = value;
         onChanged();
-        return this;
+          return this;
       }
-      /**
+
+        /**
        * <pre>
        *是否亮过牌
        * </pre>
        *
-       * <code>bool open = 7;</code>
+       * <code>bool open = 6;</code>
        */
       public Builder clearOpen() {
-        
-        open_ = false;
-        onChanged();
+
+          open_ = false;
+          onChanged();
         return this;
       }
 
@@ -3758,17 +3836,17 @@ public final class SanGong {
        *下注分
        * </pre>
        *
-       * <code>uint32 playScore = 8;</code>
+       * <code>uint32 playScore = 7;</code>
        */
       public int getPlayScore() {
-        return playScore_;
+          return playScore_;
       }
       /**
        * <pre>
        *下注分
        * </pre>
        *
-       * <code>uint32 playScore = 8;</code>
+       * <code>uint32 playScore = 7;</code>
        */
       public Builder setPlayScore(int value) {
         
@@ -3781,7 +3859,7 @@ public final class SanGong {
        *下注分
        * </pre>
        *
-       * <code>uint32 playScore = 8;</code>
+       * <code>uint32 playScore = 7;</code>
        */
       public Builder clearPlayScore() {
         
@@ -3833,1495 +3911,6 @@ public final class SanGong {
     }
 
     public sangong.mode.SanGong.SangongSeatGameInfo getDefaultInstanceForType() {
-      return DEFAULT_INSTANCE;
-    }
-
-  }
-
-  public interface GrabRequestOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:GrabRequest)
-      com.google.protobuf.MessageOrBuilder {
-
-    /**
-     * <pre>
-     *是否抢庄
-     * </pre>
-     *
-     * <code>bool grab = 1;</code>
-     */
-    boolean getGrab();
-  }
-  /**
-   * <pre>
-   *抢庄  GRAB
-   * </pre>
-   *
-   * Protobuf type {@code GrabRequest}
-   */
-  public  static final class GrabRequest extends
-      com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:GrabRequest)
-      GrabRequestOrBuilder {
-    // Use GrabRequest.newBuilder() to construct.
-    private GrabRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
-      super(builder);
-    }
-    private GrabRequest() {
-      grab_ = false;
-    }
-
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-    getUnknownFields() {
-      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
-    }
-    private GrabRequest(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      this();
-      int mutable_bitField0_ = 0;
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            default: {
-              if (!input.skipField(tag)) {
-                done = true;
-              }
-              break;
-            }
-            case 8: {
-
-              grab_ = input.readBool();
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
-      } finally {
-        makeExtensionsImmutable();
-      }
-    }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return sangong.mode.SanGong.internal_static_GrabRequest_descriptor;
-    }
-
-    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return sangong.mode.SanGong.internal_static_GrabRequest_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              sangong.mode.SanGong.GrabRequest.class, sangong.mode.SanGong.GrabRequest.Builder.class);
-    }
-
-    public static final int GRAB_FIELD_NUMBER = 1;
-    private boolean grab_;
-    /**
-     * <pre>
-     *是否抢庄
-     * </pre>
-     *
-     * <code>bool grab = 1;</code>
-     */
-    public boolean getGrab() {
-      return grab_;
-    }
-
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized == 1) return true;
-      if (isInitialized == 0) return false;
-
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      if (grab_ != false) {
-        output.writeBool(1, grab_);
-      }
-    }
-
-    public int getSerializedSize() {
-      int size = memoizedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      if (grab_ != false) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBoolSize(1, grab_);
-      }
-      memoizedSize = size;
-      return size;
-    }
-
-    private static final long serialVersionUID = 0L;
-    @java.lang.Override
-    public boolean equals(final java.lang.Object obj) {
-      if (obj == this) {
-       return true;
-      }
-      if (!(obj instanceof sangong.mode.SanGong.GrabRequest)) {
-        return super.equals(obj);
-      }
-      sangong.mode.SanGong.GrabRequest other = (sangong.mode.SanGong.GrabRequest) obj;
-
-      boolean result = true;
-      result = result && (getGrab()
-          == other.getGrab());
-      return result;
-    }
-
-    @java.lang.Override
-    public int hashCode() {
-      if (memoizedHashCode != 0) {
-        return memoizedHashCode;
-      }
-      int hash = 41;
-      hash = (19 * hash) + getDescriptor().hashCode();
-      hash = (37 * hash) + GRAB_FIELD_NUMBER;
-      hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
-          getGrab());
-      hash = (29 * hash) + unknownFields.hashCode();
-      memoizedHashCode = hash;
-      return hash;
-    }
-
-    public static sangong.mode.SanGong.GrabRequest parseFrom(
-        java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static sangong.mode.SanGong.GrabRequest parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static sangong.mode.SanGong.GrabRequest parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static sangong.mode.SanGong.GrabRequest parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static sangong.mode.SanGong.GrabRequest parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static sangong.mode.SanGong.GrabRequest parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static sangong.mode.SanGong.GrabRequest parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
-    }
-    public static sangong.mode.SanGong.GrabRequest parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
-    }
-    public static sangong.mode.SanGong.GrabRequest parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input);
-    }
-    public static sangong.mode.SanGong.GrabRequest parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
-    }
-    public static sangong.mode.SanGong.GrabRequest parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
-    }
-    public static sangong.mode.SanGong.GrabRequest parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
-    }
-
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder() {
-      return DEFAULT_INSTANCE.toBuilder();
-    }
-    public static Builder newBuilder(sangong.mode.SanGong.GrabRequest prototype) {
-      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() {
-      return this == DEFAULT_INSTANCE
-          ? new Builder() : new Builder().mergeFrom(this);
-    }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * <pre>
-     *抢庄  GRAB
-     * </pre>
-     *
-     * Protobuf type {@code GrabRequest}
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:GrabRequest)
-        sangong.mode.SanGong.GrabRequestOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return sangong.mode.SanGong.internal_static_GrabRequest_descriptor;
-      }
-
-      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return sangong.mode.SanGong.internal_static_GrabRequest_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                sangong.mode.SanGong.GrabRequest.class, sangong.mode.SanGong.GrabRequest.Builder.class);
-      }
-
-      // Construct using sangong.mode.SanGong.GrabRequest.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-        }
-      }
-      public Builder clear() {
-        super.clear();
-        grab_ = false;
-
-        return this;
-      }
-
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return sangong.mode.SanGong.internal_static_GrabRequest_descriptor;
-      }
-
-      public sangong.mode.SanGong.GrabRequest getDefaultInstanceForType() {
-        return sangong.mode.SanGong.GrabRequest.getDefaultInstance();
-      }
-
-      public sangong.mode.SanGong.GrabRequest build() {
-        sangong.mode.SanGong.GrabRequest result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      public sangong.mode.SanGong.GrabRequest buildPartial() {
-        sangong.mode.SanGong.GrabRequest result = new sangong.mode.SanGong.GrabRequest(this);
-        result.grab_ = grab_;
-        onBuilt();
-        return result;
-      }
-
-      public Builder clone() {
-        return (Builder) super.clone();
-      }
-      public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
-        return (Builder) super.setField(field, value);
-      }
-      public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
-        return (Builder) super.clearField(field);
-      }
-      public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-        return (Builder) super.clearOneof(oneof);
-      }
-      public Builder setRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, Object value) {
-        return (Builder) super.setRepeatedField(field, index, value);
-      }
-      public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
-        return (Builder) super.addRepeatedField(field, value);
-      }
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof sangong.mode.SanGong.GrabRequest) {
-          return mergeFrom((sangong.mode.SanGong.GrabRequest)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(sangong.mode.SanGong.GrabRequest other) {
-        if (other == sangong.mode.SanGong.GrabRequest.getDefaultInstance()) return this;
-        if (other.getGrab() != false) {
-          setGrab(other.getGrab());
-        }
-        onChanged();
-        return this;
-      }
-
-      public final boolean isInitialized() {
-        return true;
-      }
-
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        sangong.mode.SanGong.GrabRequest parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (sangong.mode.SanGong.GrabRequest) e.getUnfinishedMessage();
-          throw e.unwrapIOException();
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
-        return this;
-      }
-
-      private boolean grab_ ;
-      /**
-       * <pre>
-       *是否抢庄
-       * </pre>
-       *
-       * <code>bool grab = 1;</code>
-       */
-      public boolean getGrab() {
-        return grab_;
-      }
-      /**
-       * <pre>
-       *是否抢庄
-       * </pre>
-       *
-       * <code>bool grab = 1;</code>
-       */
-      public Builder setGrab(boolean value) {
-        
-        grab_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <pre>
-       *是否抢庄
-       * </pre>
-       *
-       * <code>bool grab = 1;</code>
-       */
-      public Builder clearGrab() {
-        
-        grab_ = false;
-        onChanged();
-        return this;
-      }
-      public final Builder setUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
-      }
-
-      public final Builder mergeUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
-      }
-
-
-      // @@protoc_insertion_point(builder_scope:GrabRequest)
-    }
-
-    // @@protoc_insertion_point(class_scope:GrabRequest)
-    private static final sangong.mode.SanGong.GrabRequest DEFAULT_INSTANCE;
-    static {
-      DEFAULT_INSTANCE = new sangong.mode.SanGong.GrabRequest();
-    }
-
-    public static sangong.mode.SanGong.GrabRequest getDefaultInstance() {
-      return DEFAULT_INSTANCE;
-    }
-
-    private static final com.google.protobuf.Parser<GrabRequest>
-        PARSER = new com.google.protobuf.AbstractParser<GrabRequest>() {
-      public GrabRequest parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-          return new GrabRequest(input, extensionRegistry);
-      }
-    };
-
-    public static com.google.protobuf.Parser<GrabRequest> parser() {
-      return PARSER;
-    }
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<GrabRequest> getParserForType() {
-      return PARSER;
-    }
-
-    public sangong.mode.SanGong.GrabRequest getDefaultInstanceForType() {
-      return DEFAULT_INSTANCE;
-    }
-
-  }
-
-  public interface GrabResponseOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:GrabResponse)
-      com.google.protobuf.MessageOrBuilder {
-
-    /**
-     * <pre>
-     *用户
-     * </pre>
-     *
-     * <code>uint32 ID = 1;</code>
-     */
-    int getID();
-
-    /**
-     * <pre>
-     *是否抢庄
-     * </pre>
-     *
-     * <code>bool grab = 2;</code>
-     */
-    boolean getGrab();
-  }
-  /**
-   * <pre>
-   *抢庄 GRAB
-   * </pre>
-   *
-   * Protobuf type {@code GrabResponse}
-   */
-  public  static final class GrabResponse extends
-      com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:GrabResponse)
-      GrabResponseOrBuilder {
-    // Use GrabResponse.newBuilder() to construct.
-    private GrabResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
-      super(builder);
-    }
-    private GrabResponse() {
-      iD_ = 0;
-      grab_ = false;
-    }
-
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-    getUnknownFields() {
-      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
-    }
-    private GrabResponse(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      this();
-      int mutable_bitField0_ = 0;
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            default: {
-              if (!input.skipField(tag)) {
-                done = true;
-              }
-              break;
-            }
-            case 8: {
-
-              iD_ = input.readUInt32();
-              break;
-            }
-            case 16: {
-
-              grab_ = input.readBool();
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
-      } finally {
-        makeExtensionsImmutable();
-      }
-    }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return sangong.mode.SanGong.internal_static_GrabResponse_descriptor;
-    }
-
-    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return sangong.mode.SanGong.internal_static_GrabResponse_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              sangong.mode.SanGong.GrabResponse.class, sangong.mode.SanGong.GrabResponse.Builder.class);
-    }
-
-    public static final int ID_FIELD_NUMBER = 1;
-    private int iD_;
-    /**
-     * <pre>
-     *用户
-     * </pre>
-     *
-     * <code>uint32 ID = 1;</code>
-     */
-    public int getID() {
-      return iD_;
-    }
-
-    public static final int GRAB_FIELD_NUMBER = 2;
-    private boolean grab_;
-    /**
-     * <pre>
-     *是否抢庄
-     * </pre>
-     *
-     * <code>bool grab = 2;</code>
-     */
-    public boolean getGrab() {
-      return grab_;
-    }
-
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized == 1) return true;
-      if (isInitialized == 0) return false;
-
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      if (iD_ != 0) {
-        output.writeUInt32(1, iD_);
-      }
-      if (grab_ != false) {
-        output.writeBool(2, grab_);
-      }
-    }
-
-    public int getSerializedSize() {
-      int size = memoizedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      if (iD_ != 0) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(1, iD_);
-      }
-      if (grab_ != false) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBoolSize(2, grab_);
-      }
-      memoizedSize = size;
-      return size;
-    }
-
-    private static final long serialVersionUID = 0L;
-    @java.lang.Override
-    public boolean equals(final java.lang.Object obj) {
-      if (obj == this) {
-       return true;
-      }
-      if (!(obj instanceof sangong.mode.SanGong.GrabResponse)) {
-        return super.equals(obj);
-      }
-      sangong.mode.SanGong.GrabResponse other = (sangong.mode.SanGong.GrabResponse) obj;
-
-      boolean result = true;
-      result = result && (getID()
-          == other.getID());
-      result = result && (getGrab()
-          == other.getGrab());
-      return result;
-    }
-
-    @java.lang.Override
-    public int hashCode() {
-      if (memoizedHashCode != 0) {
-        return memoizedHashCode;
-      }
-      int hash = 41;
-      hash = (19 * hash) + getDescriptor().hashCode();
-      hash = (37 * hash) + ID_FIELD_NUMBER;
-      hash = (53 * hash) + getID();
-      hash = (37 * hash) + GRAB_FIELD_NUMBER;
-      hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
-          getGrab());
-      hash = (29 * hash) + unknownFields.hashCode();
-      memoizedHashCode = hash;
-      return hash;
-    }
-
-    public static sangong.mode.SanGong.GrabResponse parseFrom(
-        java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static sangong.mode.SanGong.GrabResponse parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static sangong.mode.SanGong.GrabResponse parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static sangong.mode.SanGong.GrabResponse parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static sangong.mode.SanGong.GrabResponse parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static sangong.mode.SanGong.GrabResponse parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static sangong.mode.SanGong.GrabResponse parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
-    }
-    public static sangong.mode.SanGong.GrabResponse parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
-    }
-    public static sangong.mode.SanGong.GrabResponse parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input);
-    }
-    public static sangong.mode.SanGong.GrabResponse parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
-    }
-    public static sangong.mode.SanGong.GrabResponse parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
-    }
-    public static sangong.mode.SanGong.GrabResponse parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
-    }
-
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder() {
-      return DEFAULT_INSTANCE.toBuilder();
-    }
-    public static Builder newBuilder(sangong.mode.SanGong.GrabResponse prototype) {
-      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() {
-      return this == DEFAULT_INSTANCE
-          ? new Builder() : new Builder().mergeFrom(this);
-    }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * <pre>
-     *抢庄 GRAB
-     * </pre>
-     *
-     * Protobuf type {@code GrabResponse}
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:GrabResponse)
-        sangong.mode.SanGong.GrabResponseOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return sangong.mode.SanGong.internal_static_GrabResponse_descriptor;
-      }
-
-      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return sangong.mode.SanGong.internal_static_GrabResponse_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                sangong.mode.SanGong.GrabResponse.class, sangong.mode.SanGong.GrabResponse.Builder.class);
-      }
-
-      // Construct using sangong.mode.SanGong.GrabResponse.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-        }
-      }
-      public Builder clear() {
-        super.clear();
-        iD_ = 0;
-
-        grab_ = false;
-
-        return this;
-      }
-
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return sangong.mode.SanGong.internal_static_GrabResponse_descriptor;
-      }
-
-      public sangong.mode.SanGong.GrabResponse getDefaultInstanceForType() {
-        return sangong.mode.SanGong.GrabResponse.getDefaultInstance();
-      }
-
-      public sangong.mode.SanGong.GrabResponse build() {
-        sangong.mode.SanGong.GrabResponse result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      public sangong.mode.SanGong.GrabResponse buildPartial() {
-        sangong.mode.SanGong.GrabResponse result = new sangong.mode.SanGong.GrabResponse(this);
-        result.iD_ = iD_;
-        result.grab_ = grab_;
-        onBuilt();
-        return result;
-      }
-
-      public Builder clone() {
-        return (Builder) super.clone();
-      }
-      public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
-        return (Builder) super.setField(field, value);
-      }
-      public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
-        return (Builder) super.clearField(field);
-      }
-      public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-        return (Builder) super.clearOneof(oneof);
-      }
-      public Builder setRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, Object value) {
-        return (Builder) super.setRepeatedField(field, index, value);
-      }
-      public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
-        return (Builder) super.addRepeatedField(field, value);
-      }
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof sangong.mode.SanGong.GrabResponse) {
-          return mergeFrom((sangong.mode.SanGong.GrabResponse)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(sangong.mode.SanGong.GrabResponse other) {
-        if (other == sangong.mode.SanGong.GrabResponse.getDefaultInstance()) return this;
-        if (other.getID() != 0) {
-          setID(other.getID());
-        }
-        if (other.getGrab() != false) {
-          setGrab(other.getGrab());
-        }
-        onChanged();
-        return this;
-      }
-
-      public final boolean isInitialized() {
-        return true;
-      }
-
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        sangong.mode.SanGong.GrabResponse parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (sangong.mode.SanGong.GrabResponse) e.getUnfinishedMessage();
-          throw e.unwrapIOException();
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
-        return this;
-      }
-
-      private int iD_ ;
-      /**
-       * <pre>
-       *用户
-       * </pre>
-       *
-       * <code>uint32 ID = 1;</code>
-       */
-      public int getID() {
-        return iD_;
-      }
-      /**
-       * <pre>
-       *用户
-       * </pre>
-       *
-       * <code>uint32 ID = 1;</code>
-       */
-      public Builder setID(int value) {
-        
-        iD_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <pre>
-       *用户
-       * </pre>
-       *
-       * <code>uint32 ID = 1;</code>
-       */
-      public Builder clearID() {
-        
-        iD_ = 0;
-        onChanged();
-        return this;
-      }
-
-      private boolean grab_ ;
-      /**
-       * <pre>
-       *是否抢庄
-       * </pre>
-       *
-       * <code>bool grab = 2;</code>
-       */
-      public boolean getGrab() {
-        return grab_;
-      }
-      /**
-       * <pre>
-       *是否抢庄
-       * </pre>
-       *
-       * <code>bool grab = 2;</code>
-       */
-      public Builder setGrab(boolean value) {
-        
-        grab_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <pre>
-       *是否抢庄
-       * </pre>
-       *
-       * <code>bool grab = 2;</code>
-       */
-      public Builder clearGrab() {
-        
-        grab_ = false;
-        onChanged();
-        return this;
-      }
-      public final Builder setUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
-      }
-
-      public final Builder mergeUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
-      }
-
-
-      // @@protoc_insertion_point(builder_scope:GrabResponse)
-    }
-
-    // @@protoc_insertion_point(class_scope:GrabResponse)
-    private static final sangong.mode.SanGong.GrabResponse DEFAULT_INSTANCE;
-    static {
-      DEFAULT_INSTANCE = new sangong.mode.SanGong.GrabResponse();
-    }
-
-    public static sangong.mode.SanGong.GrabResponse getDefaultInstance() {
-      return DEFAULT_INSTANCE;
-    }
-
-    private static final com.google.protobuf.Parser<GrabResponse>
-        PARSER = new com.google.protobuf.AbstractParser<GrabResponse>() {
-      public GrabResponse parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-          return new GrabResponse(input, extensionRegistry);
-      }
-    };
-
-    public static com.google.protobuf.Parser<GrabResponse> parser() {
-      return PARSER;
-    }
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<GrabResponse> getParserForType() {
-      return PARSER;
-    }
-
-    public sangong.mode.SanGong.GrabResponse getDefaultInstanceForType() {
-      return DEFAULT_INSTANCE;
-    }
-
-  }
-
-  public interface ConfirmBankerResponseOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:ConfirmBankerResponse)
-      com.google.protobuf.MessageOrBuilder {
-
-    /**
-     * <pre>
-     *庄家ID
-     * </pre>
-     *
-     * <code>uint32 banker = 1;</code>
-     */
-    int getBanker();
-  }
-  /**
-   * <pre>
-   *确认庄家 CONFIRM_BANKER
-   * </pre>
-   *
-   * Protobuf type {@code ConfirmBankerResponse}
-   */
-  public  static final class ConfirmBankerResponse extends
-      com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:ConfirmBankerResponse)
-      ConfirmBankerResponseOrBuilder {
-    // Use ConfirmBankerResponse.newBuilder() to construct.
-    private ConfirmBankerResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
-      super(builder);
-    }
-    private ConfirmBankerResponse() {
-      banker_ = 0;
-    }
-
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-    getUnknownFields() {
-      return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
-    }
-    private ConfirmBankerResponse(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      this();
-      int mutable_bitField0_ = 0;
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            default: {
-              if (!input.skipField(tag)) {
-                done = true;
-              }
-              break;
-            }
-            case 8: {
-
-              banker_ = input.readUInt32();
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
-      } finally {
-        makeExtensionsImmutable();
-      }
-    }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return sangong.mode.SanGong.internal_static_ConfirmBankerResponse_descriptor;
-    }
-
-    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return sangong.mode.SanGong.internal_static_ConfirmBankerResponse_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              sangong.mode.SanGong.ConfirmBankerResponse.class, sangong.mode.SanGong.ConfirmBankerResponse.Builder.class);
-    }
-
-    public static final int BANKER_FIELD_NUMBER = 1;
-    private int banker_;
-    /**
-     * <pre>
-     *庄家ID
-     * </pre>
-     *
-     * <code>uint32 banker = 1;</code>
-     */
-    public int getBanker() {
-      return banker_;
-    }
-
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized == 1) return true;
-      if (isInitialized == 0) return false;
-
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      if (banker_ != 0) {
-        output.writeUInt32(1, banker_);
-      }
-    }
-
-    public int getSerializedSize() {
-      int size = memoizedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      if (banker_ != 0) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(1, banker_);
-      }
-      memoizedSize = size;
-      return size;
-    }
-
-    private static final long serialVersionUID = 0L;
-    @java.lang.Override
-    public boolean equals(final java.lang.Object obj) {
-      if (obj == this) {
-       return true;
-      }
-      if (!(obj instanceof sangong.mode.SanGong.ConfirmBankerResponse)) {
-        return super.equals(obj);
-      }
-      sangong.mode.SanGong.ConfirmBankerResponse other = (sangong.mode.SanGong.ConfirmBankerResponse) obj;
-
-      boolean result = true;
-      result = result && (getBanker()
-          == other.getBanker());
-      return result;
-    }
-
-    @java.lang.Override
-    public int hashCode() {
-      if (memoizedHashCode != 0) {
-        return memoizedHashCode;
-      }
-      int hash = 41;
-      hash = (19 * hash) + getDescriptor().hashCode();
-      hash = (37 * hash) + BANKER_FIELD_NUMBER;
-      hash = (53 * hash) + getBanker();
-      hash = (29 * hash) + unknownFields.hashCode();
-      memoizedHashCode = hash;
-      return hash;
-    }
-
-    public static sangong.mode.SanGong.ConfirmBankerResponse parseFrom(
-        java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static sangong.mode.SanGong.ConfirmBankerResponse parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static sangong.mode.SanGong.ConfirmBankerResponse parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static sangong.mode.SanGong.ConfirmBankerResponse parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static sangong.mode.SanGong.ConfirmBankerResponse parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static sangong.mode.SanGong.ConfirmBankerResponse parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static sangong.mode.SanGong.ConfirmBankerResponse parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
-    }
-    public static sangong.mode.SanGong.ConfirmBankerResponse parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
-    }
-    public static sangong.mode.SanGong.ConfirmBankerResponse parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input);
-    }
-    public static sangong.mode.SanGong.ConfirmBankerResponse parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
-    }
-    public static sangong.mode.SanGong.ConfirmBankerResponse parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
-    }
-    public static sangong.mode.SanGong.ConfirmBankerResponse parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
-    }
-
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder() {
-      return DEFAULT_INSTANCE.toBuilder();
-    }
-    public static Builder newBuilder(sangong.mode.SanGong.ConfirmBankerResponse prototype) {
-      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() {
-      return this == DEFAULT_INSTANCE
-          ? new Builder() : new Builder().mergeFrom(this);
-    }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * <pre>
-     *确认庄家 CONFIRM_BANKER
-     * </pre>
-     *
-     * Protobuf type {@code ConfirmBankerResponse}
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:ConfirmBankerResponse)
-        sangong.mode.SanGong.ConfirmBankerResponseOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return sangong.mode.SanGong.internal_static_ConfirmBankerResponse_descriptor;
-      }
-
-      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return sangong.mode.SanGong.internal_static_ConfirmBankerResponse_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                sangong.mode.SanGong.ConfirmBankerResponse.class, sangong.mode.SanGong.ConfirmBankerResponse.Builder.class);
-      }
-
-      // Construct using sangong.mode.SanGong.ConfirmBankerResponse.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-        }
-      }
-      public Builder clear() {
-        super.clear();
-        banker_ = 0;
-
-        return this;
-      }
-
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return sangong.mode.SanGong.internal_static_ConfirmBankerResponse_descriptor;
-      }
-
-      public sangong.mode.SanGong.ConfirmBankerResponse getDefaultInstanceForType() {
-        return sangong.mode.SanGong.ConfirmBankerResponse.getDefaultInstance();
-      }
-
-      public sangong.mode.SanGong.ConfirmBankerResponse build() {
-        sangong.mode.SanGong.ConfirmBankerResponse result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      public sangong.mode.SanGong.ConfirmBankerResponse buildPartial() {
-        sangong.mode.SanGong.ConfirmBankerResponse result = new sangong.mode.SanGong.ConfirmBankerResponse(this);
-        result.banker_ = banker_;
-        onBuilt();
-        return result;
-      }
-
-      public Builder clone() {
-        return (Builder) super.clone();
-      }
-      public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
-        return (Builder) super.setField(field, value);
-      }
-      public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
-        return (Builder) super.clearField(field);
-      }
-      public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-        return (Builder) super.clearOneof(oneof);
-      }
-      public Builder setRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, Object value) {
-        return (Builder) super.setRepeatedField(field, index, value);
-      }
-      public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
-        return (Builder) super.addRepeatedField(field, value);
-      }
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof sangong.mode.SanGong.ConfirmBankerResponse) {
-          return mergeFrom((sangong.mode.SanGong.ConfirmBankerResponse)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(sangong.mode.SanGong.ConfirmBankerResponse other) {
-        if (other == sangong.mode.SanGong.ConfirmBankerResponse.getDefaultInstance()) return this;
-        if (other.getBanker() != 0) {
-          setBanker(other.getBanker());
-        }
-        onChanged();
-        return this;
-      }
-
-      public final boolean isInitialized() {
-        return true;
-      }
-
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        sangong.mode.SanGong.ConfirmBankerResponse parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (sangong.mode.SanGong.ConfirmBankerResponse) e.getUnfinishedMessage();
-          throw e.unwrapIOException();
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
-        return this;
-      }
-
-      private int banker_ ;
-      /**
-       * <pre>
-       *庄家ID
-       * </pre>
-       *
-       * <code>uint32 banker = 1;</code>
-       */
-      public int getBanker() {
-        return banker_;
-      }
-      /**
-       * <pre>
-       *庄家ID
-       * </pre>
-       *
-       * <code>uint32 banker = 1;</code>
-       */
-      public Builder setBanker(int value) {
-        
-        banker_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <pre>
-       *庄家ID
-       * </pre>
-       *
-       * <code>uint32 banker = 1;</code>
-       */
-      public Builder clearBanker() {
-        
-        banker_ = 0;
-        onChanged();
-        return this;
-      }
-      public final Builder setUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
-      }
-
-      public final Builder mergeUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return this;
-      }
-
-
-      // @@protoc_insertion_point(builder_scope:ConfirmBankerResponse)
-    }
-
-    // @@protoc_insertion_point(class_scope:ConfirmBankerResponse)
-    private static final sangong.mode.SanGong.ConfirmBankerResponse DEFAULT_INSTANCE;
-    static {
-      DEFAULT_INSTANCE = new sangong.mode.SanGong.ConfirmBankerResponse();
-    }
-
-    public static sangong.mode.SanGong.ConfirmBankerResponse getDefaultInstance() {
-      return DEFAULT_INSTANCE;
-    }
-
-    private static final com.google.protobuf.Parser<ConfirmBankerResponse>
-        PARSER = new com.google.protobuf.AbstractParser<ConfirmBankerResponse>() {
-      public ConfirmBankerResponse parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-          return new ConfirmBankerResponse(input, extensionRegistry);
-      }
-    };
-
-    public static com.google.protobuf.Parser<ConfirmBankerResponse> parser() {
-      return PARSER;
-    }
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<ConfirmBankerResponse> getParserForType() {
-      return PARSER;
-    }
-
-    public sangong.mode.SanGong.ConfirmBankerResponse getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -12431,21 +11020,6 @@ public final class SanGong {
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_SangongSeatGameInfo_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_GrabRequest_descriptor;
-  private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_GrabRequest_fieldAccessorTable;
-  private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_GrabResponse_descriptor;
-  private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_GrabResponse_fieldAccessorTable;
-  private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_ConfirmBankerResponse_descriptor;
-  private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_ConfirmBankerResponse_fieldAccessorTable;
-  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_PlayScoreRequest_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
@@ -12489,52 +11063,51 @@ public final class SanGong {
     internal_static_SangongReplayResponse_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_SangongReplayResponse_fieldAccessorTable;
+          internal_static_SangongReplayResponse_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
-      getDescriptor() {
-    return descriptor;
+  getDescriptor() {
+      return descriptor;
   }
-  private static  com.google.protobuf.Descriptors.FileDescriptor
-      descriptor;
-  static {
-    java.lang.String[] descriptorData = {
-      "\n\rsanGong.proto\032\016gameBase.proto\"N\n\023Sango" +
-      "ngIntoResponse\022\021\n\tbaseScore\030\001 \001(\r\022\021\n\tgam" +
-      "eTimes\030\002 \001(\r\022\021\n\tbankerWay\030\003 \001(\r\"l\n\017Sango" +
-      "ngGameInfo\022#\n\005seats\030\001 \003(\0132\024.SangongSeatG" +
-      "ameInfo\022\021\n\tgameCount\030\002 \001(\r\022\021\n\tgameTimes\030" +
-      "\003 \001(\r\022\016\n\006banker\030\004 \001(\r\"X\n\031SangongGameStat" +
-      "usResponse\022&\n\ngameStatus\030\001 \001(\0162\022.Sangong" +
-      "GameStatus\022\023\n\013timeCounter\030\002 \001(\005\"\222\001\n\023Sang" +
-      "ongSeatGameInfo\022\n\n\002ID\030\001 \001(\r\022\r\n\005cards\030\002 \003" +
-      "(\005\022\021\n\tcardsSize\030\003 \001(\r\022\r\n\005score\030\004 \001(\005\022\017\n\007",
-      "isRobot\030\005 \001(\010\022\014\n\004grab\030\006 \001(\r\022\014\n\004open\030\007 \001(" +
-      "\010\022\021\n\tplayScore\030\010 \001(\r\"\033\n\013GrabRequest\022\014\n\004g" +
-      "rab\030\001 \001(\010\"(\n\014GrabResponse\022\n\n\002ID\030\001 \001(\r\022\014\n" +
-      "\004grab\030\002 \001(\010\"\'\n\025ConfirmBankerResponse\022\016\n\006" +
-      "banker\030\001 \001(\r\"!\n\020PlayScoreRequest\022\r\n\005scor" +
-      "e\030\001 \001(\r\".\n\021PlayScoreResponse\022\n\n\002ID\030\001 \001(\r" +
-      "\022\r\n\005score\030\002 \001(\005\"\031\n\010DealCard\022\r\n\005cards\030\001 \003" +
-      "(\005\"-\n\020OpenCardResponse\022\n\n\002ID\030\001 \001(\r\022\r\n\005ca" +
-      "rds\030\002 \003(\005\"Q\n\025SanGongResultResponse\022\036\n\006re" +
-      "sult\030\001 \003(\0132\016.SanGongResult\022\030\n\020readyTimeC",
-      "ounter\030\002 \001(\005\"q\n\rSanGongResult\022\n\n\002ID\030\001 \001(" +
-      "\r\022\024\n\014currentScore\030\002 \001(\005\022\022\n\ntotalScore\030\003 " +
-      "\001(\005\022\033\n\010cardType\030\004 \001(\0162\t.CardType\022\r\n\005card" +
-      "s\030\005 \003(\005\"J\n\023SanGongOverResponse\022\"\n\010gameOv" +
-      "er\030\001 \003(\0132\020.SanGongSeatOver\022\017\n\007backKey\030\002 " +
-      "\001(\t\"F\n\017SanGongSeatOver\022\n\n\002ID\030\001 \001(\r\022\021\n\twi" +
-      "nOrLose\030\002 \001(\005\022\024\n\014sanGongCount\030\003 \001(\r\"\200\001\n\025" +
-      "SangongReplayResponse\022\033\n\010dealCard\030\001 \001(\0132" +
-      "\t.DealCard\022\"\n\007history\030\002 \003(\0132\021.OperationH" +
-      "istory\022&\n\006result\030\003 \001(\0132\026.SanGongResultRe",
-      "sponse*5\n\010CardType\022\024\n\020CARDTYPE_SANGONG\020\000" +
-      "\022\023\n\017CARDTYPE_DANPAI\020\001*~\n\021SangongGameStat" +
-      "us\022\024\n\020SANGONG_WAITTING\020\000\022\024\n\020SANGONG_READ" +
-      "YING\020\001\022\023\n\017SANGONG_GRABING\020\002\022\023\n\017SANGONG_P" +
-      "LAYING\020\003\022\023\n\017SANGONG_OPENING\020\004B\016\n\014sangong" +
-      ".modeb\006proto3"
+
+    private static com.google.protobuf.Descriptors.FileDescriptor
+            descriptor;
+
+    static {
+        java.lang.String[] descriptorData = {
+                "\n\rsanGong.proto\032\016gameBase.proto\"n\n\023Sango" +
+                        "ngIntoResponse\022\021\n\tbaseScore\030\001 \001(\r\022\021\n\tgam" +
+                        "eTimes\030\002 \001(\r\022\021\n\tbankerWay\030\003 \001(\r\022\r\n\005count" +
+                        "\030\004 \001(\r\022\017\n\007payType\030\005 \001(\r\"l\n\017SangongGameIn" +
+                        "fo\022#\n\005seats\030\001 \003(\0132\024.SangongSeatGameInfo\022" +
+                        "\021\n\tgameCount\030\002 \001(\r\022\021\n\tgameTimes\030\003 \001(\r\022\016\n" +
+                        "\006banker\030\004 \001(\r\"X\n\031SangongGameStatusRespon" +
+                        "se\022&\n\ngameStatus\030\001 \001(\0162\022.SangongGameStat" +
+                        "us\022\023\n\013timeCounter\030\002 \001(\005\"\204\001\n\023SangongSeatG" +
+                        "ameInfo\022\n\n\002ID\030\001 \001(\r\022\r\n\005cards\030\002 \003(\005\022\021\n\tca",
+                "rdsSize\030\003 \001(\r\022\r\n\005score\030\004 \001(\005\022\017\n\007isRobot\030" +
+                        "\005 \001(\010\022\014\n\004open\030\006 \001(\010\022\021\n\tplayScore\030\007 \001(\r\"!" +
+                        "\n\020PlayScoreRequest\022\r\n\005score\030\001 \001(\r\".\n\021Pla" +
+                        "yScoreResponse\022\n\n\002ID\030\001 \001(\r\022\r\n\005score\030\002 \001(" +
+                        "\005\"\031\n\010DealCard\022\r\n\005cards\030\001 \003(\005\"-\n\020OpenCard" +
+                        "Response\022\n\n\002ID\030\001 \001(\r\022\r\n\005cards\030\002 \003(\005\"Q\n\025S" +
+                        "anGongResultResponse\022\036\n\006result\030\001 \003(\0132\016.S" +
+                        "anGongResult\022\030\n\020readyTimeCounter\030\002 \001(\005\"q" +
+                        "\n\rSanGongResult\022\n\n\002ID\030\001 \001(\r\022\024\n\014currentSc" +
+                        "ore\030\002 \001(\005\022\022\n\ntotalScore\030\003 \001(\005\022\033\n\010cardTyp",
+                "e\030\004 \001(\0162\t.CardType\022\r\n\005cards\030\005 \003(\005\"J\n\023San" +
+                        "GongOverResponse\022\"\n\010gameOver\030\001 \003(\0132\020.San" +
+                        "GongSeatOver\022\017\n\007backKey\030\002 \001(\t\"F\n\017SanGong" +
+                        "SeatOver\022\n\n\002ID\030\001 \001(\r\022\021\n\twinOrLose\030\002 \001(\005\022" +
+                        "\024\n\014sanGongCount\030\003 \001(\r\"\200\001\n\025SangongReplayR" +
+                        "esponse\022\033\n\010dealCard\030\001 \001(\0132\t.DealCard\022\"\n\007" +
+                        "history\030\002 \003(\0132\021.OperationHistory\022&\n\006resu" +
+                        "lt\030\003 \001(\0132\026.SanGongResultResponse*5\n\010Card" +
+      "Type\022\024\n\020CARDTYPE_SANGONG\020\000\022\023\n\017CARDTYPE_D" +
+      "ANPAI\020\001*i\n\021SangongGameStatus\022\024\n\020SANGONG_",
+      "WAITTING\020\000\022\024\n\020SANGONG_READYING\020\001\022\023\n\017SANG" +
+      "ONG_PLAYING\020\002\022\023\n\017SANGONG_OPENING\020\003B\016\n\014sa" +
+      "ngong.modeb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -12546,15 +11119,15 @@ public final class SanGong {
         };
     com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
-        new com.google.protobuf.Descriptors.FileDescriptor[] {
-          sangong.mode.GameBase.getDescriptor(),
+        new com.google.protobuf.Descriptors.FileDescriptor[]{
+                sangong.mode.GameBase.getDescriptor(),
         }, assigner);
-    internal_static_SangongIntoResponse_descriptor =
+        internal_static_SangongIntoResponse_descriptor =
       getDescriptor().getMessageTypes().get(0);
     internal_static_SangongIntoResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_SangongIntoResponse_descriptor,
-        new java.lang.String[] { "BaseScore", "GameTimes", "BankerWay", });
+        new java.lang.String[] { "BaseScore", "GameTimes", "BankerWay", "Count", "PayType", });
     internal_static_SangongGameInfo_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_SangongGameInfo_fieldAccessorTable = new
@@ -12566,81 +11139,63 @@ public final class SanGong {
     internal_static_SangongGameStatusResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_SangongGameStatusResponse_descriptor,
-        new java.lang.String[] { "GameStatus", "TimeCounter", });
-    internal_static_SangongSeatGameInfo_descriptor =
+            new java.lang.String[]{"GameStatus", "TimeCounter",});
+        internal_static_SangongSeatGameInfo_descriptor =
       getDescriptor().getMessageTypes().get(3);
-    internal_static_SangongSeatGameInfo_fieldAccessorTable = new
+        internal_static_SangongSeatGameInfo_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_SangongSeatGameInfo_descriptor,
-        new java.lang.String[] { "ID", "Cards", "CardsSize", "Score", "IsRobot", "Grab", "Open", "PlayScore", });
-    internal_static_GrabRequest_descriptor =
-      getDescriptor().getMessageTypes().get(4);
-    internal_static_GrabRequest_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_GrabRequest_descriptor,
-        new java.lang.String[] { "Grab", });
-    internal_static_GrabResponse_descriptor =
-      getDescriptor().getMessageTypes().get(5);
-    internal_static_GrabResponse_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_GrabResponse_descriptor,
-        new java.lang.String[] { "ID", "Grab", });
-    internal_static_ConfirmBankerResponse_descriptor =
-      getDescriptor().getMessageTypes().get(6);
-    internal_static_ConfirmBankerResponse_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_ConfirmBankerResponse_descriptor,
-        new java.lang.String[] { "Banker", });
+        new java.lang.String[] { "ID", "Cards", "CardsSize", "Score", "IsRobot", "Open", "PlayScore", });
     internal_static_PlayScoreRequest_descriptor =
-      getDescriptor().getMessageTypes().get(7);
+            getDescriptor().getMessageTypes().get(4);
     internal_static_PlayScoreRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_PlayScoreRequest_descriptor,
         new java.lang.String[] { "Score", });
     internal_static_PlayScoreResponse_descriptor =
-      getDescriptor().getMessageTypes().get(8);
+            getDescriptor().getMessageTypes().get(5);
     internal_static_PlayScoreResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_PlayScoreResponse_descriptor,
-        new java.lang.String[] { "ID", "Score", });
-    internal_static_DealCard_descriptor =
-      getDescriptor().getMessageTypes().get(9);
+        new java.lang.String[] { "ID", "Score",});
+        internal_static_DealCard_descriptor =
+      getDescriptor().getMessageTypes().get(6);
     internal_static_DealCard_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_DealCard_descriptor,
         new java.lang.String[] { "Cards", });
     internal_static_OpenCardResponse_descriptor =
-      getDescriptor().getMessageTypes().get(10);
+            getDescriptor().getMessageTypes().get(7);
     internal_static_OpenCardResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_OpenCardResponse_descriptor,
         new java.lang.String[] { "ID", "Cards", });
     internal_static_SanGongResultResponse_descriptor =
-      getDescriptor().getMessageTypes().get(11);
+            getDescriptor().getMessageTypes().get(8);
     internal_static_SanGongResultResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_SanGongResultResponse_descriptor,
         new java.lang.String[] { "Result", "ReadyTimeCounter", });
     internal_static_SanGongResult_descriptor =
-      getDescriptor().getMessageTypes().get(12);
-    internal_static_SanGongResult_fieldAccessorTable = new
+      getDescriptor().getMessageTypes().get(9);
+        internal_static_SanGongResult_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_SanGongResult_descriptor,
         new java.lang.String[] { "ID", "CurrentScore", "TotalScore", "CardType", "Cards", });
     internal_static_SanGongOverResponse_descriptor =
-      getDescriptor().getMessageTypes().get(13);
+            getDescriptor().getMessageTypes().get(10);
     internal_static_SanGongOverResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_SanGongOverResponse_descriptor,
         new java.lang.String[] { "GameOver", "BackKey", });
     internal_static_SanGongSeatOver_descriptor =
-      getDescriptor().getMessageTypes().get(14);
+            getDescriptor().getMessageTypes().get(11);
     internal_static_SanGongSeatOver_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_SanGongSeatOver_descriptor,
         new java.lang.String[] { "ID", "WinOrLose", "SanGongCount", });
     internal_static_SangongReplayResponse_descriptor =
-      getDescriptor().getMessageTypes().get(15);
+      getDescriptor().getMessageTypes().get(12);
     internal_static_SangongReplayResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_SangongReplayResponse_descriptor,

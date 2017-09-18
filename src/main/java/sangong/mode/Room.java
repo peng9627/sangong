@@ -31,6 +31,8 @@ public class Room {
     private int roomOwner;
     private Date startDate;
     private Date statusDate;
+    private int payType;//支付方式
+    private int count;//人数
 
     public int getBaseScore() {
         return baseScore;
@@ -136,6 +138,22 @@ public class Room {
         this.statusDate = statusDate;
     }
 
+    public int getPayType() {
+        return payType;
+    }
+
+    public void setPayType(int payType) {
+        this.payType = payType;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
     public void addSeat(User user) {
         Seat seat = new Seat();
         seat.setRobot(false);
@@ -170,46 +188,43 @@ public class Room {
         }
     }
 
-    public void compareGrab(int userId) {
-        if (1 == bankerWay) {
-//            int userId = 0;
-//            int score = Integer.MIN_VALUE;
-//
-//            for (Seat seat : seats) {
-//                if (1 == seat.getGrab() && seat.getScore() > score) {
-//                    userId = seat.getUserId();
-//                    score = seat.getScore();
+//    public void compareGrab(int userId) {
+//        if (1 == bankerWay) {
+////            int userId = 0;
+////            int score = Integer.MIN_VALUE;
+////
+////            for (Seat seat : seats) {
+////                if (1 == seat.getGrab() && seat.getScore() > score) {
+////                    userId = seat.getUserId();
+////                    score = seat.getScore();
+////                }
+////            }
+////            grab = userId;
+//            grab = userId;
+//        } else {
+//            if (0 == grab) {
+//                grab = seats.get(0).getUserId();
+//                return;
+//            }
+//            for (int i = 0; i < seats.size(); i++) {
+//                if (seats.get(i).getUserId() == grab) {
+//                    if (i == seats.size() - 1) {
+//                        grab = seats.get(0).getUserId();
+//                    } else {
+//                        grab = seats.get(i + 1).getUserId();
+//                    }
+//                    break;
 //                }
 //            }
-//            grab = userId;
-            grab = userId;
-        } else {
-            if (0 == grab) {
-                grab = seats.get(0).getUserId();
-                return;
-            }
-            for (int i = 0; i < seats.size(); i++) {
-                if (seats.get(i).getUserId() == grab) {
-                    if (i == seats.size() - 1) {
-                        grab = seats.get(0).getUserId();
-                    } else {
-                        grab = seats.get(i + 1).getUserId();
-                    }
-                    break;
-                }
-            }
-        }
-        for (Seat seat : seats) {
-            seat.setGrab(0);
-        }
-    }
+//        }
+//        for (Seat seat : seats) {
+//            seat.setGrab(0);
+//        }
+//    }
 
     private void clear() {
         historyList.clear();
         gameStatus = GameStatus.READYING;
-        if (1 == bankerWay) {
-            grab = 0;
-        }
         startDate = new Date();
         seats.forEach(Seat::clear);
     }
@@ -475,6 +490,8 @@ public class Room {
         sangongIntoResponse.setBaseScore(baseScore);
         sangongIntoResponse.setBankerWay(bankerWay);
         sangongIntoResponse.setGameTimes(gameTimes);
+        sangongIntoResponse.setPayType(payType);
+        sangongIntoResponse.setCount(count);
         intoResponseBuilder.setData(sangongIntoResponse.build().toByteString());
 
         response.setOperationType(GameBase.OperationType.ROOM_INFO).setData(intoResponseBuilder.build().toByteString());
