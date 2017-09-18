@@ -3,6 +3,7 @@ package sangong.mode;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.TypeReference;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import org.slf4j.LoggerFactory;
 import sangong.constant.Constant;
@@ -254,7 +255,8 @@ public class Room {
             }
             int bankScore = 0;
             for (Seat seat : seats) {
-                if (Card.isSanGong(seat.getCards())) {
+                boolean isSangong = Card.isSanGong(seat.getCards());
+                if (isSangong) {
                     seat.setSanGongCount(seat.getSanGongCount() + 1);
                 }
                 if (seat.getSeatNo() != grabSeat.getSeatNo()) {
@@ -267,6 +269,7 @@ public class Room {
                         seat.setScore(seat.getScore() - seat.getPlayScore());
                         userResult.setCurrentScore(-seat.getPlayScore());
                         userResult.setTotalScore(seat.getScore());
+                        userResult.setCardType(isSangong ? SanGong.CardType.CARDTYPE_SANGONG : SanGong.CardType.CARDTYPE_DANPAI);
                         resultResponse.addResult(userResult);
 
                         SeatRecord seatRecord = new SeatRecord();
@@ -285,6 +288,7 @@ public class Room {
                         seat.setScore(seat.getScore() + seat.getPlayScore());
                         userResult.setCurrentScore(seat.getPlayScore());
                         userResult.setTotalScore(seat.getScore());
+                        userResult.setCardType(isSangong ? SanGong.CardType.CARDTYPE_SANGONG : SanGong.CardType.CARDTYPE_DANPAI);
                         resultResponse.addResult(userResult);
 
                         SeatRecord seatRecord = new SeatRecord();
@@ -326,73 +330,71 @@ public class Room {
                     return -1;
                 }
             });
-
-            Seat winSeat = arraySeat.get(arraySeat.size() - 1);
-            int win = winSeat.getPlayScore();
-
-            SanGong.SanGongResult.Builder winResult = SanGong.SanGongResult.newBuilder();
-            winResult.setID(winSeat.getUserId());
-            winResult.addAllCards(winSeat.getCards());
-            winSeat.setScore(winSeat.getScore() + win);
-            winResult.setCurrentScore(win);
-            winResult.setTotalScore(winSeat.getScore());
-            resultResponse.addResult(winResult);
-
-            SeatRecord winRecord = new SeatRecord();
-            winRecord.setUserId(winSeat.getUserId());
-            winRecord.setNickname(winSeat.getNickname());
-            winRecord.setHead(winSeat.getHead());
-            winRecord.setCards(winSeat.getCards());
-            winRecord.setWinOrLose(win);
-            seatRecords.add(winRecord);
-
             Map<Integer, Integer> lose = new HashMap<>();
-            while (win > 0) {
-                for (Seat seat : arraySeat) {
-                    if (seat.getUserId() != winSeat.getUserId()) {
-                        int score;
-                        if (win > seat.getPlayScore()) {
-                            score = seat.getPlayScore();
-                        } else {
-                            score = win;
-                        }
-                        if (!lose.containsKey(seat.getUserId())) {
-                            lose.put(seat.getUserId(), score);
-                        } else {
-                            lose.put(seat.getUserId(), lose.get(seat.getUserId()) + score);
-                        }
-                        win -= score;
-                        if (0 == win) {
-                            break;
-                        }
+            Map<Integer, Integer> win = new HashMap<>();
+            Seat lastWin = null;
+            Seat lastLose = null;
+            List<Seat> userSeats = new ArrayList<>();
+            userSeats.addAll(arraySeat);
+            int loseTemp = 0;
+            while (userSeats.size() > 0) {
+                if (loseTemp >= 0) {
+                    lastWin = userSeats.remove(userSeats.size() - 1);
+                    loseTemp -= lastWin.getPlayScore();
+                    win.put(lastWin.getUserId(), lastWin.getPlayScore());
+                } else {
+                    if (userSeats.size() > 0) {
+                        lastLose = userSeats.remove(0);
+                        loseTemp += lastLose.getPlayScore();
+                        lose.put(lastLose.getUserId(), lastLose.getPlayScore());
                     }
                 }
             }
+            if (loseTemp > 0) {
+                lose.put(lastLose.getUserId(), lose.get(lastLose.getUserId()) - loseTemp);
+            } else {
+                win.put(lastWin.getUserId(), win.get(lastWin.getUserId()) + loseTemp);
+            }
 
             for (Seat seat : seats) {
-                if (Card.isSanGong(seat.getCards())) {
+                boolean isSangong = Card.isSanGong(seat.getCards());
+                if (isSangong) {
                     seat.setSanGongCount(seat.getSanGongCount() + 1);
                 }
-                if (seat.getSeatNo() != winSeat.getSeatNo()) {
-                    SanGong.SanGongResult.Builder userResult = SanGong.SanGongResult.newBuilder();
-                    userResult.setID(seat.getUserId());
-                    userResult.addAllCards(seat.getCards());
-                    if (lose.containsKey(seat.getUserId())) {
-                        seat.setScore(seat.getScore() - lose.get(seat.getUserId()));
-                        userResult.setCurrentScore(-lose.get(seat.getUserId()));
-                        userResult.setTotalScore(seat.getScore());
+                SanGong.SanGongResult.Builder userResult = SanGong.SanGongResult.newBuilder();
+                userResult.setID(seat.getUserId());
+                userResult.addAllCards(seat.getCards());
+                if (lose.containsKey(seat.getUserId())) {
+                    seat.setScore(seat.getScore() - lose.get(seat.getUserId()));
+                    userResult.setCurrentScore(-lose.get(seat.getUserId()));
+                    userResult.setTotalScore(seat.getScore());
+                    userResult.setCardType(isSangong ? SanGong.CardType.CARDTYPE_SANGONG : SanGong.CardType.CARDTYPE_DANPAI);
 
-                        resultResponse.addResult(userResult);
+                    resultResponse.addResult(userResult);
 
-                        SeatRecord seatRecord = new SeatRecord();
-                        seatRecord.setUserId(winSeat.getUserId());
-                        seatRecord.setNickname(winSeat.getNickname());
-                        seatRecord.setHead(winSeat.getHead());
-                        seatRecord.setCards(winSeat.getCards());
-                        seatRecord.setWinOrLose(-lose.get(seat.getUserId()));
-                        seatRecords.add(seatRecord);
+                    SeatRecord seatRecord = new SeatRecord();
+                    seatRecord.setUserId(seat.getUserId());
+                    seatRecord.setNickname(seat.getNickname());
+                    seatRecord.setHead(seat.getHead());
+                    seatRecord.setCards(seat.getCards());
+                    seatRecord.setWinOrLose(-lose.get(seat.getUserId()));
+                    seatRecords.add(seatRecord);
 
-                    }
+                } else if (win.containsKey(seat.getUserId())) {
+                    seat.setScore(seat.getScore() + win.get(seat.getUserId()));
+                    userResult.setCurrentScore(-win.get(seat.getUserId()));
+                    userResult.setTotalScore(seat.getScore());
+                    userResult.setCardType(isSangong ? SanGong.CardType.CARDTYPE_SANGONG : SanGong.CardType.CARDTYPE_DANPAI);
+
+                    resultResponse.addResult(userResult);
+
+                    SeatRecord seatRecord = new SeatRecord();
+                    seatRecord.setUserId(seat.getUserId());
+                    seatRecord.setNickname(seat.getNickname());
+                    seatRecord.setHead(seat.getHead());
+                    seatRecord.setCards(seat.getCards());
+                    seatRecord.setWinOrLose(win.get(seat.getUserId()));
+                    seatRecords.add(seatRecord);
                 }
             }
 
@@ -407,6 +409,24 @@ public class Room {
                 .forEach(seat -> SanGongTcpService.userClients.get(seat.getUserId()).send(response.build(), seat.getUserId()));
 
         clear();
+        if (1 == gameCount && 2 == payType) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("flowType", 2);
+            if (10 == gameCount) {
+                jsonObject.put("money", 1);
+            } else {
+                jsonObject.put("money", 2);
+            }
+            jsonObject.put("description", "AA支付" + roomNo);
+            for (Seat seat : seats) {
+                jsonObject.put("userId", seat.getUserId());
+                ApiResponse moneyDetail = JSON.parseObject(HttpUtil.urlConnectionByRsa("http://127.0.0.1:9999/api/money_detailed/create", jsonObject.toJSONString()), new TypeReference<ApiResponse<User>>() {
+                });
+                if (0 != moneyDetail.getCode()) {
+                    LoggerFactory.getLogger(this.getClass()).error("http://127.0.0.1:9999/api/money_detailed/create?" + jsonObject.toJSONString());
+                }
+            }
+        }
         //结束房间
         if (gameCount == gameTimes) {
             roomOver(response, redisService);
@@ -422,6 +442,24 @@ public class Room {
     }
 
     public void roomOver(GameBase.BaseConnection.Builder response, RedisService redisService) {
+        if (0 == gameStatus.compareTo(GameStatus.WAITING)) {
+            if (1 == payType) {
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("flowType", 1);
+                if (10 == gameCount) {
+                    jsonObject.put("money", 3);
+                } else {
+                    jsonObject.put("money", 6);
+                }
+                jsonObject.put("description", "开房间退回" + roomNo);
+                jsonObject.put("userId", roomOwner);
+                ApiResponse moneyDetail = JSON.parseObject(HttpUtil.urlConnectionByRsa("http://127.0.0.1:9999/api/money_detailed/create", jsonObject.toJSONString()), new TypeReference<ApiResponse<User>>() {
+                });
+                if (0 != moneyDetail.getCode()) {
+                    LoggerFactory.getLogger(this.getClass()).error("http://127.0.0.1:9999/api/money_detailed/create?" + jsonObject.toJSONString());
+                }
+            }
+        }
         SanGong.SanGongOverResponse.Builder over = SanGong.SanGongOverResponse.newBuilder();
 
         StringBuilder people = new StringBuilder();

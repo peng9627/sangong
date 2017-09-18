@@ -222,10 +222,10 @@ public final class SanGong {
       switch (value) {
         case 0: return SANGONG_WAITTING;
         case 1: return SANGONG_READYING;
-          case 2:
-              return SANGONG_PLAYING;
-          case 3:
-              return SANGONG_OPENING;
+        case 2:
+          return SANGONG_PLAYING;
+        case 3:
+          return SANGONG_OPENING;
         default: return null;
       }
     }
@@ -309,23 +309,23 @@ public final class SanGong {
      */
     int getBankerWay();
 
-      /**
-       * <pre>
-       * 人数
-       * </pre>
-       * <p>
-       * <code>uint32 count = 4;</code>
-       */
-      int getCount();
+    /**
+     * <pre>
+     * 人数
+     * </pre>
+     * <p>
+     * <code>uint32 count = 4;</code>
+     */
+    int getCount();
 
-      /**
-       * <pre>
-       * 支付方式 1.房主支付，2.AA
-       * </pre>
-       * <p>
-       * <code>uint32 payType = 5;</code>
-       */
-      int getPayType();
+    /**
+     * <pre>
+     * 支付方式 1.房主支付，2.AA
+     * </pre>
+     * <p>
+     * <code>uint32 payType = 5;</code>
+     */
+    int getPayType();
   }
   /**
    * <pre>
@@ -342,10 +342,11 @@ public final class SanGong {
     private SangongIntoResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
+
     private SangongIntoResponse() {
       baseScore_ = 0;
-        gameTimes_ = 0;
-        bankerWay_ = 0;
+      gameTimes_ = 0;
+      bankerWay_ = 0;
       count_ = 0;
       payType_ = 0;
     }
@@ -385,21 +386,21 @@ public final class SanGong {
               gameTimes_ = input.readUInt32();
               break;
             }
-              case 24: {
+            case 24: {
 
-                  bankerWay_ = input.readUInt32();
-                  break;
-              }
-              case 32: {
+              bankerWay_ = input.readUInt32();
+              break;
+            }
+            case 32: {
 
-                  count_ = input.readUInt32();
-                  break;
-              }
-              case 40: {
+              count_ = input.readUInt32();
+              break;
+            }
+            case 40: {
 
-                  payType_ = input.readUInt32();
-                  break;
-              }
+              payType_ = input.readUInt32();
+              break;
+            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -450,7 +451,7 @@ public final class SanGong {
     }
 
     public static final int BANKERWAY_FIELD_NUMBER = 3;
-      private int bankerWay_;
+    private int bankerWay_;
     /**
      * <pre>
      *庄家方式 1.自由场，2.通杀庄
@@ -459,36 +460,36 @@ public final class SanGong {
      * <code>uint32 bankerWay = 3;</code>
      */
     public int getBankerWay() {
-        return bankerWay_;
+      return bankerWay_;
     }
 
-      public static final int COUNT_FIELD_NUMBER = 4;
-      private int count_;
+    public static final int COUNT_FIELD_NUMBER = 4;
+    private int count_;
 
-      /**
-       * <pre>
-       * 人数
-       * </pre>
-       * <p>
-       * <code>uint32 count = 4;</code>
-       */
-      public int getCount() {
-          return count_;
-      }
+    /**
+     * <pre>
+     * 人数
+     * </pre>
+     * <p>
+     * <code>uint32 count = 4;</code>
+     */
+    public int getCount() {
+      return count_;
+    }
 
-      public static final int PAYTYPE_FIELD_NUMBER = 5;
-      private int payType_;
+    public static final int PAYTYPE_FIELD_NUMBER = 5;
+    private int payType_;
 
-      /**
-       * <pre>
-       * 支付方式 1.房主支付，2.AA
-       * </pre>
-       * <p>
-       * <code>uint32 payType = 5;</code>
-       */
-      public int getPayType() {
-          return payType_;
-      }
+    /**
+     * <pre>
+     * 支付方式 1.房主支付，2.AA
+     * </pre>
+     * <p>
+     * <code>uint32 payType = 5;</code>
+     */
+    public int getPayType() {
+      return payType_;
+    }
 
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -508,12 +509,12 @@ public final class SanGong {
       if (gameTimes_ != 0) {
         output.writeUInt32(2, gameTimes_);
       }
-        if (bankerWay_ != 0) {
-            output.writeUInt32(3, bankerWay_);
-        }
-        if (count_ != 0) {
-            output.writeUInt32(4, count_);
-        }
+      if (bankerWay_ != 0) {
+        output.writeUInt32(3, bankerWay_);
+      }
+      if (count_ != 0) {
+        output.writeUInt32(4, count_);
+      }
       if (payType_ != 0) {
         output.writeUInt32(5, payType_);
       }
@@ -530,20 +531,20 @@ public final class SanGong {
       }
       if (gameTimes_ != 0) {
         size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(2, gameTimes_);
+                .computeUInt32Size(2, gameTimes_);
       }
-        if (bankerWay_ != 0) {
-            size += com.google.protobuf.CodedOutputStream
-                    .computeUInt32Size(3, bankerWay_);
-        }
-        if (count_ != 0) {
-            size += com.google.protobuf.CodedOutputStream
-                    .computeUInt32Size(4, count_);
-        }
-        if (payType_ != 0) {
-            size += com.google.protobuf.CodedOutputStream
-                    .computeUInt32Size(5, payType_);
-        }
+      if (bankerWay_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+                .computeUInt32Size(3, bankerWay_);
+      }
+      if (count_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+                .computeUInt32Size(4, count_);
+      }
+      if (payType_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeUInt32Size(5, payType_);
+      }
       memoizedSize = size;
       return size;
     }
@@ -561,13 +562,13 @@ public final class SanGong {
 
       boolean result = true;
       result = result && (getBaseScore()
-          == other.getBaseScore());
+              == other.getBaseScore());
       result = result && (getGameTimes()
               == other.getGameTimes());
-        result = result && (getBankerWay()
-                == other.getBankerWay());
-        result = result && (getCount()
-                == other.getCount());
+      result = result && (getBankerWay()
+          == other.getBankerWay());
+      result = result && (getCount()
+          == other.getCount());
       result = result && (getPayType()
           == other.getPayType());
       return result;
@@ -584,10 +585,10 @@ public final class SanGong {
       hash = (53 * hash) + getBaseScore();
       hash = (37 * hash) + GAMETIMES_FIELD_NUMBER;
       hash = (53 * hash) + getGameTimes();
-        hash = (37 * hash) + BANKERWAY_FIELD_NUMBER;
-        hash = (53 * hash) + getBankerWay();
-        hash = (37 * hash) + COUNT_FIELD_NUMBER;
-        hash = (53 * hash) + getCount();
+      hash = (37 * hash) + BANKERWAY_FIELD_NUMBER;
+      hash = (53 * hash) + getBankerWay();
+      hash = (37 * hash) + COUNT_FIELD_NUMBER;
+      hash = (53 * hash) + getCount();
       hash = (37 * hash) + PAYTYPE_FIELD_NUMBER;
       hash = (53 * hash) + getPayType();
       hash = (29 * hash) + unknownFields.hashCode();
@@ -722,8 +723,8 @@ public final class SanGong {
         }
       }
       public Builder clear() {
-          super.clear();
-          baseScore_ = 0;
+        super.clear();
+        baseScore_ = 0;
 
         gameTimes_ = 0;
 
@@ -755,8 +756,8 @@ public final class SanGong {
 
       public sangong.mode.SanGong.SangongIntoResponse buildPartial() {
         sangong.mode.SanGong.SangongIntoResponse result = new sangong.mode.SanGong.SangongIntoResponse(this);
-          result.baseScore_ = baseScore_;
-          result.gameTimes_ = gameTimes_;
+        result.baseScore_ = baseScore_;
+        result.gameTimes_ = gameTimes_;
         result.bankerWay_ = bankerWay_;
         result.count_ = count_;
         result.payType_ = payType_;
@@ -807,12 +808,12 @@ public final class SanGong {
         if (other.getGameTimes() != 0) {
           setGameTimes(other.getGameTimes());
         }
-          if (other.getBankerWay() != 0) {
-              setBankerWay(other.getBankerWay());
-          }
-          if (other.getCount() != 0) {
-              setCount(other.getCount());
-          }
+        if (other.getBankerWay() != 0) {
+          setBankerWay(other.getBankerWay());
+        }
+        if (other.getCount() != 0) {
+          setCount(other.getCount());
+        }
         if (other.getPayType() != 0) {
           setPayType(other.getPayType());
         }
@@ -914,7 +915,7 @@ public final class SanGong {
       public Builder clearGameTimes() {
         
         gameTimes_ = 0;
-          onChanged();
+        onChanged();
         return this;
       }
 
@@ -937,8 +938,8 @@ public final class SanGong {
        * <code>uint32 bankerWay = 3;</code>
        */
       public Builder setBankerWay(int value) {
-
-          bankerWay_ = value;
+        
+        bankerWay_ = value;
         onChanged();
         return this;
       }
@@ -951,92 +952,92 @@ public final class SanGong {
        */
       public Builder clearBankerWay() {
 
-          bankerWay_ = 0;
-          onChanged();
-          return this;
+        bankerWay_ = 0;
+        onChanged();
+        return this;
       }
 
-        private int count_;
+      private int count_;
 
-        /**
-         * <pre>
-         * 人数
-         * </pre>
-         * <p>
-         * <code>uint32 count = 4;</code>
-         */
-        public int getCount() {
-            return count_;
-        }
+      /**
+       * <pre>
+       * 人数
+       * </pre>
+       * <p>
+       * <code>uint32 count = 4;</code>
+       */
+      public int getCount() {
+        return count_;
+      }
 
-        /**
-         * <pre>
-         * 人数
-         * </pre>
-         * <p>
-         * <code>uint32 count = 4;</code>
-         */
-        public Builder setCount(int value) {
+      /**
+       * <pre>
+       * 人数
+       * </pre>
+       * <p>
+       * <code>uint32 count = 4;</code>
+       */
+      public Builder setCount(int value) {
 
-            count_ = value;
-            onChanged();
-            return this;
-        }
+        count_ = value;
+        onChanged();
+        return this;
+      }
 
-        /**
-         * <pre>
-         * 人数
-         * </pre>
-         * <p>
-         * <code>uint32 count = 4;</code>
-         */
-        public Builder clearCount() {
+      /**
+       * <pre>
+       * 人数
+       * </pre>
+       * <p>
+       * <code>uint32 count = 4;</code>
+       */
+      public Builder clearCount() {
 
-            count_ = 0;
-            onChanged();
-            return this;
-        }
+        count_ = 0;
+        onChanged();
+        return this;
+      }
 
-        private int payType_;
+      private int payType_;
 
-        /**
-         * <pre>
-         * 支付方式 1.房主支付，2.AA
-         * </pre>
-         * <p>
-         * <code>uint32 payType = 5;</code>
-         */
-        public int getPayType() {
-            return payType_;
-        }
+      /**
+       * <pre>
+       * 支付方式 1.房主支付，2.AA
+       * </pre>
+       * <p>
+       * <code>uint32 payType = 5;</code>
+       */
+      public int getPayType() {
+        return payType_;
+      }
 
-        /**
-         * <pre>
-         * 支付方式 1.房主支付，2.AA
-         * </pre>
-         * <p>
-         * <code>uint32 payType = 5;</code>
-         */
-        public Builder setPayType(int value) {
+      /**
+       * <pre>
+       * 支付方式 1.房主支付，2.AA
+       * </pre>
+       * <p>
+       * <code>uint32 payType = 5;</code>
+       */
+      public Builder setPayType(int value) {
 
-            payType_ = value;
-            onChanged();
-            return this;
-        }
+        payType_ = value;
+        onChanged();
+        return this;
+      }
 
-        /**
-         * <pre>
-         * 支付方式 1.房主支付，2.AA
-         * </pre>
-         * <p>
-         * <code>uint32 payType = 5;</code>
-         */
-        public Builder clearPayType() {
-
-            payType_ = 0;
-            onChanged();
-            return this;
-        }
+      /**
+       * <pre>
+       * 支付方式 1.房主支付，2.AA
+       * </pre>
+       * <p>
+       * <code>uint32 payType = 5;</code>
+       */
+      public Builder clearPayType() {
+        
+        payType_ = 0;
+        onChanged();
+        return this;
+      }
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
@@ -3144,10 +3145,10 @@ public final class SanGong {
         output.writeUInt32NoTag(18);
         output.writeUInt32NoTag(cardsMemoizedSerializedSize);
       }
-        for (int i = 0; i < cards_.size(); i++) {
+      for (int i = 0; i < cards_.size(); i++) {
         output.writeInt32NoTag(cards_.get(i));
-        }
-        if (cardsSize_ != 0) {
+      }
+      if (cardsSize_ != 0) {
         output.writeUInt32(3, cardsSize_);
       }
       if (score_ != 0) {
@@ -3183,7 +3184,7 @@ public final class SanGong {
         if (!getCardsList().isEmpty()) {
           size += 1;
           size += com.google.protobuf.CodedOutputStream
-              .computeInt32SizeNoTag(dataSize);
+                  .computeInt32SizeNoTag(dataSize);
         }
         cardsMemoizedSerializedSize = dataSize;
       }
@@ -3191,11 +3192,11 @@ public final class SanGong {
         size += com.google.protobuf.CodedOutputStream
           .computeUInt32Size(3, cardsSize_);
       }
-        if (score_ != 0) {
+      if (score_ != 0) {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(4, score_);
-        }
-        if (isRobot_ != false) {
+      }
+      if (isRobot_ != false) {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(5, isRobot_);
       }
@@ -3774,10 +3775,9 @@ public final class SanGong {
         
         isRobot_ = value;
         onChanged();
-          return this;
+        return this;
       }
-
-        /**
+      /**
        * <pre>
        *是否托管
        * </pre>
@@ -3785,8 +3785,8 @@ public final class SanGong {
        * <code>bool isRobot = 5;</code>
        */
       public Builder clearIsRobot() {
-
-          isRobot_ = false;
+        
+        isRobot_ = false;
         onChanged();
         return this;
       }
@@ -3800,7 +3800,7 @@ public final class SanGong {
        * <code>bool open = 6;</code>
        */
       public boolean getOpen() {
-          return open_;
+        return open_;
       }
       /**
        * <pre>
@@ -3813,10 +3813,9 @@ public final class SanGong {
         
         open_ = value;
         onChanged();
-          return this;
+        return this;
       }
-
-        /**
+      /**
        * <pre>
        *是否亮过牌
        * </pre>
@@ -3824,9 +3823,9 @@ public final class SanGong {
        * <code>bool open = 6;</code>
        */
       public Builder clearOpen() {
-
-          open_ = false;
-          onChanged();
+        
+        open_ = false;
+        onChanged();
         return this;
       }
 
@@ -3839,7 +3838,7 @@ public final class SanGong {
        * <code>uint32 playScore = 7;</code>
        */
       public int getPlayScore() {
-          return playScore_;
+        return playScore_;
       }
       /**
        * <pre>
@@ -11056,53 +11055,53 @@ public final class SanGong {
       internal_static_SanGongOverResponse_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_SanGongSeatOver_descriptor;
-  private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+  private static final
+  com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_SanGongSeatOver_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_SangongReplayResponse_descriptor;
-  private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internal_static_SangongReplayResponse_descriptor;
+  private static final
+  com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internal_static_SangongReplayResponse_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
   getDescriptor() {
-      return descriptor;
+    return descriptor;
   }
 
-    private static com.google.protobuf.Descriptors.FileDescriptor
-            descriptor;
+  private static com.google.protobuf.Descriptors.FileDescriptor
+          descriptor;
 
-    static {
-        java.lang.String[] descriptorData = {
-                "\n\rsanGong.proto\032\016gameBase.proto\"n\n\023Sango" +
-                        "ngIntoResponse\022\021\n\tbaseScore\030\001 \001(\r\022\021\n\tgam" +
-                        "eTimes\030\002 \001(\r\022\021\n\tbankerWay\030\003 \001(\r\022\r\n\005count" +
-                        "\030\004 \001(\r\022\017\n\007payType\030\005 \001(\r\"l\n\017SangongGameIn" +
-                        "fo\022#\n\005seats\030\001 \003(\0132\024.SangongSeatGameInfo\022" +
-                        "\021\n\tgameCount\030\002 \001(\r\022\021\n\tgameTimes\030\003 \001(\r\022\016\n" +
-                        "\006banker\030\004 \001(\r\"X\n\031SangongGameStatusRespon" +
-                        "se\022&\n\ngameStatus\030\001 \001(\0162\022.SangongGameStat" +
-                        "us\022\023\n\013timeCounter\030\002 \001(\005\"\204\001\n\023SangongSeatG" +
-                        "ameInfo\022\n\n\002ID\030\001 \001(\r\022\r\n\005cards\030\002 \003(\005\022\021\n\tca",
-                "rdsSize\030\003 \001(\r\022\r\n\005score\030\004 \001(\005\022\017\n\007isRobot\030" +
-                        "\005 \001(\010\022\014\n\004open\030\006 \001(\010\022\021\n\tplayScore\030\007 \001(\r\"!" +
-                        "\n\020PlayScoreRequest\022\r\n\005score\030\001 \001(\r\".\n\021Pla" +
-                        "yScoreResponse\022\n\n\002ID\030\001 \001(\r\022\r\n\005score\030\002 \001(" +
-                        "\005\"\031\n\010DealCard\022\r\n\005cards\030\001 \003(\005\"-\n\020OpenCard" +
-                        "Response\022\n\n\002ID\030\001 \001(\r\022\r\n\005cards\030\002 \003(\005\"Q\n\025S" +
-                        "anGongResultResponse\022\036\n\006result\030\001 \003(\0132\016.S" +
-                        "anGongResult\022\030\n\020readyTimeCounter\030\002 \001(\005\"q" +
-                        "\n\rSanGongResult\022\n\n\002ID\030\001 \001(\r\022\024\n\014currentSc" +
-                        "ore\030\002 \001(\005\022\022\n\ntotalScore\030\003 \001(\005\022\033\n\010cardTyp",
-                "e\030\004 \001(\0162\t.CardType\022\r\n\005cards\030\005 \003(\005\"J\n\023San" +
-                        "GongOverResponse\022\"\n\010gameOver\030\001 \003(\0132\020.San" +
-                        "GongSeatOver\022\017\n\007backKey\030\002 \001(\t\"F\n\017SanGong" +
-                        "SeatOver\022\n\n\002ID\030\001 \001(\r\022\021\n\twinOrLose\030\002 \001(\005\022" +
-                        "\024\n\014sanGongCount\030\003 \001(\r\"\200\001\n\025SangongReplayR" +
-                        "esponse\022\033\n\010dealCard\030\001 \001(\0132\t.DealCard\022\"\n\007" +
-                        "history\030\002 \003(\0132\021.OperationHistory\022&\n\006resu" +
-                        "lt\030\003 \001(\0132\026.SanGongResultResponse*5\n\010Card" +
+  static {
+    java.lang.String[] descriptorData = {
+            "\n\rsanGong.proto\032\016gameBase.proto\"n\n\023Sango" +
+                    "ngIntoResponse\022\021\n\tbaseScore\030\001 \001(\r\022\021\n\tgam" +
+                    "eTimes\030\002 \001(\r\022\021\n\tbankerWay\030\003 \001(\r\022\r\n\005count" +
+                    "\030\004 \001(\r\022\017\n\007payType\030\005 \001(\r\"l\n\017SangongGameIn" +
+                    "fo\022#\n\005seats\030\001 \003(\0132\024.SangongSeatGameInfo\022" +
+                    "\021\n\tgameCount\030\002 \001(\r\022\021\n\tgameTimes\030\003 \001(\r\022\016\n" +
+                    "\006banker\030\004 \001(\r\"X\n\031SangongGameStatusRespon" +
+                    "se\022&\n\ngameStatus\030\001 \001(\0162\022.SangongGameStat" +
+                    "us\022\023\n\013timeCounter\030\002 \001(\005\"\204\001\n\023SangongSeatG" +
+                    "ameInfo\022\n\n\002ID\030\001 \001(\r\022\r\n\005cards\030\002 \003(\005\022\021\n\tca",
+            "rdsSize\030\003 \001(\r\022\r\n\005score\030\004 \001(\005\022\017\n\007isRobot\030" +
+                    "\005 \001(\010\022\014\n\004open\030\006 \001(\010\022\021\n\tplayScore\030\007 \001(\r\"!" +
+                    "\n\020PlayScoreRequest\022\r\n\005score\030\001 \001(\r\".\n\021Pla" +
+                    "yScoreResponse\022\n\n\002ID\030\001 \001(\r\022\r\n\005score\030\002 \001(" +
+                    "\005\"\031\n\010DealCard\022\r\n\005cards\030\001 \003(\005\"-\n\020OpenCard" +
+                    "Response\022\n\n\002ID\030\001 \001(\r\022\r\n\005cards\030\002 \003(\005\"Q\n\025S" +
+                    "anGongResultResponse\022\036\n\006result\030\001 \003(\0132\016.S" +
+                    "anGongResult\022\030\n\020readyTimeCounter\030\002 \001(\005\"q" +
+                    "\n\rSanGongResult\022\n\n\002ID\030\001 \001(\r\022\024\n\014currentSc" +
+                    "ore\030\002 \001(\005\022\022\n\ntotalScore\030\003 \001(\005\022\033\n\010cardTyp",
+            "e\030\004 \001(\0162\t.CardType\022\r\n\005cards\030\005 \003(\005\"J\n\023San" +
+                    "GongOverResponse\022\"\n\010gameOver\030\001 \003(\0132\020.San" +
+                    "GongSeatOver\022\017\n\007backKey\030\002 \001(\t\"F\n\017SanGong" +
+                    "SeatOver\022\n\n\002ID\030\001 \001(\r\022\021\n\twinOrLose\030\002 \001(\005\022" +
+      "\024\n\014sanGongCount\030\003 \001(\r\"\200\001\n\025SangongReplayR" +
+      "esponse\022\033\n\010dealCard\030\001 \001(\0132\t.DealCard\022\"\n\007" +
+      "history\030\002 \003(\0132\021.OperationHistory\022&\n\006resu" +
+      "lt\030\003 \001(\0132\026.SanGongResultResponse*5\n\010Card" +
       "Type\022\024\n\020CARDTYPE_SANGONG\020\000\022\023\n\017CARDTYPE_D" +
       "ANPAI\020\001*i\n\021SangongGameStatus\022\024\n\020SANGONG_",
       "WAITTING\020\000\022\024\n\020SANGONG_READYING\020\001\022\023\n\017SANG" +
@@ -11110,19 +11109,19 @@ public final class SanGong {
       "ngong.modeb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
-        new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
+        new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
           public com.google.protobuf.ExtensionRegistry assignDescriptors(
-              com.google.protobuf.Descriptors.FileDescriptor root) {
+                  com.google.protobuf.Descriptors.FileDescriptor root) {
             descriptor = root;
             return null;
           }
         };
     com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
-        new com.google.protobuf.Descriptors.FileDescriptor[]{
-                sangong.mode.GameBase.getDescriptor(),
+        new com.google.protobuf.Descriptors.FileDescriptor[] {
+          sangong.mode.GameBase.getDescriptor(),
         }, assigner);
-        internal_static_SangongIntoResponse_descriptor =
+    internal_static_SangongIntoResponse_descriptor =
       getDescriptor().getMessageTypes().get(0);
     internal_static_SangongIntoResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
@@ -11133,16 +11132,16 @@ public final class SanGong {
     internal_static_SangongGameInfo_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_SangongGameInfo_descriptor,
-        new java.lang.String[] { "Seats", "GameCount", "GameTimes", "Banker", });
+        new java.lang.String[]{"Seats", "GameCount", "GameTimes", "Banker",});
     internal_static_SangongGameStatusResponse_descriptor =
-      getDescriptor().getMessageTypes().get(2);
+            getDescriptor().getMessageTypes().get(2);
     internal_static_SangongGameStatusResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_SangongGameStatusResponse_descriptor,
-            new java.lang.String[]{"GameStatus", "TimeCounter",});
-        internal_static_SangongSeatGameInfo_descriptor =
+        new java.lang.String[] { "GameStatus", "TimeCounter", });
+    internal_static_SangongSeatGameInfo_descriptor =
       getDescriptor().getMessageTypes().get(3);
-        internal_static_SangongSeatGameInfo_fieldAccessorTable = new
+    internal_static_SangongSeatGameInfo_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_SangongSeatGameInfo_descriptor,
         new java.lang.String[] { "ID", "Cards", "CardsSize", "Score", "IsRobot", "Open", "PlayScore", });
@@ -11151,14 +11150,14 @@ public final class SanGong {
     internal_static_PlayScoreRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_PlayScoreRequest_descriptor,
-        new java.lang.String[] { "Score", });
+            new java.lang.String[]{"Score",});
     internal_static_PlayScoreResponse_descriptor =
-            getDescriptor().getMessageTypes().get(5);
+      getDescriptor().getMessageTypes().get(5);
     internal_static_PlayScoreResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_PlayScoreResponse_descriptor,
         new java.lang.String[] { "ID", "Score",});
-        internal_static_DealCard_descriptor =
+    internal_static_DealCard_descriptor =
       getDescriptor().getMessageTypes().get(6);
     internal_static_DealCard_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
@@ -11171,14 +11170,14 @@ public final class SanGong {
         internal_static_OpenCardResponse_descriptor,
         new java.lang.String[] { "ID", "Cards", });
     internal_static_SanGongResultResponse_descriptor =
-            getDescriptor().getMessageTypes().get(8);
+      getDescriptor().getMessageTypes().get(8);
     internal_static_SanGongResultResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_SanGongResultResponse_descriptor,
         new java.lang.String[] { "Result", "ReadyTimeCounter", });
     internal_static_SanGongResult_descriptor =
       getDescriptor().getMessageTypes().get(9);
-        internal_static_SanGongResult_fieldAccessorTable = new
+    internal_static_SanGongResult_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_SanGongResult_descriptor,
         new java.lang.String[] { "ID", "CurrentScore", "TotalScore", "CardType", "Cards", });
@@ -11189,7 +11188,7 @@ public final class SanGong {
         internal_static_SanGongOverResponse_descriptor,
         new java.lang.String[] { "GameOver", "BackKey", });
     internal_static_SanGongSeatOver_descriptor =
-            getDescriptor().getMessageTypes().get(11);
+      getDescriptor().getMessageTypes().get(11);
     internal_static_SanGongSeatOver_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_SanGongSeatOver_descriptor,
