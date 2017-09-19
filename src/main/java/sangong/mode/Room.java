@@ -382,7 +382,7 @@ public class Room {
 
                 } else if (win.containsKey(seat.getUserId())) {
                     seat.setScore(seat.getScore() + win.get(seat.getUserId()));
-                    userResult.setCurrentScore(-win.get(seat.getUserId()));
+                    userResult.setCurrentScore(win.get(seat.getUserId()));
                     userResult.setTotalScore(seat.getScore());
                     userResult.setCardType(isSangong ? SanGong.CardType.CARDTYPE_SANGONG : SanGong.CardType.CARDTYPE_DANPAI);
 
@@ -420,10 +420,10 @@ public class Room {
             jsonObject.put("description", "AA支付" + roomNo);
             for (Seat seat : seats) {
                 jsonObject.put("userId", seat.getUserId());
-                ApiResponse moneyDetail = JSON.parseObject(HttpUtil.urlConnectionByRsa("http://127.0.0.1:9999/api/money_detailed/create", jsonObject.toJSONString()), new TypeReference<ApiResponse<User>>() {
+                ApiResponse moneyDetail = JSON.parseObject(HttpUtil.urlConnectionByRsa(Constant.apiUrl + Constant.moneyDetailedCreate, jsonObject.toJSONString()), new TypeReference<ApiResponse<User>>() {
                 });
                 if (0 != moneyDetail.getCode()) {
-                    LoggerFactory.getLogger(this.getClass()).error("http://127.0.0.1:9999/api/money_detailed/create?" + jsonObject.toJSONString());
+                    LoggerFactory.getLogger(this.getClass()).error(Constant.apiUrl + Constant.moneyDetailedCreate + "?" + jsonObject.toJSONString());
                 }
             }
         }
@@ -446,7 +446,7 @@ public class Room {
             if (1 == payType) {
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("flowType", 1);
-                if (10 == gameCount) {
+                if (10 == gameTimes) {
                     jsonObject.put("money", 3);
                 } else {
                     jsonObject.put("money", 6);
@@ -508,6 +508,10 @@ public class Room {
             jsonObject.put("gameCount", gameCount);
             jsonObject.put("peopleCount", seats.size());
             jsonObject.put("roomNo", Integer.parseInt(roomNo));
+            JSONObject gameRule = new JSONObject();
+            gameRule.put("bankerWay", bankerWay);
+            gameRule.put("payType", payType);
+            jsonObject.put("gameRule", gameRule.toJSONString());
             jsonObject.put("gameData", JSON.toJSONString(recordList, feature, features).getBytes());
             jsonObject.put("scoreData", JSON.toJSONString(totalScores, feature, features).getBytes());
 

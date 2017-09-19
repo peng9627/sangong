@@ -189,18 +189,16 @@ public class SanGongClient {
                             GameBase.DissolveApply dissolveApply = GameBase.DissolveApply.newBuilder()
                                     .setError(GameBase.ErrorCode.SUCCESS).setUserId(Integer.valueOf(user)).build();
                             response.setOperationType(GameBase.OperationType.DISSOLVE).setData(dissolveApply.toByteString());
-                            for (Seat seat : room.getSeats()) {
-                                if (SanGongTcpService.userClients.containsKey(seat.getUserId())) {
-                                    messageReceive.send(response.build(), seat.getUserId());
-                                }
+                            if (SanGongTcpService.userClients.containsKey(userId)) {
+                                messageReceive.send(response.build(), userId);
                             }
 
                             GameBase.DissolveReplyResponse.Builder replyResponse = GameBase.DissolveReplyResponse.newBuilder();
                             for (Seat seat : room.getSeats()) {
                                 if (dissolveStatus.contains("-1" + seat.getUserId())) {
-                                    replyResponse.addDissolve(GameBase.Dissolve.newBuilder().setUserId(userId).setAgree(true));
+                                    replyResponse.addDissolve(GameBase.Dissolve.newBuilder().setUserId(seat.getUserId()).setAgree(true));
                                 } else if (dissolveStatus.contains("-2" + seat.getUserId())) {
-                                    replyResponse.addDissolve(GameBase.Dissolve.newBuilder().setUserId(userId).setAgree(false));
+                                    replyResponse.addDissolve(GameBase.Dissolve.newBuilder().setUserId(seat.getUserId()).setAgree(false));
                                 }
                             }
                             response.setOperationType(GameBase.OperationType.DISSOLVE_REPLY).setData(replyResponse.build().toByteString());

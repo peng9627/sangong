@@ -11,6 +11,7 @@ public class Constant {
     public static String userInfoUrl = "/user/info";
     public static String userListUrl = "/user/list";
     public static String gamerecordCreateUrl = "/gamerecord/create";
+    public static String moneyDetailedCreate = "/money_detailed/create";
 
     public static int readyTimeout = 5000;
     public static int playCardTimeout = 18000;
