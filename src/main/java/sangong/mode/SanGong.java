@@ -311,18 +311,18 @@ public final class SanGong {
 
     /**
      * <pre>
-     * 人数
+     *人数
      * </pre>
-     * <p>
+     *
      * <code>uint32 count = 4;</code>
      */
     int getCount();
 
     /**
      * <pre>
-     * 支付方式 1.房主支付，2.AA
+     *支付方式 1.房主支付，2.AA
      * </pre>
-     * <p>
+     *
      * <code>uint32 payType = 5;</code>
      */
     int getPayType();
@@ -342,7 +342,6 @@ public final class SanGong {
     private SangongIntoResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-
     private SangongIntoResponse() {
       baseScore_ = 0;
       gameTimes_ = 0;
@@ -465,12 +464,11 @@ public final class SanGong {
 
     public static final int COUNT_FIELD_NUMBER = 4;
     private int count_;
-
     /**
      * <pre>
-     * 人数
+     *人数
      * </pre>
-     * <p>
+     *
      * <code>uint32 count = 4;</code>
      */
     public int getCount() {
@@ -479,12 +477,11 @@ public final class SanGong {
 
     public static final int PAYTYPE_FIELD_NUMBER = 5;
     private int payType_;
-
     /**
      * <pre>
-     * 支付方式 1.房主支付，2.AA
+     *支付方式 1.房主支付，2.AA
      * </pre>
-     * <p>
+     *
      * <code>uint32 payType = 5;</code>
      */
     public int getPayType() {
@@ -958,23 +955,21 @@ public final class SanGong {
       }
 
       private int count_;
-
       /**
        * <pre>
-       * 人数
+       *人数
        * </pre>
-       * <p>
+       *
        * <code>uint32 count = 4;</code>
        */
       public int getCount() {
         return count_;
       }
-
       /**
        * <pre>
-       * 人数
+       *人数
        * </pre>
-       * <p>
+       *
        * <code>uint32 count = 4;</code>
        */
       public Builder setCount(int value) {
@@ -983,12 +978,11 @@ public final class SanGong {
         onChanged();
         return this;
       }
-
       /**
        * <pre>
-       * 人数
+       *人数
        * </pre>
-       * <p>
+       *
        * <code>uint32 count = 4;</code>
        */
       public Builder clearCount() {
@@ -999,23 +993,21 @@ public final class SanGong {
       }
 
       private int payType_;
-
       /**
        * <pre>
-       * 支付方式 1.房主支付，2.AA
+       *支付方式 1.房主支付，2.AA
        * </pre>
-       * <p>
+       *
        * <code>uint32 payType = 5;</code>
        */
       public int getPayType() {
         return payType_;
       }
-
       /**
        * <pre>
-       * 支付方式 1.房主支付，2.AA
+       *支付方式 1.房主支付，2.AA
        * </pre>
-       * <p>
+       *
        * <code>uint32 payType = 5;</code>
        */
       public Builder setPayType(int value) {
@@ -1024,12 +1016,11 @@ public final class SanGong {
         onChanged();
         return this;
       }
-
       /**
        * <pre>
-       * 支付方式 1.房主支付，2.AA
+       *支付方式 1.房主支付，2.AA
        * </pre>
-       * <p>
+       *
        * <code>uint32 payType = 5;</code>
        */
       public Builder clearPayType() {
@@ -2859,19 +2850,10 @@ public final class SanGong {
 
     /**
      * <pre>
-     *是否托管
-     * </pre>
-     *
-     * <code>bool isRobot = 5;</code>
-     */
-    boolean getIsRobot();
-
-    /**
-     * <pre>
      *是否亮过牌
      * </pre>
      *
-     * <code>bool open = 6;</code>
+     * <code>bool open = 5;</code>
      */
     boolean getOpen();
 
@@ -2880,7 +2862,7 @@ public final class SanGong {
      *下注分
      * </pre>
      *
-     * <code>uint32 playScore = 7;</code>
+     * <code>uint32 playScore = 6;</code>
      */
     int getPlayScore();
   }
@@ -2904,7 +2886,6 @@ public final class SanGong {
       cards_ = java.util.Collections.emptyList();
       cardsSize_ = 0;
       score_ = 0;
-      isRobot_ = false;
       open_ = false;
       playScore_ = 0;
     }
@@ -2972,15 +2953,10 @@ public final class SanGong {
             }
             case 40: {
 
-              isRobot_ = input.readBool();
-              break;
-            }
-            case 48: {
-
               open_ = input.readBool();
               break;
             }
-            case 56: {
+            case 48: {
 
               playScore_ = input.readUInt32();
               break;
@@ -3086,40 +3062,27 @@ public final class SanGong {
       return score_;
     }
 
-    public static final int ISROBOT_FIELD_NUMBER = 5;
-    private boolean isRobot_;
-    /**
-     * <pre>
-     *是否托管
-     * </pre>
-     *
-     * <code>bool isRobot = 5;</code>
-     */
-    public boolean getIsRobot() {
-      return isRobot_;
-    }
-
-    public static final int OPEN_FIELD_NUMBER = 6;
+    public static final int OPEN_FIELD_NUMBER = 5;
     private boolean open_;
     /**
      * <pre>
      *是否亮过牌
      * </pre>
      *
-     * <code>bool open = 6;</code>
+     * <code>bool open = 5;</code>
      */
     public boolean getOpen() {
       return open_;
     }
 
-    public static final int PLAYSCORE_FIELD_NUMBER = 7;
+    public static final int PLAYSCORE_FIELD_NUMBER = 6;
     private int playScore_;
     /**
      * <pre>
      *下注分
      * </pre>
      *
-     * <code>uint32 playScore = 7;</code>
+     * <code>uint32 playScore = 6;</code>
      */
     public int getPlayScore() {
       return playScore_;
@@ -3154,14 +3117,11 @@ public final class SanGong {
       if (score_ != 0) {
         output.writeInt32(4, score_);
       }
-      if (isRobot_ != false) {
-        output.writeBool(5, isRobot_);
-      }
       if (open_ != false) {
-        output.writeBool(6, open_);
+        output.writeBool(5, open_);
       }
       if (playScore_ != 0) {
-        output.writeUInt32(7, playScore_);
+        output.writeUInt32(6, playScore_);
       }
     }
 
@@ -3196,17 +3156,13 @@ public final class SanGong {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(4, score_);
       }
-      if (isRobot_ != false) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBoolSize(5, isRobot_);
-      }
       if (open_ != false) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBoolSize(6, open_);
+                .computeBoolSize(5, open_);
       }
       if (playScore_ != 0) {
         size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(7, playScore_);
+                .computeUInt32Size(6, playScore_);
       }
       memoizedSize = size;
       return size;
@@ -3232,8 +3188,6 @@ public final class SanGong {
           == other.getCardsSize());
       result = result && (getScore()
           == other.getScore());
-      result = result && (getIsRobot()
-          == other.getIsRobot());
       result = result && (getOpen()
           == other.getOpen());
       result = result && (getPlayScore()
@@ -3258,9 +3212,6 @@ public final class SanGong {
       hash = (53 * hash) + getCardsSize();
       hash = (37 * hash) + SCORE_FIELD_NUMBER;
       hash = (53 * hash) + getScore();
-      hash = (37 * hash) + ISROBOT_FIELD_NUMBER;
-      hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
-          getIsRobot());
       hash = (37 * hash) + OPEN_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
           getOpen());
@@ -3407,8 +3358,6 @@ public final class SanGong {
 
         score_ = 0;
 
-        isRobot_ = false;
-
         open_ = false;
 
         playScore_ = 0;
@@ -3445,7 +3394,6 @@ public final class SanGong {
         result.cards_ = cards_;
         result.cardsSize_ = cardsSize_;
         result.score_ = score_;
-        result.isRobot_ = isRobot_;
         result.open_ = open_;
         result.playScore_ = playScore_;
         result.bitField0_ = to_bitField0_;
@@ -3508,9 +3456,6 @@ public final class SanGong {
         }
         if (other.getScore() != 0) {
           setScore(other.getScore());
-        }
-        if (other.getIsRobot() != false) {
-          setIsRobot(other.getIsRobot());
         }
         if (other.getOpen() != false) {
           setOpen(other.getOpen());
@@ -3753,51 +3698,13 @@ public final class SanGong {
         return this;
       }
 
-      private boolean isRobot_ ;
-      /**
-       * <pre>
-       *是否托管
-       * </pre>
-       *
-       * <code>bool isRobot = 5;</code>
-       */
-      public boolean getIsRobot() {
-        return isRobot_;
-      }
-      /**
-       * <pre>
-       *是否托管
-       * </pre>
-       *
-       * <code>bool isRobot = 5;</code>
-       */
-      public Builder setIsRobot(boolean value) {
-        
-        isRobot_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <pre>
-       *是否托管
-       * </pre>
-       *
-       * <code>bool isRobot = 5;</code>
-       */
-      public Builder clearIsRobot() {
-        
-        isRobot_ = false;
-        onChanged();
-        return this;
-      }
-
       private boolean open_ ;
       /**
        * <pre>
        *是否亮过牌
        * </pre>
        *
-       * <code>bool open = 6;</code>
+       * <code>bool open = 5;</code>
        */
       public boolean getOpen() {
         return open_;
@@ -3807,7 +3714,7 @@ public final class SanGong {
        *是否亮过牌
        * </pre>
        *
-       * <code>bool open = 6;</code>
+       * <code>bool open = 5;</code>
        */
       public Builder setOpen(boolean value) {
         
@@ -3820,7 +3727,7 @@ public final class SanGong {
        *是否亮过牌
        * </pre>
        *
-       * <code>bool open = 6;</code>
+       * <code>bool open = 5;</code>
        */
       public Builder clearOpen() {
         
@@ -3835,7 +3742,7 @@ public final class SanGong {
        *下注分
        * </pre>
        *
-       * <code>uint32 playScore = 7;</code>
+       * <code>uint32 playScore = 6;</code>
        */
       public int getPlayScore() {
         return playScore_;
@@ -3845,7 +3752,7 @@ public final class SanGong {
        *下注分
        * </pre>
        *
-       * <code>uint32 playScore = 7;</code>
+       * <code>uint32 playScore = 6;</code>
        */
       public Builder setPlayScore(int value) {
         
@@ -3858,7 +3765,7 @@ public final class SanGong {
        *下注分
        * </pre>
        *
-       * <code>uint32 playScore = 7;</code>
+       * <code>uint32 playScore = 6;</code>
        */
       public Builder clearPlayScore() {
         
@@ -8185,70 +8092,53 @@ public final class SanGong {
 
   }
 
-  public interface SanGongOverResponseOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:SanGongOverResponse)
+  public interface SanGongBalanceResponseOrBuilder extends
+          // @@protoc_insertion_point(interface_extends:SanGongBalanceResponse)
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>repeated .SanGongSeatOver gameOver = 1;</code>
+     * <code>repeated .SanGongSeatBalance gameBalance = 1;</code>
      */
-    java.util.List<sangong.mode.SanGong.SanGongSeatOver> 
-        getGameOverList();
+    java.util.List<sangong.mode.SanGong.SanGongSeatBalance>
+    getGameBalanceList();
     /**
-     * <code>repeated .SanGongSeatOver gameOver = 1;</code>
+     * <code>repeated .SanGongSeatBalance gameBalance = 1;</code>
      */
-    sangong.mode.SanGong.SanGongSeatOver getGameOver(int index);
+    sangong.mode.SanGong.SanGongSeatBalance getGameBalance(int index);
     /**
-     * <code>repeated .SanGongSeatOver gameOver = 1;</code>
+     * <code>repeated .SanGongSeatBalance gameBalance = 1;</code>
      */
-    int getGameOverCount();
+    int getGameBalanceCount();
     /**
-     * <code>repeated .SanGongSeatOver gameOver = 1;</code>
+     * <code>repeated .SanGongSeatBalance gameBalance = 1;</code>
      */
-    java.util.List<? extends sangong.mode.SanGong.SanGongSeatOverOrBuilder> 
-        getGameOverOrBuilderList();
+    java.util.List<? extends sangong.mode.SanGong.SanGongSeatBalanceOrBuilder>
+    getGameBalanceOrBuilderList();
     /**
-     * <code>repeated .SanGongSeatOver gameOver = 1;</code>
+     * <code>repeated .SanGongSeatBalance gameBalance = 1;</code>
      */
-    sangong.mode.SanGong.SanGongSeatOverOrBuilder getGameOverOrBuilder(
+    sangong.mode.SanGong.SanGongSeatBalanceOrBuilder getGameBalanceOrBuilder(
         int index);
-
-    /**
-     * <pre>
-     *回到大厅的码
-     * </pre>
-     *
-     * <code>string backKey = 2;</code>
-     */
-    java.lang.String getBackKey();
-    /**
-     * <pre>
-     *回到大厅的码
-     * </pre>
-     *
-     * <code>string backKey = 2;</code>
-     */
-    com.google.protobuf.ByteString
-        getBackKeyBytes();
   }
+
   /**
    * <pre>
-   *结束 OVER
+   *结束 BALANCE
    * </pre>
    *
-   * Protobuf type {@code SanGongOverResponse}
+   * Protobuf type {@code SanGongBalanceResponse}
    */
-  public  static final class SanGongOverResponse extends
+  public static final class SanGongBalanceResponse extends
       com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:SanGongOverResponse)
-      SanGongOverResponseOrBuilder {
-    // Use SanGongOverResponse.newBuilder() to construct.
-    private SanGongOverResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+          // @@protoc_insertion_point(message_implements:SanGongBalanceResponse)
+          SanGongBalanceResponseOrBuilder {
+    // Use SanGongBalanceResponse.newBuilder() to construct.
+    private SanGongBalanceResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-    private SanGongOverResponse() {
-      gameOver_ = java.util.Collections.emptyList();
-      backKey_ = "";
+
+    private SanGongBalanceResponse() {
+      gameBalance_ = java.util.Collections.emptyList();
     }
 
     @java.lang.Override
@@ -8256,7 +8146,8 @@ public final class SanGong {
     getUnknownFields() {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
-    private SanGongOverResponse(
+
+    private SanGongBalanceResponse(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -8278,17 +8169,11 @@ public final class SanGong {
             }
             case 10: {
               if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
-                gameOver_ = new java.util.ArrayList<sangong.mode.SanGong.SanGongSeatOver>();
+                gameBalance_ = new java.util.ArrayList<sangong.mode.SanGong.SanGongSeatBalance>();
                 mutable_bitField0_ |= 0x00000001;
               }
-              gameOver_.add(
-                  input.readMessage(sangong.mode.SanGong.SanGongSeatOver.parser(), extensionRegistry));
-              break;
-            }
-            case 18: {
-              java.lang.String s = input.readStringRequireUtf8();
-
-              backKey_ = s;
+              gameBalance_.add(
+                      input.readMessage(sangong.mode.SanGong.SanGongSeatBalance.parser(), extensionRegistry));
               break;
             }
           }
@@ -8300,99 +8185,56 @@ public final class SanGong {
             e).setUnfinishedMessage(this);
       } finally {
         if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
-          gameOver_ = java.util.Collections.unmodifiableList(gameOver_);
+          gameBalance_ = java.util.Collections.unmodifiableList(gameBalance_);
         }
         makeExtensionsImmutable();
       }
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return sangong.mode.SanGong.internal_static_SanGongOverResponse_descriptor;
+      return sangong.mode.SanGong.internal_static_SanGongBalanceResponse_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return sangong.mode.SanGong.internal_static_SanGongOverResponse_fieldAccessorTable
+      return sangong.mode.SanGong.internal_static_SanGongBalanceResponse_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              sangong.mode.SanGong.SanGongOverResponse.class, sangong.mode.SanGong.SanGongOverResponse.Builder.class);
+                  sangong.mode.SanGong.SanGongBalanceResponse.class, sangong.mode.SanGong.SanGongBalanceResponse.Builder.class);
     }
 
-    private int bitField0_;
-    public static final int GAMEOVER_FIELD_NUMBER = 1;
-    private java.util.List<sangong.mode.SanGong.SanGongSeatOver> gameOver_;
+    public static final int GAMEBALANCE_FIELD_NUMBER = 1;
+    private java.util.List<sangong.mode.SanGong.SanGongSeatBalance> gameBalance_;
     /**
-     * <code>repeated .SanGongSeatOver gameOver = 1;</code>
+     * <code>repeated .SanGongSeatBalance gameBalance = 1;</code>
      */
-    public java.util.List<sangong.mode.SanGong.SanGongSeatOver> getGameOverList() {
-      return gameOver_;
+    public java.util.List<sangong.mode.SanGong.SanGongSeatBalance> getGameBalanceList() {
+      return gameBalance_;
     }
     /**
-     * <code>repeated .SanGongSeatOver gameOver = 1;</code>
+     * <code>repeated .SanGongSeatBalance gameBalance = 1;</code>
      */
-    public java.util.List<? extends sangong.mode.SanGong.SanGongSeatOverOrBuilder> 
-        getGameOverOrBuilderList() {
-      return gameOver_;
+    public java.util.List<? extends sangong.mode.SanGong.SanGongSeatBalanceOrBuilder>
+    getGameBalanceOrBuilderList() {
+      return gameBalance_;
     }
     /**
-     * <code>repeated .SanGongSeatOver gameOver = 1;</code>
+     * <code>repeated .SanGongSeatBalance gameBalance = 1;</code>
      */
-    public int getGameOverCount() {
-      return gameOver_.size();
+    public int getGameBalanceCount() {
+      return gameBalance_.size();
     }
     /**
-     * <code>repeated .SanGongSeatOver gameOver = 1;</code>
+     * <code>repeated .SanGongSeatBalance gameBalance = 1;</code>
      */
-    public sangong.mode.SanGong.SanGongSeatOver getGameOver(int index) {
-      return gameOver_.get(index);
+    public sangong.mode.SanGong.SanGongSeatBalance getGameBalance(int index) {
+      return gameBalance_.get(index);
     }
     /**
-     * <code>repeated .SanGongSeatOver gameOver = 1;</code>
+     * <code>repeated .SanGongSeatBalance gameBalance = 1;</code>
      */
-    public sangong.mode.SanGong.SanGongSeatOverOrBuilder getGameOverOrBuilder(
+    public sangong.mode.SanGong.SanGongSeatBalanceOrBuilder getGameBalanceOrBuilder(
         int index) {
-      return gameOver_.get(index);
-    }
-
-    public static final int BACKKEY_FIELD_NUMBER = 2;
-    private volatile java.lang.Object backKey_;
-    /**
-     * <pre>
-     *回到大厅的码
-     * </pre>
-     *
-     * <code>string backKey = 2;</code>
-     */
-    public java.lang.String getBackKey() {
-      java.lang.Object ref = backKey_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        backKey_ = s;
-        return s;
-      }
-    }
-    /**
-     * <pre>
-     *回到大厅的码
-     * </pre>
-     *
-     * <code>string backKey = 2;</code>
-     */
-    public com.google.protobuf.ByteString
-        getBackKeyBytes() {
-      java.lang.Object ref = backKey_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        backKey_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
+      return gameBalance_.get(index);
     }
 
     private byte memoizedIsInitialized = -1;
@@ -8407,11 +8249,8 @@ public final class SanGong {
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      for (int i = 0; i < gameOver_.size(); i++) {
-        output.writeMessage(1, gameOver_.get(i));
-      }
-      if (!getBackKeyBytes().isEmpty()) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 2, backKey_);
+      for (int i = 0; i < gameBalance_.size(); i++) {
+        output.writeMessage(1, gameBalance_.get(i));
       }
     }
 
@@ -8420,12 +8259,9 @@ public final class SanGong {
       if (size != -1) return size;
 
       size = 0;
-      for (int i = 0; i < gameOver_.size(); i++) {
+      for (int i = 0; i < gameBalance_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(1, gameOver_.get(i));
-      }
-      if (!getBackKeyBytes().isEmpty()) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, backKey_);
+                .computeMessageSize(1, gameBalance_.get(i));
       }
       memoizedSize = size;
       return size;
@@ -8437,16 +8273,14 @@ public final class SanGong {
       if (obj == this) {
        return true;
       }
-      if (!(obj instanceof sangong.mode.SanGong.SanGongOverResponse)) {
+      if (!(obj instanceof sangong.mode.SanGong.SanGongBalanceResponse)) {
         return super.equals(obj);
       }
-      sangong.mode.SanGong.SanGongOverResponse other = (sangong.mode.SanGong.SanGongOverResponse) obj;
+      sangong.mode.SanGong.SanGongBalanceResponse other = (sangong.mode.SanGong.SanGongBalanceResponse) obj;
 
       boolean result = true;
-      result = result && getGameOverList()
-          .equals(other.getGameOverList());
-      result = result && getBackKey()
-          .equals(other.getBackKey());
+      result = result && getGameBalanceList()
+              .equals(other.getGameBalanceList());
       return result;
     }
 
@@ -8457,80 +8291,89 @@ public final class SanGong {
       }
       int hash = 41;
       hash = (19 * hash) + getDescriptor().hashCode();
-      if (getGameOverCount() > 0) {
-        hash = (37 * hash) + GAMEOVER_FIELD_NUMBER;
-        hash = (53 * hash) + getGameOverList().hashCode();
+      if (getGameBalanceCount() > 0) {
+        hash = (37 * hash) + GAMEBALANCE_FIELD_NUMBER;
+        hash = (53 * hash) + getGameBalanceList().hashCode();
       }
-      hash = (37 * hash) + BACKKEY_FIELD_NUMBER;
-      hash = (53 * hash) + getBackKey().hashCode();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
     }
 
-    public static sangong.mode.SanGong.SanGongOverResponse parseFrom(
+    public static sangong.mode.SanGong.SanGongBalanceResponse parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static sangong.mode.SanGong.SanGongOverResponse parseFrom(
+
+    public static sangong.mode.SanGong.SanGongBalanceResponse parseFrom(
         java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static sangong.mode.SanGong.SanGongOverResponse parseFrom(
+
+    public static sangong.mode.SanGong.SanGongBalanceResponse parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static sangong.mode.SanGong.SanGongOverResponse parseFrom(
+
+    public static sangong.mode.SanGong.SanGongBalanceResponse parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static sangong.mode.SanGong.SanGongOverResponse parseFrom(byte[] data)
+
+    public static sangong.mode.SanGong.SanGongBalanceResponse parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static sangong.mode.SanGong.SanGongOverResponse parseFrom(
+
+    public static sangong.mode.SanGong.SanGongBalanceResponse parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static sangong.mode.SanGong.SanGongOverResponse parseFrom(java.io.InputStream input)
+
+    public static sangong.mode.SanGong.SanGongBalanceResponse parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static sangong.mode.SanGong.SanGongOverResponse parseFrom(
+
+    public static sangong.mode.SanGong.SanGongBalanceResponse parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static sangong.mode.SanGong.SanGongOverResponse parseDelimitedFrom(java.io.InputStream input)
+
+    public static sangong.mode.SanGong.SanGongBalanceResponse parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static sangong.mode.SanGong.SanGongOverResponse parseDelimitedFrom(
+
+    public static sangong.mode.SanGong.SanGongBalanceResponse parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static sangong.mode.SanGong.SanGongOverResponse parseFrom(
+
+    public static sangong.mode.SanGong.SanGongBalanceResponse parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static sangong.mode.SanGong.SanGongOverResponse parseFrom(
+
+    public static sangong.mode.SanGong.SanGongBalanceResponse parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -8542,7 +8385,8 @@ public final class SanGong {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(sangong.mode.SanGong.SanGongOverResponse prototype) {
+
+    public static Builder newBuilder(sangong.mode.SanGong.SanGongBalanceResponse prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() {
@@ -8558,28 +8402,28 @@ public final class SanGong {
     }
     /**
      * <pre>
-     *结束 OVER
+     *结束 BALANCE
      * </pre>
      *
-     * Protobuf type {@code SanGongOverResponse}
+     * Protobuf type {@code SanGongBalanceResponse}
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:SanGongOverResponse)
-        sangong.mode.SanGong.SanGongOverResponseOrBuilder {
+            // @@protoc_insertion_point(builder_implements:SanGongBalanceResponse)
+            sangong.mode.SanGong.SanGongBalanceResponseOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return sangong.mode.SanGong.internal_static_SanGongOverResponse_descriptor;
+        return sangong.mode.SanGong.internal_static_SanGongBalanceResponse_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return sangong.mode.SanGong.internal_static_SanGongOverResponse_fieldAccessorTable
+        return sangong.mode.SanGong.internal_static_SanGongBalanceResponse_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                sangong.mode.SanGong.SanGongOverResponse.class, sangong.mode.SanGong.SanGongOverResponse.Builder.class);
+                    sangong.mode.SanGong.SanGongBalanceResponse.class, sangong.mode.SanGong.SanGongBalanceResponse.Builder.class);
       }
 
-      // Construct using sangong.mode.SanGong.SanGongOverResponse.newBuilder()
+      // Construct using sangong.mode.SanGong.SanGongBalanceResponse.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -8592,54 +8436,49 @@ public final class SanGong {
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessageV3
                 .alwaysUseFieldBuilders) {
-          getGameOverFieldBuilder();
+          getGameBalanceFieldBuilder();
         }
       }
       public Builder clear() {
         super.clear();
-        if (gameOverBuilder_ == null) {
-          gameOver_ = java.util.Collections.emptyList();
+        if (gameBalanceBuilder_ == null) {
+          gameBalance_ = java.util.Collections.emptyList();
           bitField0_ = (bitField0_ & ~0x00000001);
         } else {
-          gameOverBuilder_.clear();
+          gameBalanceBuilder_.clear();
         }
-        backKey_ = "";
-
         return this;
       }
 
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return sangong.mode.SanGong.internal_static_SanGongOverResponse_descriptor;
+        return sangong.mode.SanGong.internal_static_SanGongBalanceResponse_descriptor;
       }
 
-      public sangong.mode.SanGong.SanGongOverResponse getDefaultInstanceForType() {
-        return sangong.mode.SanGong.SanGongOverResponse.getDefaultInstance();
+      public sangong.mode.SanGong.SanGongBalanceResponse getDefaultInstanceForType() {
+        return sangong.mode.SanGong.SanGongBalanceResponse.getDefaultInstance();
       }
 
-      public sangong.mode.SanGong.SanGongOverResponse build() {
-        sangong.mode.SanGong.SanGongOverResponse result = buildPartial();
+      public sangong.mode.SanGong.SanGongBalanceResponse build() {
+        sangong.mode.SanGong.SanGongBalanceResponse result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      public sangong.mode.SanGong.SanGongOverResponse buildPartial() {
-        sangong.mode.SanGong.SanGongOverResponse result = new sangong.mode.SanGong.SanGongOverResponse(this);
+      public sangong.mode.SanGong.SanGongBalanceResponse buildPartial() {
+        sangong.mode.SanGong.SanGongBalanceResponse result = new sangong.mode.SanGong.SanGongBalanceResponse(this);
         int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (gameOverBuilder_ == null) {
+        if (gameBalanceBuilder_ == null) {
           if (((bitField0_ & 0x00000001) == 0x00000001)) {
-            gameOver_ = java.util.Collections.unmodifiableList(gameOver_);
+            gameBalance_ = java.util.Collections.unmodifiableList(gameBalance_);
             bitField0_ = (bitField0_ & ~0x00000001);
           }
-          result.gameOver_ = gameOver_;
+          result.gameBalance_ = gameBalance_;
         } else {
-          result.gameOver_ = gameOverBuilder_.build();
+          result.gameBalance_ = gameBalanceBuilder_.build();
         }
-        result.backKey_ = backKey_;
-        result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
       }
@@ -8671,45 +8510,41 @@ public final class SanGong {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof sangong.mode.SanGong.SanGongOverResponse) {
-          return mergeFrom((sangong.mode.SanGong.SanGongOverResponse)other);
+        if (other instanceof sangong.mode.SanGong.SanGongBalanceResponse) {
+          return mergeFrom((sangong.mode.SanGong.SanGongBalanceResponse) other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(sangong.mode.SanGong.SanGongOverResponse other) {
-        if (other == sangong.mode.SanGong.SanGongOverResponse.getDefaultInstance()) return this;
-        if (gameOverBuilder_ == null) {
-          if (!other.gameOver_.isEmpty()) {
-            if (gameOver_.isEmpty()) {
-              gameOver_ = other.gameOver_;
+      public Builder mergeFrom(sangong.mode.SanGong.SanGongBalanceResponse other) {
+        if (other == sangong.mode.SanGong.SanGongBalanceResponse.getDefaultInstance()) return this;
+        if (gameBalanceBuilder_ == null) {
+          if (!other.gameBalance_.isEmpty()) {
+            if (gameBalance_.isEmpty()) {
+              gameBalance_ = other.gameBalance_;
               bitField0_ = (bitField0_ & ~0x00000001);
             } else {
-              ensureGameOverIsMutable();
-              gameOver_.addAll(other.gameOver_);
+              ensureGameBalanceIsMutable();
+              gameBalance_.addAll(other.gameBalance_);
             }
             onChanged();
           }
         } else {
-          if (!other.gameOver_.isEmpty()) {
-            if (gameOverBuilder_.isEmpty()) {
-              gameOverBuilder_.dispose();
-              gameOverBuilder_ = null;
-              gameOver_ = other.gameOver_;
+          if (!other.gameBalance_.isEmpty()) {
+            if (gameBalanceBuilder_.isEmpty()) {
+              gameBalanceBuilder_.dispose();
+              gameBalanceBuilder_ = null;
+              gameBalance_ = other.gameBalance_;
               bitField0_ = (bitField0_ & ~0x00000001);
-              gameOverBuilder_ = 
+              gameBalanceBuilder_ = 
                 com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
-                   getGameOverFieldBuilder() : null;
+                        getGameBalanceFieldBuilder() : null;
             } else {
-              gameOverBuilder_.addAllMessages(other.gameOver_);
+              gameBalanceBuilder_.addAllMessages(other.gameBalance_);
             }
           }
-        }
-        if (!other.getBackKey().isEmpty()) {
-          backKey_ = other.backKey_;
-          onChanged();
         }
         onChanged();
         return this;
@@ -8723,11 +8558,11 @@ public final class SanGong {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        sangong.mode.SanGong.SanGongOverResponse parsedMessage = null;
+        sangong.mode.SanGong.SanGongBalanceResponse parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (sangong.mode.SanGong.SanGongOverResponse) e.getUnfinishedMessage();
+          parsedMessage = (sangong.mode.SanGong.SanGongBalanceResponse) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -8738,333 +8573,246 @@ public final class SanGong {
       }
       private int bitField0_;
 
-      private java.util.List<sangong.mode.SanGong.SanGongSeatOver> gameOver_ =
+      private java.util.List<sangong.mode.SanGong.SanGongSeatBalance> gameBalance_ =
         java.util.Collections.emptyList();
-      private void ensureGameOverIsMutable() {
+
+      private void ensureGameBalanceIsMutable() {
         if (!((bitField0_ & 0x00000001) == 0x00000001)) {
-          gameOver_ = new java.util.ArrayList<sangong.mode.SanGong.SanGongSeatOver>(gameOver_);
+          gameBalance_ = new java.util.ArrayList<sangong.mode.SanGong.SanGongSeatBalance>(gameBalance_);
           bitField0_ |= 0x00000001;
          }
       }
 
       private com.google.protobuf.RepeatedFieldBuilderV3<
-          sangong.mode.SanGong.SanGongSeatOver, sangong.mode.SanGong.SanGongSeatOver.Builder, sangong.mode.SanGong.SanGongSeatOverOrBuilder> gameOverBuilder_;
+              sangong.mode.SanGong.SanGongSeatBalance, sangong.mode.SanGong.SanGongSeatBalance.Builder, sangong.mode.SanGong.SanGongSeatBalanceOrBuilder> gameBalanceBuilder_;
 
       /**
-       * <code>repeated .SanGongSeatOver gameOver = 1;</code>
+       * <code>repeated .SanGongSeatBalance gameBalance = 1;</code>
        */
-      public java.util.List<sangong.mode.SanGong.SanGongSeatOver> getGameOverList() {
-        if (gameOverBuilder_ == null) {
-          return java.util.Collections.unmodifiableList(gameOver_);
+      public java.util.List<sangong.mode.SanGong.SanGongSeatBalance> getGameBalanceList() {
+        if (gameBalanceBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(gameBalance_);
         } else {
-          return gameOverBuilder_.getMessageList();
+          return gameBalanceBuilder_.getMessageList();
         }
       }
       /**
-       * <code>repeated .SanGongSeatOver gameOver = 1;</code>
+       * <code>repeated .SanGongSeatBalance gameBalance = 1;</code>
        */
-      public int getGameOverCount() {
-        if (gameOverBuilder_ == null) {
-          return gameOver_.size();
+      public int getGameBalanceCount() {
+        if (gameBalanceBuilder_ == null) {
+          return gameBalance_.size();
         } else {
-          return gameOverBuilder_.getCount();
+          return gameBalanceBuilder_.getCount();
         }
       }
       /**
-       * <code>repeated .SanGongSeatOver gameOver = 1;</code>
+       * <code>repeated .SanGongSeatBalance gameBalance = 1;</code>
        */
-      public sangong.mode.SanGong.SanGongSeatOver getGameOver(int index) {
-        if (gameOverBuilder_ == null) {
-          return gameOver_.get(index);
+      public sangong.mode.SanGong.SanGongSeatBalance getGameBalance(int index) {
+        if (gameBalanceBuilder_ == null) {
+          return gameBalance_.get(index);
         } else {
-          return gameOverBuilder_.getMessage(index);
+          return gameBalanceBuilder_.getMessage(index);
         }
       }
       /**
-       * <code>repeated .SanGongSeatOver gameOver = 1;</code>
+       * <code>repeated .SanGongSeatBalance gameBalance = 1;</code>
        */
-      public Builder setGameOver(
-          int index, sangong.mode.SanGong.SanGongSeatOver value) {
-        if (gameOverBuilder_ == null) {
+      public Builder setGameBalance(
+              int index, sangong.mode.SanGong.SanGongSeatBalance value) {
+        if (gameBalanceBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
           }
-          ensureGameOverIsMutable();
-          gameOver_.set(index, value);
+          ensureGameBalanceIsMutable();
+          gameBalance_.set(index, value);
           onChanged();
         } else {
-          gameOverBuilder_.setMessage(index, value);
+          gameBalanceBuilder_.setMessage(index, value);
         }
         return this;
       }
       /**
-       * <code>repeated .SanGongSeatOver gameOver = 1;</code>
+       * <code>repeated .SanGongSeatBalance gameBalance = 1;</code>
        */
-      public Builder setGameOver(
-          int index, sangong.mode.SanGong.SanGongSeatOver.Builder builderForValue) {
-        if (gameOverBuilder_ == null) {
-          ensureGameOverIsMutable();
-          gameOver_.set(index, builderForValue.build());
+      public Builder setGameBalance(
+              int index, sangong.mode.SanGong.SanGongSeatBalance.Builder builderForValue) {
+        if (gameBalanceBuilder_ == null) {
+          ensureGameBalanceIsMutable();
+          gameBalance_.set(index, builderForValue.build());
           onChanged();
         } else {
-          gameOverBuilder_.setMessage(index, builderForValue.build());
+          gameBalanceBuilder_.setMessage(index, builderForValue.build());
         }
         return this;
       }
       /**
-       * <code>repeated .SanGongSeatOver gameOver = 1;</code>
+       * <code>repeated .SanGongSeatBalance gameBalance = 1;</code>
        */
-      public Builder addGameOver(sangong.mode.SanGong.SanGongSeatOver value) {
-        if (gameOverBuilder_ == null) {
+      public Builder addGameBalance(sangong.mode.SanGong.SanGongSeatBalance value) {
+        if (gameBalanceBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
           }
-          ensureGameOverIsMutable();
-          gameOver_.add(value);
+          ensureGameBalanceIsMutable();
+          gameBalance_.add(value);
           onChanged();
         } else {
-          gameOverBuilder_.addMessage(value);
+          gameBalanceBuilder_.addMessage(value);
         }
         return this;
       }
       /**
-       * <code>repeated .SanGongSeatOver gameOver = 1;</code>
+       * <code>repeated .SanGongSeatBalance gameBalance = 1;</code>
        */
-      public Builder addGameOver(
-          int index, sangong.mode.SanGong.SanGongSeatOver value) {
-        if (gameOverBuilder_ == null) {
+      public Builder addGameBalance(
+              int index, sangong.mode.SanGong.SanGongSeatBalance value) {
+        if (gameBalanceBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
           }
-          ensureGameOverIsMutable();
-          gameOver_.add(index, value);
+          ensureGameBalanceIsMutable();
+          gameBalance_.add(index, value);
           onChanged();
         } else {
-          gameOverBuilder_.addMessage(index, value);
+          gameBalanceBuilder_.addMessage(index, value);
         }
         return this;
       }
       /**
-       * <code>repeated .SanGongSeatOver gameOver = 1;</code>
+       * <code>repeated .SanGongSeatBalance gameBalance = 1;</code>
        */
-      public Builder addGameOver(
-          sangong.mode.SanGong.SanGongSeatOver.Builder builderForValue) {
-        if (gameOverBuilder_ == null) {
-          ensureGameOverIsMutable();
-          gameOver_.add(builderForValue.build());
+      public Builder addGameBalance(
+              sangong.mode.SanGong.SanGongSeatBalance.Builder builderForValue) {
+        if (gameBalanceBuilder_ == null) {
+          ensureGameBalanceIsMutable();
+          gameBalance_.add(builderForValue.build());
           onChanged();
         } else {
-          gameOverBuilder_.addMessage(builderForValue.build());
+          gameBalanceBuilder_.addMessage(builderForValue.build());
         }
         return this;
       }
       /**
-       * <code>repeated .SanGongSeatOver gameOver = 1;</code>
+       * <code>repeated .SanGongSeatBalance gameBalance = 1;</code>
        */
-      public Builder addGameOver(
-          int index, sangong.mode.SanGong.SanGongSeatOver.Builder builderForValue) {
-        if (gameOverBuilder_ == null) {
-          ensureGameOverIsMutable();
-          gameOver_.add(index, builderForValue.build());
+      public Builder addGameBalance(
+              int index, sangong.mode.SanGong.SanGongSeatBalance.Builder builderForValue) {
+        if (gameBalanceBuilder_ == null) {
+          ensureGameBalanceIsMutable();
+          gameBalance_.add(index, builderForValue.build());
           onChanged();
         } else {
-          gameOverBuilder_.addMessage(index, builderForValue.build());
+          gameBalanceBuilder_.addMessage(index, builderForValue.build());
         }
         return this;
       }
       /**
-       * <code>repeated .SanGongSeatOver gameOver = 1;</code>
+       * <code>repeated .SanGongSeatBalance gameBalance = 1;</code>
        */
-      public Builder addAllGameOver(
-          java.lang.Iterable<? extends sangong.mode.SanGong.SanGongSeatOver> values) {
-        if (gameOverBuilder_ == null) {
-          ensureGameOverIsMutable();
+      public Builder addAllGameBalance(
+              java.lang.Iterable<? extends sangong.mode.SanGong.SanGongSeatBalance> values) {
+        if (gameBalanceBuilder_ == null) {
+          ensureGameBalanceIsMutable();
           com.google.protobuf.AbstractMessageLite.Builder.addAll(
-              values, gameOver_);
+                  values, gameBalance_);
           onChanged();
         } else {
-          gameOverBuilder_.addAllMessages(values);
+          gameBalanceBuilder_.addAllMessages(values);
         }
         return this;
       }
       /**
-       * <code>repeated .SanGongSeatOver gameOver = 1;</code>
+       * <code>repeated .SanGongSeatBalance gameBalance = 1;</code>
        */
-      public Builder clearGameOver() {
-        if (gameOverBuilder_ == null) {
-          gameOver_ = java.util.Collections.emptyList();
+      public Builder clearGameBalance() {
+        if (gameBalanceBuilder_ == null) {
+          gameBalance_ = java.util.Collections.emptyList();
           bitField0_ = (bitField0_ & ~0x00000001);
           onChanged();
         } else {
-          gameOverBuilder_.clear();
+          gameBalanceBuilder_.clear();
         }
         return this;
       }
       /**
-       * <code>repeated .SanGongSeatOver gameOver = 1;</code>
+       * <code>repeated .SanGongSeatBalance gameBalance = 1;</code>
        */
-      public Builder removeGameOver(int index) {
-        if (gameOverBuilder_ == null) {
-          ensureGameOverIsMutable();
-          gameOver_.remove(index);
+      public Builder removeGameBalance(int index) {
+        if (gameBalanceBuilder_ == null) {
+          ensureGameBalanceIsMutable();
+          gameBalance_.remove(index);
           onChanged();
         } else {
-          gameOverBuilder_.remove(index);
+          gameBalanceBuilder_.remove(index);
         }
         return this;
       }
       /**
-       * <code>repeated .SanGongSeatOver gameOver = 1;</code>
+       * <code>repeated .SanGongSeatBalance gameBalance = 1;</code>
        */
-      public sangong.mode.SanGong.SanGongSeatOver.Builder getGameOverBuilder(
+      public sangong.mode.SanGong.SanGongSeatBalance.Builder getGameBalanceBuilder(
           int index) {
-        return getGameOverFieldBuilder().getBuilder(index);
+        return getGameBalanceFieldBuilder().getBuilder(index);
       }
       /**
-       * <code>repeated .SanGongSeatOver gameOver = 1;</code>
+       * <code>repeated .SanGongSeatBalance gameBalance = 1;</code>
        */
-      public sangong.mode.SanGong.SanGongSeatOverOrBuilder getGameOverOrBuilder(
+      public sangong.mode.SanGong.SanGongSeatBalanceOrBuilder getGameBalanceOrBuilder(
           int index) {
-        if (gameOverBuilder_ == null) {
-          return gameOver_.get(index);  } else {
-          return gameOverBuilder_.getMessageOrBuilder(index);
-        }
-      }
-      /**
-       * <code>repeated .SanGongSeatOver gameOver = 1;</code>
-       */
-      public java.util.List<? extends sangong.mode.SanGong.SanGongSeatOverOrBuilder> 
-           getGameOverOrBuilderList() {
-        if (gameOverBuilder_ != null) {
-          return gameOverBuilder_.getMessageOrBuilderList();
+        if (gameBalanceBuilder_ == null) {
+          return gameBalance_.get(index);
         } else {
-          return java.util.Collections.unmodifiableList(gameOver_);
+          return gameBalanceBuilder_.getMessageOrBuilder(index);
         }
       }
       /**
-       * <code>repeated .SanGongSeatOver gameOver = 1;</code>
+       * <code>repeated .SanGongSeatBalance gameBalance = 1;</code>
        */
-      public sangong.mode.SanGong.SanGongSeatOver.Builder addGameOverBuilder() {
-        return getGameOverFieldBuilder().addBuilder(
-            sangong.mode.SanGong.SanGongSeatOver.getDefaultInstance());
+      public java.util.List<? extends sangong.mode.SanGong.SanGongSeatBalanceOrBuilder>
+      getGameBalanceOrBuilderList() {
+        if (gameBalanceBuilder_ != null) {
+          return gameBalanceBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(gameBalance_);
+        }
       }
       /**
-       * <code>repeated .SanGongSeatOver gameOver = 1;</code>
+       * <code>repeated .SanGongSeatBalance gameBalance = 1;</code>
        */
-      public sangong.mode.SanGong.SanGongSeatOver.Builder addGameOverBuilder(
+      public sangong.mode.SanGong.SanGongSeatBalance.Builder addGameBalanceBuilder() {
+        return getGameBalanceFieldBuilder().addBuilder(
+                sangong.mode.SanGong.SanGongSeatBalance.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .SanGongSeatBalance gameBalance = 1;</code>
+       */
+      public sangong.mode.SanGong.SanGongSeatBalance.Builder addGameBalanceBuilder(
           int index) {
-        return getGameOverFieldBuilder().addBuilder(
-            index, sangong.mode.SanGong.SanGongSeatOver.getDefaultInstance());
+        return getGameBalanceFieldBuilder().addBuilder(
+                index, sangong.mode.SanGong.SanGongSeatBalance.getDefaultInstance());
       }
       /**
-       * <code>repeated .SanGongSeatOver gameOver = 1;</code>
+       * <code>repeated .SanGongSeatBalance gameBalance = 1;</code>
        */
-      public java.util.List<sangong.mode.SanGong.SanGongSeatOver.Builder> 
-           getGameOverBuilderList() {
-        return getGameOverFieldBuilder().getBuilderList();
+      public java.util.List<sangong.mode.SanGong.SanGongSeatBalance.Builder>
+      getGameBalanceBuilderList() {
+        return getGameBalanceFieldBuilder().getBuilderList();
       }
       private com.google.protobuf.RepeatedFieldBuilderV3<
-          sangong.mode.SanGong.SanGongSeatOver, sangong.mode.SanGong.SanGongSeatOver.Builder, sangong.mode.SanGong.SanGongSeatOverOrBuilder> 
-          getGameOverFieldBuilder() {
-        if (gameOverBuilder_ == null) {
-          gameOverBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
-              sangong.mode.SanGong.SanGongSeatOver, sangong.mode.SanGong.SanGongSeatOver.Builder, sangong.mode.SanGong.SanGongSeatOverOrBuilder>(
-                  gameOver_,
+              sangong.mode.SanGong.SanGongSeatBalance, sangong.mode.SanGong.SanGongSeatBalance.Builder, sangong.mode.SanGong.SanGongSeatBalanceOrBuilder>
+      getGameBalanceFieldBuilder() {
+        if (gameBalanceBuilder_ == null) {
+          gameBalanceBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
+                  sangong.mode.SanGong.SanGongSeatBalance, sangong.mode.SanGong.SanGongSeatBalance.Builder, sangong.mode.SanGong.SanGongSeatBalanceOrBuilder>(
+                  gameBalance_,
                   ((bitField0_ & 0x00000001) == 0x00000001),
                   getParentForChildren(),
                   isClean());
-          gameOver_ = null;
+          gameBalance_ = null;
         }
-        return gameOverBuilder_;
-      }
-
-      private java.lang.Object backKey_ = "";
-      /**
-       * <pre>
-       *回到大厅的码
-       * </pre>
-       *
-       * <code>string backKey = 2;</code>
-       */
-      public java.lang.String getBackKey() {
-        java.lang.Object ref = backKey_;
-        if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          backKey_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <pre>
-       *回到大厅的码
-       * </pre>
-       *
-       * <code>string backKey = 2;</code>
-       */
-      public com.google.protobuf.ByteString
-          getBackKeyBytes() {
-        java.lang.Object ref = backKey_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          backKey_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <pre>
-       *回到大厅的码
-       * </pre>
-       *
-       * <code>string backKey = 2;</code>
-       */
-      public Builder setBackKey(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  
-        backKey_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <pre>
-       *回到大厅的码
-       * </pre>
-       *
-       * <code>string backKey = 2;</code>
-       */
-      public Builder clearBackKey() {
-        
-        backKey_ = getDefaultInstance().getBackKey();
-        onChanged();
-        return this;
-      }
-      /**
-       * <pre>
-       *回到大厅的码
-       * </pre>
-       *
-       * <code>string backKey = 2;</code>
-       */
-      public Builder setBackKeyBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-        
-        backKey_ = value;
-        onChanged();
-        return this;
+        return gameBalanceBuilder_;
       }
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
@@ -9077,46 +8825,46 @@ public final class SanGong {
       }
 
 
-      // @@protoc_insertion_point(builder_scope:SanGongOverResponse)
+      // @@protoc_insertion_point(builder_scope:SanGongBalanceResponse)
     }
 
-    // @@protoc_insertion_point(class_scope:SanGongOverResponse)
-    private static final sangong.mode.SanGong.SanGongOverResponse DEFAULT_INSTANCE;
+    // @@protoc_insertion_point(class_scope:SanGongBalanceResponse)
+    private static final sangong.mode.SanGong.SanGongBalanceResponse DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new sangong.mode.SanGong.SanGongOverResponse();
+      DEFAULT_INSTANCE = new sangong.mode.SanGong.SanGongBalanceResponse();
     }
 
-    public static sangong.mode.SanGong.SanGongOverResponse getDefaultInstance() {
+    public static sangong.mode.SanGong.SanGongBalanceResponse getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
-    private static final com.google.protobuf.Parser<SanGongOverResponse>
-        PARSER = new com.google.protobuf.AbstractParser<SanGongOverResponse>() {
-      public SanGongOverResponse parsePartialFrom(
+    private static final com.google.protobuf.Parser<SanGongBalanceResponse>
+            PARSER = new com.google.protobuf.AbstractParser<SanGongBalanceResponse>() {
+      public SanGongBalanceResponse parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-          return new SanGongOverResponse(input, extensionRegistry);
+        return new SanGongBalanceResponse(input, extensionRegistry);
       }
     };
 
-    public static com.google.protobuf.Parser<SanGongOverResponse> parser() {
+    public static com.google.protobuf.Parser<SanGongBalanceResponse> parser() {
       return PARSER;
     }
 
     @java.lang.Override
-    public com.google.protobuf.Parser<SanGongOverResponse> getParserForType() {
+    public com.google.protobuf.Parser<SanGongBalanceResponse> getParserForType() {
       return PARSER;
     }
 
-    public sangong.mode.SanGong.SanGongOverResponse getDefaultInstanceForType() {
+    public sangong.mode.SanGong.SanGongBalanceResponse getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
   }
 
-  public interface SanGongSeatOverOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:SanGongSeatOver)
+  public interface SanGongSeatBalanceOrBuilder extends
+          // @@protoc_insertion_point(interface_extends:SanGongSeatBalance)
       com.google.protobuf.MessageOrBuilder {
 
     /**
@@ -9147,17 +8895,18 @@ public final class SanGong {
     int getSanGongCount();
   }
   /**
-   * Protobuf type {@code SanGongSeatOver}
+   * Protobuf type {@code SanGongSeatBalance}
    */
-  public  static final class SanGongSeatOver extends
+  public static final class SanGongSeatBalance extends
       com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:SanGongSeatOver)
-      SanGongSeatOverOrBuilder {
-    // Use SanGongSeatOver.newBuilder() to construct.
-    private SanGongSeatOver(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+          // @@protoc_insertion_point(message_implements:SanGongSeatBalance)
+          SanGongSeatBalanceOrBuilder {
+    // Use SanGongSeatBalance.newBuilder() to construct.
+    private SanGongSeatBalance(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-    private SanGongSeatOver() {
+
+    private SanGongSeatBalance() {
       iD_ = 0;
       winOrLose_ = 0;
       sanGongCount_ = 0;
@@ -9168,7 +8917,8 @@ public final class SanGong {
     getUnknownFields() {
       return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
     }
-    private SanGongSeatOver(
+
+    private SanGongSeatBalance(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -9216,14 +8966,14 @@ public final class SanGong {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return sangong.mode.SanGong.internal_static_SanGongSeatOver_descriptor;
+      return sangong.mode.SanGong.internal_static_SanGongSeatBalance_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return sangong.mode.SanGong.internal_static_SanGongSeatOver_fieldAccessorTable
+      return sangong.mode.SanGong.internal_static_SanGongSeatBalance_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              sangong.mode.SanGong.SanGongSeatOver.class, sangong.mode.SanGong.SanGongSeatOver.Builder.class);
+                  sangong.mode.SanGong.SanGongSeatBalance.class, sangong.mode.SanGong.SanGongSeatBalance.Builder.class);
     }
 
     public static final int ID_FIELD_NUMBER = 1;
@@ -9315,10 +9065,10 @@ public final class SanGong {
       if (obj == this) {
        return true;
       }
-      if (!(obj instanceof sangong.mode.SanGong.SanGongSeatOver)) {
+      if (!(obj instanceof sangong.mode.SanGong.SanGongSeatBalance)) {
         return super.equals(obj);
       }
-      sangong.mode.SanGong.SanGongSeatOver other = (sangong.mode.SanGong.SanGongSeatOver) obj;
+      sangong.mode.SanGong.SanGongSeatBalance other = (sangong.mode.SanGong.SanGongSeatBalance) obj;
 
       boolean result = true;
       result = result && (getID()
@@ -9348,69 +9098,80 @@ public final class SanGong {
       return hash;
     }
 
-    public static sangong.mode.SanGong.SanGongSeatOver parseFrom(
+    public static sangong.mode.SanGong.SanGongSeatBalance parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static sangong.mode.SanGong.SanGongSeatOver parseFrom(
+
+    public static sangong.mode.SanGong.SanGongSeatBalance parseFrom(
         java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static sangong.mode.SanGong.SanGongSeatOver parseFrom(
+
+    public static sangong.mode.SanGong.SanGongSeatBalance parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static sangong.mode.SanGong.SanGongSeatOver parseFrom(
+
+    public static sangong.mode.SanGong.SanGongSeatBalance parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static sangong.mode.SanGong.SanGongSeatOver parseFrom(byte[] data)
+
+    public static sangong.mode.SanGong.SanGongSeatBalance parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static sangong.mode.SanGong.SanGongSeatOver parseFrom(
+
+    public static sangong.mode.SanGong.SanGongSeatBalance parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static sangong.mode.SanGong.SanGongSeatOver parseFrom(java.io.InputStream input)
+
+    public static sangong.mode.SanGong.SanGongSeatBalance parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static sangong.mode.SanGong.SanGongSeatOver parseFrom(
+
+    public static sangong.mode.SanGong.SanGongSeatBalance parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static sangong.mode.SanGong.SanGongSeatOver parseDelimitedFrom(java.io.InputStream input)
+
+    public static sangong.mode.SanGong.SanGongSeatBalance parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static sangong.mode.SanGong.SanGongSeatOver parseDelimitedFrom(
+
+    public static sangong.mode.SanGong.SanGongSeatBalance parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static sangong.mode.SanGong.SanGongSeatOver parseFrom(
+
+    public static sangong.mode.SanGong.SanGongSeatBalance parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static sangong.mode.SanGong.SanGongSeatOver parseFrom(
+
+    public static sangong.mode.SanGong.SanGongSeatBalance parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -9422,7 +9183,8 @@ public final class SanGong {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(sangong.mode.SanGong.SanGongSeatOver prototype) {
+
+    public static Builder newBuilder(sangong.mode.SanGong.SanGongSeatBalance prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() {
@@ -9437,25 +9199,25 @@ public final class SanGong {
       return builder;
     }
     /**
-     * Protobuf type {@code SanGongSeatOver}
+     * Protobuf type {@code SanGongSeatBalance}
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:SanGongSeatOver)
-        sangong.mode.SanGong.SanGongSeatOverOrBuilder {
+            // @@protoc_insertion_point(builder_implements:SanGongSeatBalance)
+            sangong.mode.SanGong.SanGongSeatBalanceOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return sangong.mode.SanGong.internal_static_SanGongSeatOver_descriptor;
+        return sangong.mode.SanGong.internal_static_SanGongSeatBalance_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return sangong.mode.SanGong.internal_static_SanGongSeatOver_fieldAccessorTable
+        return sangong.mode.SanGong.internal_static_SanGongSeatBalance_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                sangong.mode.SanGong.SanGongSeatOver.class, sangong.mode.SanGong.SanGongSeatOver.Builder.class);
+                    sangong.mode.SanGong.SanGongSeatBalance.class, sangong.mode.SanGong.SanGongSeatBalance.Builder.class);
       }
 
-      // Construct using sangong.mode.SanGong.SanGongSeatOver.newBuilder()
+      // Construct using sangong.mode.SanGong.SanGongSeatBalance.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -9483,23 +9245,23 @@ public final class SanGong {
 
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return sangong.mode.SanGong.internal_static_SanGongSeatOver_descriptor;
+        return sangong.mode.SanGong.internal_static_SanGongSeatBalance_descriptor;
       }
 
-      public sangong.mode.SanGong.SanGongSeatOver getDefaultInstanceForType() {
-        return sangong.mode.SanGong.SanGongSeatOver.getDefaultInstance();
+      public sangong.mode.SanGong.SanGongSeatBalance getDefaultInstanceForType() {
+        return sangong.mode.SanGong.SanGongSeatBalance.getDefaultInstance();
       }
 
-      public sangong.mode.SanGong.SanGongSeatOver build() {
-        sangong.mode.SanGong.SanGongSeatOver result = buildPartial();
+      public sangong.mode.SanGong.SanGongSeatBalance build() {
+        sangong.mode.SanGong.SanGongSeatBalance result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      public sangong.mode.SanGong.SanGongSeatOver buildPartial() {
-        sangong.mode.SanGong.SanGongSeatOver result = new sangong.mode.SanGong.SanGongSeatOver(this);
+      public sangong.mode.SanGong.SanGongSeatBalance buildPartial() {
+        sangong.mode.SanGong.SanGongSeatBalance result = new sangong.mode.SanGong.SanGongSeatBalance(this);
         result.iD_ = iD_;
         result.winOrLose_ = winOrLose_;
         result.sanGongCount_ = sanGongCount_;
@@ -9534,16 +9296,16 @@ public final class SanGong {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof sangong.mode.SanGong.SanGongSeatOver) {
-          return mergeFrom((sangong.mode.SanGong.SanGongSeatOver)other);
+        if (other instanceof sangong.mode.SanGong.SanGongSeatBalance) {
+          return mergeFrom((sangong.mode.SanGong.SanGongSeatBalance) other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(sangong.mode.SanGong.SanGongSeatOver other) {
-        if (other == sangong.mode.SanGong.SanGongSeatOver.getDefaultInstance()) return this;
+      public Builder mergeFrom(sangong.mode.SanGong.SanGongSeatBalance other) {
+        if (other == sangong.mode.SanGong.SanGongSeatBalance.getDefaultInstance()) return this;
         if (other.getID() != 0) {
           setID(other.getID());
         }
@@ -9565,11 +9327,11 @@ public final class SanGong {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        sangong.mode.SanGong.SanGongSeatOver parsedMessage = null;
+        sangong.mode.SanGong.SanGongSeatBalance parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (sangong.mode.SanGong.SanGongSeatOver) e.getUnfinishedMessage();
+          parsedMessage = (sangong.mode.SanGong.SanGongSeatBalance) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -9703,39 +9465,39 @@ public final class SanGong {
       }
 
 
-      // @@protoc_insertion_point(builder_scope:SanGongSeatOver)
+      // @@protoc_insertion_point(builder_scope:SanGongSeatBalance)
     }
 
-    // @@protoc_insertion_point(class_scope:SanGongSeatOver)
-    private static final sangong.mode.SanGong.SanGongSeatOver DEFAULT_INSTANCE;
+    // @@protoc_insertion_point(class_scope:SanGongSeatBalance)
+    private static final sangong.mode.SanGong.SanGongSeatBalance DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new sangong.mode.SanGong.SanGongSeatOver();
+      DEFAULT_INSTANCE = new sangong.mode.SanGong.SanGongSeatBalance();
     }
 
-    public static sangong.mode.SanGong.SanGongSeatOver getDefaultInstance() {
+    public static sangong.mode.SanGong.SanGongSeatBalance getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
-    private static final com.google.protobuf.Parser<SanGongSeatOver>
-        PARSER = new com.google.protobuf.AbstractParser<SanGongSeatOver>() {
-      public SanGongSeatOver parsePartialFrom(
+    private static final com.google.protobuf.Parser<SanGongSeatBalance>
+            PARSER = new com.google.protobuf.AbstractParser<SanGongSeatBalance>() {
+      public SanGongSeatBalance parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-          return new SanGongSeatOver(input, extensionRegistry);
+        return new SanGongSeatBalance(input, extensionRegistry);
       }
     };
 
-    public static com.google.protobuf.Parser<SanGongSeatOver> parser() {
+    public static com.google.protobuf.Parser<SanGongSeatBalance> parser() {
       return PARSER;
     }
 
     @java.lang.Override
-    public com.google.protobuf.Parser<SanGongSeatOver> getParserForType() {
+    public com.google.protobuf.Parser<SanGongSeatBalance> getParserForType() {
       return PARSER;
     }
 
-    public sangong.mode.SanGong.SanGongSeatOver getDefaultInstanceForType() {
+    public sangong.mode.SanGong.SanGongSeatBalance getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -11049,15 +10811,15 @@ public final class SanGong {
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_SanGongResult_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_SanGongOverResponse_descriptor;
+          internal_static_SanGongBalanceResponse_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_SanGongOverResponse_fieldAccessorTable;
+          internal_static_SanGongBalanceResponse_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_SanGongSeatOver_descriptor;
+          internal_static_SanGongSeatBalance_descriptor;
   private static final
   com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_SanGongSeatOver_fieldAccessorTable;
+          internal_static_SanGongSeatBalance_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
           internal_static_SangongReplayResponse_descriptor;
   private static final
@@ -11071,7 +10833,6 @@ public final class SanGong {
 
   private static com.google.protobuf.Descriptors.FileDescriptor
           descriptor;
-
   static {
     java.lang.String[] descriptorData = {
             "\n\rsanGong.proto\032\016gameBase.proto\"n\n\023Sango" +
@@ -11082,34 +10843,33 @@ public final class SanGong {
                     "\021\n\tgameCount\030\002 \001(\r\022\021\n\tgameTimes\030\003 \001(\r\022\016\n" +
                     "\006banker\030\004 \001(\r\"X\n\031SangongGameStatusRespon" +
                     "se\022&\n\ngameStatus\030\001 \001(\0162\022.SangongGameStat" +
-                    "us\022\023\n\013timeCounter\030\002 \001(\005\"\204\001\n\023SangongSeatG" +
-                    "ameInfo\022\n\n\002ID\030\001 \001(\r\022\r\n\005cards\030\002 \003(\005\022\021\n\tca",
-            "rdsSize\030\003 \001(\r\022\r\n\005score\030\004 \001(\005\022\017\n\007isRobot\030" +
-                    "\005 \001(\010\022\014\n\004open\030\006 \001(\010\022\021\n\tplayScore\030\007 \001(\r\"!" +
-                    "\n\020PlayScoreRequest\022\r\n\005score\030\001 \001(\r\".\n\021Pla" +
-                    "yScoreResponse\022\n\n\002ID\030\001 \001(\r\022\r\n\005score\030\002 \001(" +
-                    "\005\"\031\n\010DealCard\022\r\n\005cards\030\001 \003(\005\"-\n\020OpenCard" +
-                    "Response\022\n\n\002ID\030\001 \001(\r\022\r\n\005cards\030\002 \003(\005\"Q\n\025S" +
-                    "anGongResultResponse\022\036\n\006result\030\001 \003(\0132\016.S" +
-                    "anGongResult\022\030\n\020readyTimeCounter\030\002 \001(\005\"q" +
-                    "\n\rSanGongResult\022\n\n\002ID\030\001 \001(\r\022\024\n\014currentSc" +
-                    "ore\030\002 \001(\005\022\022\n\ntotalScore\030\003 \001(\005\022\033\n\010cardTyp",
-            "e\030\004 \001(\0162\t.CardType\022\r\n\005cards\030\005 \003(\005\"J\n\023San" +
-                    "GongOverResponse\022\"\n\010gameOver\030\001 \003(\0132\020.San" +
-                    "GongSeatOver\022\017\n\007backKey\030\002 \001(\t\"F\n\017SanGong" +
-                    "SeatOver\022\n\n\002ID\030\001 \001(\r\022\021\n\twinOrLose\030\002 \001(\005\022" +
-      "\024\n\014sanGongCount\030\003 \001(\r\"\200\001\n\025SangongReplayR" +
-      "esponse\022\033\n\010dealCard\030\001 \001(\0132\t.DealCard\022\"\n\007" +
-      "history\030\002 \003(\0132\021.OperationHistory\022&\n\006resu" +
-      "lt\030\003 \001(\0132\026.SanGongResultResponse*5\n\010Card" +
-      "Type\022\024\n\020CARDTYPE_SANGONG\020\000\022\023\n\017CARDTYPE_D" +
-      "ANPAI\020\001*i\n\021SangongGameStatus\022\024\n\020SANGONG_",
-      "WAITTING\020\000\022\024\n\020SANGONG_READYING\020\001\022\023\n\017SANG" +
-      "ONG_PLAYING\020\002\022\023\n\017SANGONG_OPENING\020\003B\016\n\014sa" +
-      "ngong.modeb\006proto3"
+                    "us\022\023\n\013timeCounter\030\002 \001(\005\"s\n\023SangongSeatGa" +
+                    "meInfo\022\n\n\002ID\030\001 \001(\r\022\r\n\005cards\030\002 \003(\005\022\021\n\tcar",
+            "dsSize\030\003 \001(\r\022\r\n\005score\030\004 \001(\005\022\014\n\004open\030\005 \001(" +
+                    "\010\022\021\n\tplayScore\030\006 \001(\r\"!\n\020PlayScoreRequest" +
+                    "\022\r\n\005score\030\001 \001(\r\".\n\021PlayScoreResponse\022\n\n\002" +
+                    "ID\030\001 \001(\r\022\r\n\005score\030\002 \001(\005\"\031\n\010DealCard\022\r\n\005c" +
+                    "ards\030\001 \003(\005\"-\n\020OpenCardResponse\022\n\n\002ID\030\001 \001" +
+                    "(\r\022\r\n\005cards\030\002 \003(\005\"Q\n\025SanGongResultRespon" +
+                    "se\022\036\n\006result\030\001 \003(\0132\016.SanGongResult\022\030\n\020re" +
+                    "adyTimeCounter\030\002 \001(\005\"q\n\rSanGongResult\022\n\n" +
+                    "\002ID\030\001 \001(\r\022\024\n\014currentScore\030\002 \001(\005\022\022\n\ntotal" +
+                    "Score\030\003 \001(\005\022\033\n\010cardType\030\004 \001(\0162\t.CardType",
+            "\022\r\n\005cards\030\005 \003(\005\"B\n\026SanGongBalanceRespons" +
+                    "e\022(\n\013gameBalance\030\001 \003(\0132\023.SanGongSeatBala" +
+                    "nce\"I\n\022SanGongSeatBalance\022\n\n\002ID\030\001 \001(\r\022\021\n" +
+                    "\twinOrLose\030\002 \001(\005\022\024\n\014sanGongCount\030\003 \001(\r\"\200" +
+                    "\001\n\025SangongReplayResponse\022\033\n\010dealCard\030\001 \001" +
+                    "(\0132\t.DealCard\022\"\n\007history\030\002 \003(\0132\021.Operati" +
+                    "onHistory\022&\n\006result\030\003 \001(\0132\026.SanGongResul" +
+                    "tResponse*5\n\010CardType\022\024\n\020CARDTYPE_SANGON" +
+                    "G\020\000\022\023\n\017CARDTYPE_DANPAI\020\001*i\n\021SangongGameS" +
+                    "tatus\022\024\n\020SANGONG_WAITTING\020\000\022\024\n\020SANGONG_R",
+            "EADYING\020\001\022\023\n\017SANGONG_PLAYING\020\002\022\023\n\017SANGON" +
+                    "G_OPENING\020\003B\016\n\014sangong.modeb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
-        new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
+            new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
           public com.google.protobuf.ExtensionRegistry assignDescriptors(
                   com.google.protobuf.Descriptors.FileDescriptor root) {
             descriptor = root;
@@ -11132,7 +10892,7 @@ public final class SanGong {
     internal_static_SangongGameInfo_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_SangongGameInfo_descriptor,
-        new java.lang.String[]{"Seats", "GameCount", "GameTimes", "Banker",});
+            new java.lang.String[]{"Seats", "GameCount", "GameTimes", "Banker",});
     internal_static_SangongGameStatusResponse_descriptor =
             getDescriptor().getMessageTypes().get(2);
     internal_static_SangongGameStatusResponse_fieldAccessorTable = new
@@ -11144,7 +10904,7 @@ public final class SanGong {
     internal_static_SangongSeatGameInfo_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_SangongSeatGameInfo_descriptor,
-        new java.lang.String[] { "ID", "Cards", "CardsSize", "Score", "IsRobot", "Open", "PlayScore", });
+            new java.lang.String[]{"ID", "Cards", "CardsSize", "Score", "Open", "PlayScore",});
     internal_static_PlayScoreRequest_descriptor =
             getDescriptor().getMessageTypes().get(4);
     internal_static_PlayScoreRequest_fieldAccessorTable = new
@@ -11156,7 +10916,7 @@ public final class SanGong {
     internal_static_PlayScoreResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_PlayScoreResponse_descriptor,
-        new java.lang.String[] { "ID", "Score",});
+            new java.lang.String[]{"ID", "Score",});
     internal_static_DealCard_descriptor =
       getDescriptor().getMessageTypes().get(6);
     internal_static_DealCard_fieldAccessorTable = new
@@ -11181,17 +10941,17 @@ public final class SanGong {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_SanGongResult_descriptor,
         new java.lang.String[] { "ID", "CurrentScore", "TotalScore", "CardType", "Cards", });
-    internal_static_SanGongOverResponse_descriptor =
+    internal_static_SanGongBalanceResponse_descriptor =
             getDescriptor().getMessageTypes().get(10);
-    internal_static_SanGongOverResponse_fieldAccessorTable = new
+    internal_static_SanGongBalanceResponse_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_SanGongOverResponse_descriptor,
-        new java.lang.String[] { "GameOver", "BackKey", });
-    internal_static_SanGongSeatOver_descriptor =
+            internal_static_SanGongBalanceResponse_descriptor,
+            new java.lang.String[]{"GameBalance",});
+    internal_static_SanGongSeatBalance_descriptor =
       getDescriptor().getMessageTypes().get(11);
-    internal_static_SanGongSeatOver_fieldAccessorTable = new
+    internal_static_SanGongSeatBalance_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_SanGongSeatOver_descriptor,
+            internal_static_SanGongSeatBalance_descriptor,
         new java.lang.String[] { "ID", "WinOrLose", "SanGongCount", });
     internal_static_SangongReplayResponse_descriptor =
       getDescriptor().getMessageTypes().get(12);

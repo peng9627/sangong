@@ -14,8 +14,8 @@ public class Constant {
     public static String moneyDetailedCreate = "/money_detailed/create";
 
     public static int readyTimeout = 5000;
-    public static int playCardTimeout = 18000;
-    public static int dissolve = 18000;
+    public static int playTimeout = 18000;
+    public static int dissolve = 180000;
     public static int messageTimeout = 300000;
 
 }
