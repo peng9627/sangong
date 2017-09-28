@@ -62,7 +62,9 @@ public class OpenTimeout extends Thread {
                     room.gameOver(response, redisService);
                 }
             }
-            redisService.addCache("room" + roomNo, JSON.toJSONString(room));
+            if (null != room.getRoomNo()) {
+                redisService.addCache("room" + roomNo, JSON.toJSONString(room));
+            }
             redisService.unlock("lock_room" + roomNo);
         }
     }

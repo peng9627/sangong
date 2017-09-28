@@ -15,10 +15,10 @@ import sangong.redis.RedisService;
  */
 public class MatchScoreTimeout extends Thread {
 
-    private Integer matchNo;
+    private int matchNo;
     private RedisService redisService;
 
-    public MatchScoreTimeout(Integer matchNo, RedisService redisService) {
+    public MatchScoreTimeout(int matchNo, RedisService redisService) {
         this.matchNo = matchNo;
         this.redisService = redisService;
     }
@@ -37,14 +37,17 @@ public class MatchScoreTimeout extends Thread {
             while (!redisService.lock("lock_match_info" + matchNo)) {
             }
             MatchInfo matchInfo = JSON.parseObject(redisService.getCache("match_info" + matchNo), MatchInfo.class);
-            matchInfo.setMatchEliminateScore(matchInfo.getMatchEliminateScore() + Constant.matchEliminateScore);
+            if (matchInfo.getStatus() == 1) {
+                matchInfo.setMatchEliminateScore(matchInfo.getMatchEliminateScore() + Constant.matchEliminateScore);
 
-            GameBase.BaseConnection response = GameBase.BaseConnection.newBuilder().setOperationType(GameBase.OperationType.MATCH_ELIMINATE_SCORE)
-                    .setData(GameBase.MatchEliminateScore.newBuilder().setScore(matchInfo.getMatchEliminateScore()).build().toByteString()).build();
-            for (MatchUser matchUser : matchInfo.getMatchUsers()) {
-                if (SanGongTcpService.userClients.containsKey(matchUser.getUserId())) {
-                    SanGongTcpService.userClients.get(matchUser.getUserId()).send(response, matchUser.getUserId());
+                GameBase.BaseConnection response = GameBase.BaseConnection.newBuilder().setOperationType(GameBase.OperationType.MATCH_ELIMINATE_SCORE)
+                        .setData(GameBase.MatchEliminateScore.newBuilder().setScore(matchInfo.getMatchEliminateScore()).build().toByteString()).build();
+                for (MatchUser matchUser : matchInfo.getMatchUsers()) {
+                    if (SanGongTcpService.userClients.containsKey(matchUser.getUserId())) {
+                        SanGongTcpService.userClients.get(matchUser.getUserId()).send(response, matchUser.getUserId());
+                    }
                 }
+                new MatchScoreTimeout(matchNo, redisService).start();
             }
             redisService.addCache("match_info" + matchNo, JSON.toJSONString(matchInfo));
             redisService.unlock("lock_match_info" + matchNo);

@@ -83,24 +83,34 @@ public class MatchInfo {
         Room room = new Room();
         room.setBaseScore(1);
         room.setRoomNo(roomNo(redisService));
-        //TODO 测试，要改回去
-        room.setGameTimes(1);
+        room.setGameTimes(gameTimes);
         room.setCount(4);
         room.setBankerWay(1);
         room.setGameStatus(GameStatus.WAITING);
         room.setSeatNos(new ArrayList<>(Arrays.asList(1, 2, 3, 4)));
+        GameBase.MatchResult.Builder matchResult = GameBase.MatchResult.newBuilder();
         while (4 > room.getSeats().size()) {
             User user = users.remove(0);
             room.addSeat(user, userIdScore.get(user.getUserId()));
-            response.setOperationType(GameBase.OperationType.MATCH_DATA).setData(matchData.build().toByteString());
+            matchResult.setResult(1).setTotalScore(userIdScore.get(user.getUserId())).setCurrentScore(-1);
+            response.setOperationType(GameBase.OperationType.MATCH_RESULT).setData(matchResult.build().toByteString());
             if (SanGongTcpService.userClients.containsKey(user.getUserId())) {
                 SanGongTcpService.userClients.get(user.getUserId()).send(response.build(), user.getUserId());
+                room.sendRoomInfo(user.getUserId(), GameBase.RoomCardIntoResponse.newBuilder(), response);
             }
-            room.sendRoomInfo(user.getUserId(), GameBase.RoomCardIntoResponse.newBuilder(), response);
             redisService.addCache("room_match" + room.getRoomNo(), matchNo);
-            redisService.addCache("reconnect" + user.getUserId(), "run_quickly," + room.getRoomNo());
+            redisService.addCache("reconnect" + user.getUserId(), "sangong," + room.getRoomNo());
         }
         room.sendSeatInfo(response);
+
+        for (Seat seat : room.getSeats()) {
+            if (SanGongTcpService.userClients.containsKey(seat.getUserId())) {
+                SanGongTcpService.userClients.get(seat.getUserId()).roomNo = room.getRoomNo();
+                response.setOperationType(GameBase.OperationType.MATCH_DATA).setData(matchData.build().toByteString());
+                SanGongTcpService.userClients.get(seat.getUserId()).send(response.build(), seat.getUserId());
+            }
+        }
+
         new ReadyTimeout(Integer.parseInt(room.getRoomNo()), redisService, 0).start();
         redisService.addCache("room" + room.getRoomNo(), JSON.toJSONString(room));
         return Integer.parseInt(room.getRoomNo());

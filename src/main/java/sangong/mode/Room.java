@@ -11,6 +11,7 @@ import sangong.entrance.SanGongTcpService;
 import sangong.redis.RedisService;
 import sangong.timout.OpenTimeout;
 import sangong.timout.PlayTimeout;
+import sangong.timout.ReadyTimeout;
 import sangong.utils.HttpUtil;
 
 import java.util.*;
@@ -416,15 +417,39 @@ public class Room {
         record.getHistoryList().addAll(historyList);
         recordList.add(record);
 
-        response.setOperationType(GameBase.OperationType.RESULT).setData(resultResponse.build().toByteString());
-        seats.stream().filter(seat -> SanGongTcpService.userClients.containsKey(seat.getUserId()))
-                .forEach(seat -> SanGongTcpService.userClients.get(seat.getUserId()).send(response.build(), seat.getUserId()));
-
+        if (redisService.exists("room_match" + roomNo)) {
+            GameBase.ScoreResponse.Builder scoreResponse = GameBase.ScoreResponse.newBuilder();
+            for (SanGong.SanGongResult.Builder userResult : resultResponse.getResultBuilderList()) {
+                if (SanGongTcpService.userClients.containsKey(userResult.getID())) {
+                    GameBase.MatchResult matchResult;
+                    if (gameCount != gameTimes) {
+                        matchResult = GameBase.MatchResult.newBuilder().setResult(0).setCurrentScore(userResult.getCurrentScore())
+                                .setTotalScore(userResult.getTotalScore()).build();
+                    } else {
+                        matchResult = GameBase.MatchResult.newBuilder().setResult(2).setCurrentScore(userResult.getCurrentScore())
+                                .setTotalScore(userResult.getTotalScore()).build();
+                    }
+                    SanGongTcpService.userClients.get(userResult.getID()).send(response.setOperationType(GameBase.OperationType.MATCH_RESULT)
+                            .setData(matchResult.toByteString()).build(), userResult.getID());
+                }
+                scoreResponse.addScoreResult(GameBase.ScoreResult.newBuilder().setID(userResult.getID()).setScore(userResult.getTotalScore()));
+            }
+            for (Seat seat : seats) {
+                if (SanGongTcpService.userClients.containsKey(seat.getUserId())) {
+                    SanGongTcpService.userClients.get(seat.getUserId()).send(response.setOperationType(GameBase.OperationType.MATCH_SCORE)
+                            .setData(scoreResponse.build().toByteString()).build(), seat.getUserId());
+                }
+            }
+        } else {
+            response.setOperationType(GameBase.OperationType.RESULT).setData(resultResponse.build().toByteString());
+            seats.stream().filter(seat -> SanGongTcpService.userClients.containsKey(seat.getUserId()))
+                    .forEach(seat -> SanGongTcpService.userClients.get(seat.getUserId()).send(response.build(), seat.getUserId()));
+        }
         clear();
         if (1 == gameCount && 2 == payType) {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("flowType", 2);
-            if (10 == gameCount) {
+            if (10 == gameTimes) {
                 jsonObject.put("money", 1);
             } else {
                 jsonObject.put("money", 2);
@@ -443,6 +468,9 @@ public class Room {
         if (gameCount == gameTimes) {
             roomOver(response, redisService);
         } else {
+            if (redisService.exists("room_match" + roomNo)) {
+                new ReadyTimeout(Integer.valueOf(roomNo), redisService, gameCount).start();
+            }
             SanGong.SangongGameStatusResponse.Builder statusResponse = SanGong.SangongGameStatusResponse.newBuilder();
             statusResponse.setTimeCounter(redisService.exists("room_match" + roomNo) ? 8 : 0);
             statusResponse.setGameStatus(SanGong.SangongGameStatus.SANGONG_READYING).build();
@@ -490,24 +518,24 @@ public class Room {
                             matchUser.setScore(seat.getScore());
                         }
                     }
-                    if (SanGongTcpService.userClients.containsKey(seat.getUserId())) {
-                        SanGongTcpService.userClients.get(seat.getUserId()).send(response.setOperationType(GameBase.OperationType.ROOM_INFO).clearData().build(), seat.getUserId());
-                        GameBase.RoomSeatsInfo.Builder roomSeatsInfo = GameBase.RoomSeatsInfo.newBuilder();
-                        GameBase.SeatResponse.Builder seatResponse = GameBase.SeatResponse.newBuilder();
-                        seatResponse.setSeatNo(1);
-                        seatResponse.setID(seat.getUserId());
-                        seatResponse.setScore(seat.getScore());
-                        seatResponse.setReady(false);
-                        seatResponse.setIp(seat.getIp());
-                        seatResponse.setGameCount(seat.getGamecount());
-                        seatResponse.setNickname(seat.getNickname());
-                        seatResponse.setHead(seat.getHead());
-                        seatResponse.setSex(seat.isSex());
-                        seatResponse.setOffline(false);
-                        seatResponse.setIsRobot(false);
-                        roomSeatsInfo.addSeats(seatResponse.build());
-                        SanGongTcpService.userClients.get(seat.getUserId()).send(response.setOperationType(GameBase.OperationType.SEAT_INFO).setData(roomSeatsInfo.build().toByteString()).build(), seat.getUserId());
-                    }
+//                    if (SanGongTcpService.userClients.containsKey(seat.getUserId())) {
+//                        SanGongTcpService.userClients.get(seat.getUserId()).send(response.setOperationType(GameBase.OperationType.ROOM_INFO).clearData().build(), seat.getUserId());
+//                        GameBase.RoomSeatsInfo.Builder roomSeatsInfo = GameBase.RoomSeatsInfo.newBuilder();
+//                        GameBase.SeatResponse.Builder seatResponse = GameBase.SeatResponse.newBuilder();
+//                        seatResponse.setSeatNo(1);
+//                        seatResponse.setID(seat.getUserId());
+//                        seatResponse.setScore(seat.getScore());
+//                        seatResponse.setReady(false);
+//                        seatResponse.setIp(seat.getIp());
+//                        seatResponse.setGameCount(seat.getGamecount());
+//                        seatResponse.setNickname(seat.getNickname());
+//                        seatResponse.setHead(seat.getHead());
+//                        seatResponse.setSex(seat.isSex());
+//                        seatResponse.setOffline(false);
+//                        seatResponse.setIsRobot(false);
+//                        roomSeatsInfo.addSeats(seatResponse.build());
+//                        SanGongTcpService.userClients.get(seat.getUserId()).send(response.setOperationType(GameBase.OperationType.SEAT_INFO).setData(roomSeatsInfo.build().toByteString()).build(), seat.getUserId());
+//                    }
                 }
 
                 //用户对应分数
@@ -537,25 +565,31 @@ public class Room {
                                     if (seat.getScore() < matchInfo.getMatchEliminateScore() && matchUsers.size() > arena.getCount() / 2) {
                                         matchUsers.remove(matchUser);
 
-                                        matchResult.setResult(3);
+                                        matchResult.setResult(3).setTotalScore(seat.getScore()).setCurrentScore(-1);
                                         response.setOperationType(GameBase.OperationType.MATCH_RESULT).setData(matchResult.build().toByteString());
                                         if (SanGongTcpService.userClients.containsKey(matchUser.getUserId())) {
                                             SanGongTcpService.userClients.get(matchUser.getUserId()).send(response.build(), matchUser.getUserId());
                                         }
-                                        response.setOperationType(GameBase.OperationType.MATCH_OVER).setData(GameBase.MatchOver.newBuilder()
-                                                .setRanking(matchUsers.size()).build().toByteString());
+                                        response.setOperationType(GameBase.OperationType.MATCH_BALANCE).setData(GameBase.MatchBalance.newBuilder()
+                                                .setRanking(matchUsers.size()).setTotalScore(matchUser.getScore()).build().toByteString());
                                         if (SanGongTcpService.userClients.containsKey(matchUser.getUserId())) {
                                             SanGongTcpService.userClients.get(matchUser.getUserId()).send(response.build(), matchUser.getUserId());
+                                            GameBase.OverResponse.Builder over = GameBase.OverResponse.newBuilder();
+                                            String uuid = UUID.randomUUID().toString().replace("-", "");
+                                            while (redisService.exists(uuid)) {
+                                                uuid = UUID.randomUUID().toString().replace("-", "");
+                                            }
+                                            redisService.addCache("backkey" + uuid, seat.getUserId() + "", 1800);
+                                            over.setBackKey(uuid);
+                                            over.setDateTime(new Date().getTime());
+                                            response.setOperationType(GameBase.OperationType.OVER).setData(over.build().toByteString());
+                                            SanGongTcpService.userClients.get(seat.getUserId()).send(response.build(), seat.getUserId());
                                         }
+
                                         redisService.delete("reconnect" + seat.getUserId());
                                     } else {
-                                        matchResult.setResult(2);
-                                        response.setOperationType(GameBase.OperationType.MATCH_RESULT).setData(matchResult.build().toByteString());
-                                        if (SanGongTcpService.userClients.containsKey(matchUser.getUserId())) {
-                                            SanGongTcpService.userClients.get(matchUser.getUserId()).send(response.build(), matchUser.getUserId());
-                                        }
                                         thisWait.add(matchUser);
-                                        redisService.addCache("reconnect" + seat.getUserId(), "run_quickly," + matchNo);
+                                        redisService.addCache("reconnect" + seat.getUserId(), "sangong," + matchNo);
                                     }
                                     break;
                                 }
@@ -584,6 +618,7 @@ public class Room {
                             matchInfo.setStatus(2);
                             matchData.setStatus(2);
                             matchData.setCurrentCount(matchUsers.size());
+                            matchData.setRound(1);
                             while (4 <= users.size()) {
                                 rooms.add(matchInfo.addRoom(matchNo, 2, redisService, users.subList(0, 4), userIdScore, response, matchData));
                             }
@@ -605,6 +640,9 @@ public class Room {
                                 if (0 == usersResponse.getCode()) {
                                     users = usersResponse.getData();
                                 }
+                                matchData.setStatus(1);
+                                matchData.setCurrentCount(matchUsers.size());
+                                matchData.setRound(1);
                                 rooms.add(matchInfo.addRoom(matchNo, 1, redisService, users, userIdScore, response, matchData));
                             }
                         }
@@ -617,11 +655,11 @@ public class Room {
                             if (SanGongTcpService.userClients.containsKey(seat.getUserId())) {
                                 SanGongTcpService.userClients.get(seat.getUserId()).send(response.build(), seat.getUserId());
                             }
-                            redisService.addCache("reconnect" + seat.getUserId(), "run_quickly," + matchNo);
+                            redisService.addCache("reconnect" + seat.getUserId(), "sangong," + matchNo);
                         }
                         if (0 == rooms.size()) {
                             matchInfo.setStatus(matchInfo.getStatus() + 1);
-                            matchData.setStatus(matchInfo.getStatus());
+                            matchData.setStatus(2);
 
                             List<User> users = new ArrayList<>();
                             StringBuilder stringBuilder = new StringBuilder();
@@ -637,6 +675,7 @@ public class Room {
                                 users = usersResponse.getData();
                             }
                             matchData.setCurrentCount(matchUsers.size());
+                            matchData.setRound(matchInfo.getStatus() - 1);
                             while (4 <= users.size()) {
                                 rooms.add(matchInfo.addRoom(matchNo, 2, redisService, users.subList(0, 4), userIdScore, response, matchData));
                             }
@@ -644,16 +683,11 @@ public class Room {
                         break;
                     case 4:
                         for (Seat seat : seats) {
-                            matchResult.setResult(2);
-                            response.setOperationType(GameBase.OperationType.MATCH_RESULT).setData(matchResult.build().toByteString());
-                            if (SanGongTcpService.userClients.containsKey(seat.getUserId())) {
-                                SanGongTcpService.userClients.get(seat.getUserId()).send(response.build(), seat.getUserId());
-                            }
                             MatchUser matchUser = new MatchUser();
                             matchUser.setUserId(seat.getUserId());
                             matchUser.setScore(seat.getScore());
                             waitUsers.add(matchUser);
-                            redisService.addCache("reconnect" + seat.getUserId(), "run_quickly," + matchNo);
+                            redisService.addCache("reconnect" + seat.getUserId(), "sangong," + matchNo);
                         }
 
                         waitUsers.sort(new Comparator<MatchUser>() {
@@ -664,10 +698,21 @@ public class Room {
                         });
                         while (waitUsers.size() > 4) {
                             MatchUser matchUser = waitUsers.remove(waitUsers.size() - 1);
+                            matchUsers.remove(matchUser);
 
-                            response.setOperationType(GameBase.OperationType.MATCH_OVER).setData(GameBase.MatchOver.newBuilder()
-                                    .setRanking(matchUsers.size()).build().toByteString());
+                            response.setOperationType(GameBase.OperationType.MATCH_BALANCE).setData(GameBase.MatchBalance.newBuilder()
+                                    .setRanking(matchUsers.size()).setTotalScore(matchUser.getScore()).build().toByteString());
                             if (SanGongTcpService.userClients.containsKey(matchUser.getUserId())) {
+                                SanGongTcpService.userClients.get(matchUser.getUserId()).send(response.build(), matchUser.getUserId());
+                                GameBase.OverResponse.Builder over = GameBase.OverResponse.newBuilder();
+                                String uuid = UUID.randomUUID().toString().replace("-", "");
+                                while (redisService.exists(uuid)) {
+                                    uuid = UUID.randomUUID().toString().replace("-", "");
+                                }
+                                redisService.addCache("backkey" + uuid, matchUser.getUserId() + "", 1800);
+                                over.setBackKey(uuid);
+                                over.setDateTime(new Date().getTime());
+                                response.setOperationType(GameBase.OperationType.OVER).setData(over.build().toByteString());
                                 SanGongTcpService.userClients.get(matchUser.getUserId()).send(response.build(), matchUser.getUserId());
                             }
                             redisService.delete("reconnect" + matchUser.getUserId());
@@ -677,14 +722,15 @@ public class Room {
 
                             matchUsers.clear();
                             matchUsers.addAll(waitUsers);
+                            waitUsers.clear();
 
                             matchInfo.setStatus(5);
-                            matchData.setStatus(5);
+                            matchData.setStatus(3);
 
                             List<User> users = new ArrayList<>();
                             StringBuilder stringBuilder = new StringBuilder();
-                            for (int i = 0; i < matchUsers.size(); i++) {
-                                stringBuilder.append(",").append(matchUsers.get(i).getUserId());
+                            for (MatchUser matchUser : matchUsers) {
+                                stringBuilder.append(",").append(matchUser.getUserId());
                             }
                             jsonObject.clear();
                             jsonObject.put("userIds", stringBuilder.toString().substring(1));
@@ -695,6 +741,7 @@ public class Room {
                                 users = usersResponse.getData();
                             }
                             matchData.setCurrentCount(matchUsers.size());
+                            matchData.setRound(1);
                             while (4 == users.size()) {
                                 rooms.add(matchInfo.addRoom(matchNo, 2, redisService, users, userIdScore, response, matchData));
                             }
@@ -708,13 +755,24 @@ public class Room {
                             }
                         });
                         for (int i = 0; i < matchUsers.size(); i++) {
-                            matchResult.setResult(i == 0 ? 1 : 3);
+                            matchResult.setResult(i == 0 ? 1 : 3).setTotalScore(matchUsers.get(i).getScore()).setCurrentScore(-1);
                             response.setOperationType(GameBase.OperationType.MATCH_RESULT).setData(matchResult.build().toByteString());
                             if (SanGongTcpService.userClients.containsKey(matchUsers.get(i).getUserId())) {
                                 SanGongTcpService.userClients.get(matchUsers.get(i).getUserId()).send(response.build(), matchUsers.get(i).getUserId());
                             }
-                            response.setOperationType(GameBase.OperationType.MATCH_OVER).setData(GameBase.MatchOver.newBuilder().setRanking(i + 1).build().toByteString());
+                            response.setOperationType(GameBase.OperationType.MATCH_BALANCE).setData(GameBase.MatchBalance.newBuilder()
+                                    .setRanking(i + 1).setTotalScore(matchUsers.get(i).getScore()).build().toByteString());
                             if (SanGongTcpService.userClients.containsKey(matchUsers.get(i).getUserId())) {
+                                SanGongTcpService.userClients.get(matchUsers.get(i).getUserId()).send(response.build(), matchUsers.get(i).getUserId());
+                                GameBase.OverResponse.Builder over = GameBase.OverResponse.newBuilder();
+                                String uuid = UUID.randomUUID().toString().replace("-", "");
+                                while (redisService.exists(uuid)) {
+                                    uuid = UUID.randomUUID().toString().replace("-", "");
+                                }
+                                redisService.addCache("backkey" + uuid, matchUsers.get(i).getUserId() + "", 1800);
+                                over.setBackKey(uuid);
+                                over.setDateTime(new Date().getTime());
+                                response.setOperationType(GameBase.OperationType.OVER).setData(over.build().toByteString());
                                 SanGongTcpService.userClients.get(matchUsers.get(i).getUserId()).send(response.build(), matchUsers.get(i).getUserId());
                             }
                         }
@@ -723,6 +781,7 @@ public class Room {
                 }
 
                 if (0 < matchInfo.getStatus()) {
+                    matchInfo.setMatchUsers(matchUsers);
                     matchInfo.setRooms(rooms);
                     matchInfo.setWaitUsers(waitUsers);
                     redisService.addCache("match_info" + matchNo, JSON.toJSONString(matchInfo));
@@ -827,6 +886,7 @@ public class Room {
         sangongIntoResponse.setPayType(payType);
         sangongIntoResponse.setCount(count);
         intoResponseBuilder.setData(sangongIntoResponse.build().toByteString());
+        intoResponseBuilder.setGameType(GameBase.GameType.SANGONG);
 
         response.setOperationType(GameBase.OperationType.ROOM_INFO).setData(intoResponseBuilder.build().toByteString());
         if (SanGongTcpService.userClients.containsKey(userId)) {
@@ -883,9 +943,7 @@ public class Room {
         seats.stream().filter(seat -> SanGongTcpService.userClients.containsKey(seat.getUserId())).forEach(seat -> {
             SanGongTcpService.userClients.get(seat.getUserId()).send(response.build(), seat.getUserId());
         });
-        if (redisService.exists("room_match" + roomNo)) {
-            new PlayTimeout(Integer.valueOf(roomNo), redisService, statusDate).start();
-        }
+        new PlayTimeout(Integer.valueOf(roomNo), redisService, statusDate).start();
     }
 
     public void allPlay(GameBase.BaseConnection.Builder response, RedisService redisService) {
@@ -908,8 +966,6 @@ public class Room {
         seats.stream().filter(seat1 -> SanGongTcpService.userClients.containsKey(seat1.getUserId())).forEach(seat1 -> {
             SanGongTcpService.userClients.get(seat1.getUserId()).send(response.build(), seat1.getUserId());
         });
-        if (redisService.exists("room_match" + roomNo)) {
-            new OpenTimeout(Integer.valueOf(roomNo), redisService, statusDate).start();
-        }
+        new OpenTimeout(Integer.valueOf(roomNo), redisService, statusDate).start();
     }
 }

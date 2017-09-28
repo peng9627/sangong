@@ -38,14 +38,18 @@ public class ReadyTimeout extends Thread {
             }
         }
 
+        System.out.println("准备==================");
         if (redisService.exists("room" + roomNo)) {
             while (!redisService.lock("lock_room" + roomNo)) {
             }
             Room room = JSON.parseObject(redisService.getCache("room" + roomNo), Room.class);
+            System.out.println("准备==================1" + room.getGameStatus());
             if ((0 == room.getGameStatus().compareTo(GameStatus.READYING) || 0 == room.getGameStatus().compareTo(GameStatus.WAITING))
                     && gameCount == room.getGameCount()) {
+                System.out.println("准备==================2");
                 boolean hasNoReady = false;
                 for (Seat seat : room.getSeats()) {
+                    System.out.println("准备==================3");
                     if (!seat.isReady()) {
                         seat.setReady(true);
                         hasNoReady = true;
