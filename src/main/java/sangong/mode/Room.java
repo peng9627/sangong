@@ -755,6 +755,18 @@ public class Room {
                             }
                         });
                         for (int i = 0; i < matchUsers.size(); i++) {
+                            if (i == 0 && matchInfo.getArena().getArenaType() == 0) {
+                                jsonObject.clear();
+                                jsonObject.put("flowType", 1);
+                                jsonObject.put("money", matchInfo.getArena().getReward());
+                                jsonObject.put("description", "比赛获胜" + matchInfo.getArena().getId());
+                                jsonObject.put("userId", matchUsers.get(i).getUserId());
+                                ApiResponse moneyDetail = JSON.parseObject(HttpUtil.urlConnectionByRsa(Constant.apiUrl + Constant.moneyDetailedCreate, jsonObject.toJSONString()), new TypeReference<ApiResponse<User>>() {
+                                });
+                                if (0 != moneyDetail.getCode()) {
+                                    LoggerFactory.getLogger(this.getClass()).error(Constant.apiUrl + Constant.moneyDetailedCreate + "?" + jsonObject.toJSONString());
+                                }
+                            }
                             matchResult.setResult(i == 0 ? 1 : 3).setTotalScore(matchUsers.get(i).getScore()).setCurrentScore(-1);
                             response.setOperationType(GameBase.OperationType.MATCH_RESULT).setData(matchResult.build().toByteString());
                             if (SanGongTcpService.userClients.containsKey(matchUsers.get(i).getUserId())) {

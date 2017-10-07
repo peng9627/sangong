@@ -117,19 +117,19 @@ public class Card {
         }
 
         //第二张是公牌
-        if (cardListArray.get(1) % 100 > 10) {
-            if (cardListArray.get(0) % 100 != cardsArray.get(0) % 100) {
-                return cardListArray.get(0) % 100 > cardsArray.get(0) % 100;
-            } else {
-                return cardListArray.get(0) > cardsArray.get(0);
-            }
+//        if (cardListArray.get(1) % 100 > 10) {
+        if (cardListArray.get(2) % 100 != cardsArray.get(2) % 100) {
+            return cardListArray.get(2) % 100 > cardsArray.get(2) % 100;
         } else {
-            if (cardListArray.get(1) % 100 != cardsArray.get(1) % 100) {
-                return cardListArray.get(1) % 100 > cardsArray.get(1) % 100;
-            } else {
-                return cardListArray.get(1) > cardsArray.get(1);
-            }
+            return cardListArray.get(2) > cardsArray.get(2);
         }
+//        } else {
+//            if (cardListArray.get(1) % 100 != cardsArray.get(1) % 100) {
+//                return cardListArray.get(1) % 100 > cardsArray.get(1) % 100;
+//            } else {
+//                return cardListArray.get(1) > cardsArray.get(1);
+//            }
+//        }
 
     }
 }
