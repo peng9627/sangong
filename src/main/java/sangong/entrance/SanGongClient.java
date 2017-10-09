@@ -50,12 +50,18 @@ public class SanGongClient {
                             return;
                         }
                         for (Seat seat : room.getSeats()) {
-                            if (seat.getUserId() == userId) {
+                            if (seat.getUserId() == userId && !seat.isRobot()) {
                                 seat.setRobot(true);
+                                response.setOperationType(GameBase.OperationType.ONLINE).setData(GameBase.Online.newBuilder()
+                                        .setOnline(false).setUserId(userId).build().toByteString());
+                                for (Seat seat1 : room.getSeats()) {
+                                    if (SanGongTcpService.userClients.containsKey(seat1.getUserId())) {
+                                        messageReceive.send(response.build(), seat1.getUserId());
+                                    }
+                                }
                                 break;
                             }
                         }
-                        room.sendSeatInfo(response);
 
                         redisService.addCache("room" + messageReceive.roomNo, JSON.toJSONString(room));
                         redisService.unlock("lock_room" + messageReceive.roomNo);
@@ -699,6 +705,32 @@ public class SanGongClient {
                             if (SanGongTcpService.userClients.containsKey(seat.getUserId())) {
                                 messageReceive.send(response.setOperationType(GameBase.OperationType.MESSAGE)
                                         .setData(appointInteractionResponse.toByteString()).build(), seat.getUserId());
+                            }
+                        }
+                        redisService.unlock("lock_room" + messageReceive.roomNo);
+                    }
+                    break;
+                case ONLINE:
+                    if (redisService.exists("room" + messageReceive.roomNo)) {
+                        while (!redisService.lock("lock_room" + messageReceive.roomNo)) {
+                        }
+                        Room room = JSON.parseObject(redisService.getCache("room" + messageReceive.roomNo), Room.class);
+                        GameBase.Online online = GameBase.Online.parseFrom(request.getData());
+                        for (Seat seat : room.getSeats()) {
+                            if (seat.getUserId() == userId) {
+                                if (online.getOnline() && seat.isRobot()) {
+                                    seat.setRobot(false);
+                                } else if (!online.getOnline() && !seat.isRobot()) {
+                                    seat.setRobot(true);
+                                } else {
+                                    break;
+                                }
+                                response.setOperationType(GameBase.OperationType.ONLINE).setData(online.toBuilder().setUserId(userId).build().toByteString());
+                                for (Seat seat1 : room.getSeats()) {
+                                    if (SanGongTcpService.userClients.containsKey(seat1.getUserId())) {
+                                        messageReceive.send(response.build(), seat1.getUserId());
+                                    }
+                                }
                             }
                         }
                         redisService.unlock("lock_room" + messageReceive.roomNo);
