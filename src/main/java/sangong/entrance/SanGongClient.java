@@ -731,6 +731,7 @@ public class SanGongClient {
                                         messageReceive.send(response.build(), seat1.getUserId());
                                     }
                                 }
+                                redisService.addCache("room" + messageReceive.roomNo, JSON.toJSONString(room));
                             }
                         }
                         redisService.unlock("lock_room" + messageReceive.roomNo);
