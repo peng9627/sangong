@@ -17,6 +17,7 @@ import sangong.utils.LoggerUtil;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created date 2016/3/25
@@ -278,7 +279,7 @@ public class SanGongClient {
                             seatResponse.setGameCount(userResponse.getData().getGameCount());
                             seatResponse.setNickname(userResponse.getData().getNickname());
                             seatResponse.setHead(userResponse.getData().getHead());
-                            seatResponse.setSex(userResponse.getData().getSex().equals("MAN"));
+                            seatResponse.setSex(userResponse.getData().getSex().equals("1"));
                             seatResponse.setOffline(false);
                             seatResponse.setIsRobot(false);
                             roomSeatsInfo.addSeats(seatResponse.build());
@@ -314,6 +315,12 @@ public class SanGongClient {
                             }
                             if (allReady && room.getSeats().size() == room.getCount()) {
                                 room.start(response, redisService);
+                                if (1 == room.getGameCount()) {
+                                    response.setOperationType(GameBase.OperationType.START).clearData();
+                                    room.getSeats().stream().filter(seat1 -> SanGongTcpService.userClients.containsKey(seat1.getUserId())).forEach(seat1 -> {
+                                        SanGongTcpService.userClients.get(seat1.getUserId()).send(response.build(), seat1.getUserId());
+                                    });
+                                }
                             }
                             redisService.addCache("room" + messageReceive.roomNo, JSON.toJSONString(room));
                         }
@@ -566,6 +573,38 @@ public class SanGongClient {
                     }
                     break;
                 case EXIT:
+                    if (redisService.exists("room" + messageReceive.roomNo) && !redisService.exists("room_match" + messageReceive.roomNo)) {
+                        while (!redisService.lock("lock_room" + messageReceive.roomNo)) {
+                        }
+                        GameBase.ExitRoom.Builder exitRoom = GameBase.ExitRoom.newBuilder();
+                        Room room = JSON.parseObject(redisService.getCache("room" + messageReceive.roomNo), Room.class);
+                        if (0 == room.getGameStatus().compareTo(GameStatus.WAITING)) {
+                            for (Seat seat : room.getSeats()) {
+                                if (seat.getUserId() == userId) {
+                                    exitRoom.setUserId(userId);
+                                    String uuid = UUID.randomUUID().toString().replace("-", "");
+                                    while (redisService.exists(uuid)) {
+                                        uuid = UUID.randomUUID().toString().replace("-", "");
+                                    }
+                                    redisService.addCache("backkey" + uuid, seat.getUserId() + "", 1800);
+                                    exitRoom.setBackKey(uuid);
+                                    response.setOperationType(GameBase.OperationType.EXIT).setData(exitRoom.build().toByteString());
+                                    messageReceive.send(response.build(), userId);
+                                    room.getSeatNos().add(seat.getSeatNo());
+                                    room.getSeats().remove(seat);
+                                    redisService.delete("reconnect" + seat.getUserId());
+                                    room.sendSeatInfo(response);
+                                    redisService.addCache("room" + messageReceive.roomNo, JSON.toJSONString(room));
+                                    break;
+                                }
+                            }
+                        } else {
+                            exitRoom.setError(GameBase.ErrorCode.SHOUND_NOT_OPERATION);
+                            response.setOperationType(GameBase.OperationType.EXIT).setData(exitRoom.build().toByteString());
+                            messageReceive.send(response.build(), userId);
+                        }
+                        redisService.unlock("lock_room" + messageReceive.roomNo);
+                    }
                     break;
                 case DISSOLVE:
                     if (redisService.exists("room" + messageReceive.roomNo) && !redisService.exists("room_match" + messageReceive.roomNo)) {

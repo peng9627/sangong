@@ -176,7 +176,7 @@ public class Room {
         seat.setUserId(user.getUserId());
         seat.setHead(user.getHead());
         seat.setNickname(user.getNickname());
-        seat.setSex(user.getSex().equals("MAN"));
+        seat.setSex(user.getSex().equals("1"));
         seat.setSeatNo(seatNos.get(0));
         seat.setIp(user.getLastLoginIp());
         seat.setGamecount(user.getGameCount());
@@ -289,7 +289,7 @@ public class Room {
                         seatRecord.setUserId(seat.getUserId());
                         seatRecord.setNickname(seat.getNickname());
                         seatRecord.setHead(seat.getHead());
-                        seatRecord.setCards(seat.getCards());
+                        seatRecord.getCards().addAll(seat.getCards());
                         seatRecord.setWinOrLose(-seat.getPlayScore());
                         seatRecords.add(seatRecord);
                     } else {
@@ -308,7 +308,7 @@ public class Room {
                         seatRecord.setUserId(seat.getUserId());
                         seatRecord.setNickname(seat.getNickname());
                         seatRecord.setHead(seat.getHead());
-                        seatRecord.setCards(seat.getCards());
+                        seatRecord.getCards().addAll(seat.getCards());
                         seatRecord.setWinOrLose(seat.getPlayScore());
                         seatRecords.add(seatRecord);
                     }
@@ -327,7 +327,7 @@ public class Room {
             seatRecord.setUserId(grabSeat.getUserId());
             seatRecord.setNickname(grabSeat.getNickname());
             seatRecord.setHead(grabSeat.getHead());
-            seatRecord.setCards(grabSeat.getCards());
+            seatRecord.getCards().addAll(grabSeat.getCards());
             seatRecord.setWinOrLose(bankScore);
             seatRecords.add(seatRecord);
         } else {
@@ -389,7 +389,7 @@ public class Room {
                     seatRecord.setUserId(seat.getUserId());
                     seatRecord.setNickname(seat.getNickname());
                     seatRecord.setHead(seat.getHead());
-                    seatRecord.setCards(seat.getCards());
+                    seatRecord.getCards().addAll(seat.getCards());
                     seatRecord.setWinOrLose(-lose.get(seat.getUserId()));
                     seatRecords.add(seatRecord);
 
@@ -405,7 +405,7 @@ public class Room {
                     seatRecord.setUserId(seat.getUserId());
                     seatRecord.setNickname(seat.getNickname());
                     seatRecord.setHead(seat.getHead());
-                    seatRecord.setCards(seat.getCards());
+                    seatRecord.getCards().addAll(seat.getCards());
                     seatRecord.setWinOrLose(win.get(seat.getUserId()));
                     seatRecords.add(seatRecord);
                 }
@@ -818,17 +818,24 @@ public class Room {
                     }
                 }
             }
-
-            SanGong.SanGongBalanceResponse.Builder balance = SanGong.SanGongBalanceResponse.newBuilder();
             StringBuilder people = new StringBuilder();
+            if (0 != recordList.size()) {
+                SanGong.SanGongBalanceResponse.Builder balance = SanGong.SanGongBalanceResponse.newBuilder();
 
-            for (Seat seat : seats) {
-                people.append(",").append(seat.getUserId());
-                SanGong.SanGongSeatBalance.Builder seatGameBalance = SanGong.SanGongSeatBalance.newBuilder()
-                        .setID(seat.getUserId()).setSanGongCount(seat.getSanGongCount()).setWinOrLose(seat.getScore());
-                balance.addGameBalance(seatGameBalance);
+                for (Seat seat : seats) {
+                    SanGong.SanGongSeatBalance.Builder seatGameBalance = SanGong.SanGongSeatBalance.newBuilder()
+                            .setID(seat.getUserId()).setSanGongCount(seat.getSanGongCount()).setWinOrLose(seat.getScore());
+                    balance.addGameBalance(seatGameBalance);
+                }
+
+                for (Seat seat : seats) {
+                    redisService.delete("reconnect" + seat.getUserId());
+                    if (SanGongTcpService.userClients.containsKey(seat.getUserId())) {
+                        response.setOperationType(GameBase.OperationType.BALANCE).setData(balance.build().toByteString());
+                        SanGongTcpService.userClients.get(seat.getUserId()).send(response.build(), seat.getUserId());
+                    }
+                }
             }
-
             GameBase.OverResponse.Builder over = GameBase.OverResponse.newBuilder();
             for (Seat seat : seats) {
                 redisService.delete("reconnect" + seat.getUserId());
@@ -840,8 +847,6 @@ public class Room {
                     redisService.addCache("backkey" + uuid, seat.getUserId() + "", 1800);
                     over.setBackKey(uuid);
                     over.setDateTime(new Date().getTime());
-                    response.setOperationType(GameBase.OperationType.BALANCE).setData(balance.build().toByteString());
-                    SanGongTcpService.userClients.get(seat.getUserId()).send(response.build(), seat.getUserId());
                     response.setOperationType(GameBase.OperationType.OVER).setData(over.build().toByteString());
                     SanGongTcpService.userClients.get(seat.getUserId()).send(response.build(), seat.getUserId());
                 }
@@ -850,6 +855,7 @@ public class Room {
             if (0 != recordList.size()) {
                 List<TotalScore> totalScores = new ArrayList<>();
                 for (Seat seat : seats) {
+                    people.append(",").append(seat.getUserId());
                     TotalScore totalScore = new TotalScore();
                     totalScore.setHead(seat.getHead());
                     totalScore.setNickname(seat.getNickname());
@@ -899,6 +905,7 @@ public class Room {
         sangongIntoResponse.setCount(count);
         intoResponseBuilder.setData(sangongIntoResponse.build().toByteString());
         intoResponseBuilder.setGameType(GameBase.GameType.SANGONG);
+        intoResponseBuilder.setStarted(0 != gameCount);
 
         response.setOperationType(GameBase.OperationType.ROOM_INFO).setData(intoResponseBuilder.build().toByteString());
         if (SanGongTcpService.userClients.containsKey(userId)) {
