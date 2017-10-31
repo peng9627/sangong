@@ -771,6 +771,7 @@ public class SanGongClient {
                                     }
                                 }
                                 redisService.addCache("room" + messageReceive.roomNo, JSON.toJSONString(room));
+                                break;
                             }
                         }
                         redisService.unlock("lock_room" + messageReceive.roomNo);
