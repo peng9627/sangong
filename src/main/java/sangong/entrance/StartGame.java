@@ -12,5 +12,6 @@ public class StartGame {
     public static void main(String[] args) {
         Constant.init();
         new Thread(new SanGongTcpService()).start();
+        new Thread(new SangongNoticeService()).start();
     }
 }
