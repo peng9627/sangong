@@ -695,7 +695,7 @@ public class SanGongClient {
                                     }
                                 }
                                 redisService.delete("dissolve" + messageReceive.roomNo);
-                                redisService.addCache("delete_dissolve" + messageReceive.roomNo, "", 60);
+//                                redisService.addCache("delete_dissolve" + messageReceive.roomNo, "", 60);
                             } else if (agree > room.getSeats().size() / 2) {
                                 GameBase.DissolveConfirm dissolveConfirm = GameBase.DissolveConfirm.newBuilder().setDissolved(true).build();
                                 response.setOperationType(GameBase.OperationType.DISSOLVE_CONFIRM).setData(dissolveConfirm.toByteString());
@@ -742,7 +742,7 @@ public class SanGongClient {
                                 .setToUserId(appointInteraction.getToUserId()).setContentIndex(appointInteraction.getContentIndex()).build();
                         for (Seat seat : room.getSeats()) {
                             if (SanGongTcpService.userClients.containsKey(seat.getUserId())) {
-                                messageReceive.send(response.setOperationType(GameBase.OperationType.MESSAGE)
+                                messageReceive.send(response.setOperationType(GameBase.OperationType.INTERACTION)
                                         .setData(appointInteractionResponse.toByteString()).build(), seat.getUserId());
                             }
                         }
