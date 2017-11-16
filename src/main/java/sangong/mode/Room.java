@@ -266,6 +266,7 @@ public class Room {
                     break;
                 }
             }
+            boolean bankerIsSangong = Card.isSanGong(grabSeat.getCards());
             int bankScore = 0;
             for (Seat seat : seats) {
                 boolean isSangong = Card.isSanGong(seat.getCards());
@@ -274,13 +275,15 @@ public class Room {
                 }
                 if (seat.getSeatNo() != grabSeat.getSeatNo()) {
                     if (Card.compare(grabSeat.getCards(), seat.getCards())) {
-                        bankScore += seat.getPlayScore();
+                        int lose = bankerIsSangong ? seat.getPlayScore() * 2 : seat.getPlayScore();
+
+                        bankScore += lose;
 
                         SanGong.SanGongResult.Builder userResult = SanGong.SanGongResult.newBuilder();
                         userResult.setID(seat.getUserId());
                         userResult.addAllCards(seat.getCards());
-                        seat.setScore(seat.getScore() - seat.getPlayScore());
-                        userResult.setCurrentScore(-seat.getPlayScore());
+                        seat.setScore(seat.getScore() - lose);
+                        userResult.setCurrentScore(-lose);
                         userResult.setTotalScore(seat.getScore());
                         userResult.setCardType(isSangong ? SanGong.CardType.CARDTYPE_SANGONG : SanGong.CardType.CARDTYPE_DANPAI);
                         resultResponse.addResult(userResult);
@@ -290,16 +293,17 @@ public class Room {
                         seatRecord.setNickname(seat.getNickname());
                         seatRecord.setHead(seat.getHead());
                         seatRecord.getCards().addAll(seat.getCards());
-                        seatRecord.setWinOrLose(-seat.getPlayScore());
+                        seatRecord.setWinOrLose(-lose);
                         seatRecords.add(seatRecord);
                     } else {
-                        bankScore -= seat.getPlayScore();
+                        int win = isSangong ? seat.getPlayScore() * 2 : seat.getPlayScore();
+                        bankScore -= win;
 
                         SanGong.SanGongResult.Builder userResult = SanGong.SanGongResult.newBuilder();
                         userResult.setID(seat.getUserId());
                         userResult.addAllCards(seat.getCards());
-                        seat.setScore(seat.getScore() + seat.getPlayScore());
-                        userResult.setCurrentScore(seat.getPlayScore());
+                        seat.setScore(seat.getScore() + win);
+                        userResult.setCurrentScore(win);
                         userResult.setTotalScore(seat.getScore());
                         userResult.setCardType(isSangong ? SanGong.CardType.CARDTYPE_SANGONG : SanGong.CardType.CARDTYPE_DANPAI);
                         resultResponse.addResult(userResult);
@@ -309,7 +313,7 @@ public class Room {
                         seatRecord.setNickname(seat.getNickname());
                         seatRecord.setHead(seat.getHead());
                         seatRecord.getCards().addAll(seat.getCards());
-                        seatRecord.setWinOrLose(seat.getPlayScore());
+                        seatRecord.setWinOrLose(win);
                         seatRecords.add(seatRecord);
                     }
                 }
@@ -353,8 +357,10 @@ public class Room {
             while (userSeats.size() > 0) {
                 if (loseTemp >= 0) {
                     lastWin = userSeats.remove(userSeats.size() - 1);
-                    loseTemp -= lastWin.getPlayScore();
-                    win.put(lastWin.getUserId(), lastWin.getPlayScore());
+                    boolean isSangong = Card.isSanGong(lastWin.getCards());
+                    int loseScore = isSangong ? lastWin.getPlayScore() * 2 : lastWin.getPlayScore();
+                    loseTemp -= loseScore;
+                    win.put(lastWin.getUserId(), loseScore);
                 } else {
                     if (userSeats.size() > 0) {
                         lastLose = userSeats.remove(0);
