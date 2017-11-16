@@ -26,7 +26,7 @@ public class SangongNoticeService implements Runnable {
     @Override
     public void run() {
 
-        int port = 10014;
+        int port = 10414;
         try {
             serverSocket = new ServerSocket(port);
             started = true;

@@ -44,7 +44,7 @@ public class SanGongTcpService implements Runnable {
         ShardedJedisPool shardedJedisPool = new ShardedJedisPool(jedisPoolConfig, shards);
         RedisService redisService = new RedisService(shardedJedisPool);
 
-        int port = 10004;
+        int port = 10404;
         try {
             serverSocket = new ServerSocket(port);
             started = true;
