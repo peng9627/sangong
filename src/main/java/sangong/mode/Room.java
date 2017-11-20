@@ -450,26 +450,22 @@ public class Room {
             response.setOperationType(GameBase.OperationType.RESULT).setData(resultResponse.build().toByteString());
             seats.stream().filter(seat -> SanGongTcpService.userClients.containsKey(seat.getUserId()))
                     .forEach(seat -> SanGongTcpService.userClients.get(seat.getUserId()).send(response.build(), seat.getUserId()));
-        }
-        clear();
-        if (1 == gameCount && 2 == payType) {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("flowType", 2);
-            if (10 == gameTimes) {
-                jsonObject.put("money", 1);
-            } else {
+            if (1 == gameCount && 2 == payType) {
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("flowType", 2);
                 jsonObject.put("money", 2);
-            }
-            jsonObject.put("description", "AA支付" + roomNo);
-            for (Seat seat : seats) {
-                jsonObject.put("userId", seat.getUserId());
-                ApiResponse moneyDetail = JSON.parseObject(HttpUtil.urlConnectionByRsa(Constant.apiUrl + Constant.moneyDetailedCreate, jsonObject.toJSONString()), new TypeReference<ApiResponse<User>>() {
-                });
-                if (0 != moneyDetail.getCode()) {
-                    LoggerFactory.getLogger(this.getClass()).error(Constant.apiUrl + Constant.moneyDetailedCreate + "?" + jsonObject.toJSONString());
+                jsonObject.put("description", "AA支付" + roomNo);
+                for (Seat seat : seats) {
+                    jsonObject.put("userId", seat.getUserId());
+                    ApiResponse moneyDetail = JSON.parseObject(HttpUtil.urlConnectionByRsa(Constant.apiUrl + Constant.moneyDetailedCreate, jsonObject.toJSONString()), new TypeReference<ApiResponse<User>>() {
+                    });
+                    if (0 != moneyDetail.getCode()) {
+                        LoggerFactory.getLogger(this.getClass()).error(Constant.apiUrl + Constant.moneyDetailedCreate + "?" + jsonObject.toJSONString());
+                    }
                 }
             }
         }
+        clear();
         //结束房间
         if (gameCount == gameTimes) {
             roomOver(response, redisService);
@@ -811,9 +807,9 @@ public class Room {
                 if (1 == payType) {
                     jsonObject.put("flowType", 1);
                     if (10 == gameTimes) {
-                        jsonObject.put("money", 3);
+                        jsonObject.put("money", 4);
                     } else {
-                        jsonObject.put("money", 6);
+                        jsonObject.put("money", 8);
                     }
                     jsonObject.put("description", "开房间退回" + roomNo);
                     jsonObject.put("userId", roomOwner);
